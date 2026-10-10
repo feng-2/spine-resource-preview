@@ -1,0 +1,60 @@
+{
+  "name": "@spine-preview/vscode",
+  "displayName": "%extension.displayName%",
+  "description": "%extension.description%",
+  "version": "1.0.0",
+  "publisher": "local-spine-preview",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Visualization"
+  ],
+  "main": "./dist/extension.cjs",
+  "contributes": {
+    "commands": [
+      {
+        "command": "spinePreview.open",
+        "title": "%command.open.title%",
+        "category": "Spine"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "spinePreview.open",
+          "group": "navigation@90"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node build.mjs --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "package": "pnpm build && node package.mjs"
+  },
+  "dependencies": {
+    "@spine-preview/core": "workspace:*",
+    "@spine-preview/runtimes": "workspace:*",
+    "@spine-preview/viewer": "workspace:*",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@types/vscode": "1.90.0",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vscode/vsce": "3.6.2",
+    "esbuild": "0.28.2",
+    "vite": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "icon": "assets/icon.png",
+  "license": "MIT"
+}

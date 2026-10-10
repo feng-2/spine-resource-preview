@@ -1,0 +1,12 @@
+**/*
+!package.json
+!package.nls*.json
+!README.md
+!LICENSE
+!THIRD_PARTY_NOTICES.md
+!assets/**
+!dist/extension.cjs
+!dist/webview/**
+!dist/licenses/**
+**/*.map
+**/*.vsix

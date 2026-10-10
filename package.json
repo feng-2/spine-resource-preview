@@ -1,0 +1,45 @@
+{
+  "name": "spine-resource-preview",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.20.0",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @spine-preview/web dev",
+    "build": "pnpm -r --if-present build",
+    "build:web": "pnpm --filter @spine-preview/web build",
+    "build:vscode": "pnpm --filter @spine-preview/vscode build",
+    "package:vscode": "pnpm --filter @spine-preview/vscode package",
+    "typecheck": "pnpm -r typecheck",
+    "test": "vitest run",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "verify": "pnpm typecheck && pnpm test && pnpm build",
+    "fixtures:fetch": "node scripts/fetch-fixtures.mjs",
+    "fixtures:check": "node scripts/fetch-fixtures.mjs --check",
+    "check:output": "node scripts/verify-output.mjs",
+    "dev:site": "pnpm --filter @spine-preview/site dev",
+    "build:site": "pnpm build:web && pnpm --filter @spine-preview/site build && node scripts/assemble-site.mjs",
+    "preview:site": "pnpm --filter @spine-preview/site preview --outDir ../../dist/site",
+    "check:site": "node scripts/verify-site.mjs"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "vitest": "5.0.3",
+    "prettier": "3.9.9",
+    "@types/node": "26.6.4",
+    "esbuild": "0.28.2"
+  },
+  "license": "MIT",
+  "description": "A local Spine animation resource viewer for the web and VS Code, powered by version-matched official runtimes.",
+  "keywords": [
+    "spine",
+    "animation",
+    "viewer",
+    "webgl",
+    "vscode"
+  ]
+}

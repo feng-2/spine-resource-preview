@@ -1,0 +1,5 @@
+{
+  "extension.displayName": "Aperçu des ressources Spine",
+  "extension.description": "Prévisualisez localement les animations Spine 3.7, 3.8 et 4.0–4.3.",
+  "command.open.title": "Aperçu des ressources Spine"
+}

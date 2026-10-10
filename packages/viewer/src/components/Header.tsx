@@ -1,0 +1,52 @@
+import { LOGO_URL } from '../assets.js';
+import { createTranslator, isLocale, LOCALE_OPTIONS, type Locale } from '../i18n.js';
+
+/** 共享品牌、语言设置与来源刷新入口。 */
+interface HeaderProps {
+  /** 当前界面语言。 */
+  locale: Locale;
+  /** 是否正在扫描。 */
+  loading: boolean;
+  /** 来源支持时显示刷新按钮。 */
+  onRefresh?: (() => void) | undefined;
+  /** 保存显式语言选择。 */
+  onLanguageChange(locale: Locale): void;
+}
+
+/** 共享品牌、语言设置与来源刷新入口。 */
+export function Header({ locale, loading, onRefresh, onLanguageChange }: HeaderProps) {
+  const t = createTranslator(locale);
+  return (
+    <header className="app-header">
+      <div className="brand">
+        <img className="brand-icon" src={LOGO_URL} alt="" />
+        <div>
+          <h1>{t('appTitle')}</h1>
+          <p>{t('appSubtitle')}</p>
+        </div>
+      </div>
+      <div className="header-actions">
+        {onRefresh && (
+          <button onClick={onRefresh} disabled={loading}>
+            {t('refresh')}
+          </button>
+        )}
+        <select
+          className="language-select"
+          aria-label={t('language')}
+          value={locale}
+          onChange={(event) => {
+            const value = event.currentTarget.value;
+            if (isLocale(value)) onLanguageChange(value);
+          }}
+        >
+          {LOCALE_OPTIONS.map(({ value, label }) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
+        </select>
+      </div>
+    </header>
+  );
+}

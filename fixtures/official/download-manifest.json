@@ -1,0 +1,1349 @@
+{
+  "schemaVersion": 1,
+  "repository": "https://github.com/EsotericSoftware/spine-runtimes",
+  "versions": [
+    {
+      "version": "3.7",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "license": "fixtures/official/3.7/LICENSE"
+    },
+    {
+      "version": "3.8",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "license": "fixtures/official/3.8/LICENSE"
+    },
+    {
+      "version": "4.0",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "license": "fixtures/official/4.0/LICENSE"
+    },
+    {
+      "version": "4.1",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "license": "fixtures/official/4.1/LICENSE"
+    },
+    {
+      "version": "4.2",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "license": "fixtures/official/4.2/LICENSE"
+    },
+    {
+      "version": "4.3",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "license": "fixtures/official/4.3/LICENSE"
+    }
+  ],
+  "resources": [
+    {
+      "version": "3.7",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "name": "spineboy",
+      "directory": "fixtures/official/3.7/spineboy",
+      "exportVersion": "3.7.90",
+      "formats": [
+        "json"
+      ],
+      "atlas": "fixtures/official/3.7/spineboy/spineboy.atlas",
+      "pages": [
+        {
+          "name": "spineboy.png"
+        }
+      ],
+      "premultipliedExample": false,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/examples/spineboy/export"
+    },
+    {
+      "version": "3.7",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "name": "tank",
+      "directory": "fixtures/official/3.7/tank",
+      "exportVersion": "3.7.90",
+      "formats": [
+        "json"
+      ],
+      "atlas": "fixtures/official/3.7/tank/tank.atlas",
+      "pages": [
+        {
+          "name": "tank.png"
+        }
+      ],
+      "premultipliedExample": false,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/examples/tank/export"
+    },
+    {
+      "version": "3.7",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "name": "raptor",
+      "directory": "fixtures/official/3.7/raptor",
+      "exportVersion": "3.7.90",
+      "formats": [
+        "json"
+      ],
+      "atlas": "fixtures/official/3.7/raptor/raptor.atlas",
+      "pages": [
+        {
+          "name": "raptor.png"
+        }
+      ],
+      "premultipliedExample": false,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/examples/raptor/export"
+    },
+    {
+      "version": "3.7",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "name": "spineboy-pma",
+      "directory": "fixtures/official/3.7/spineboy-pma",
+      "exportVersion": "3.7.90",
+      "formats": [
+        "json"
+      ],
+      "atlas": "fixtures/official/3.7/spineboy-pma/spineboy-pma.atlas",
+      "pages": [
+        {
+          "name": "spineboy-pma.png"
+        }
+      ],
+      "premultipliedExample": true,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/examples/spineboy/export"
+    },
+    {
+      "version": "3.8",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "name": "spineboy",
+      "directory": "fixtures/official/3.8/spineboy",
+      "exportVersion": "3.8.55",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/3.8/spineboy/spineboy.atlas",
+      "pages": [
+        {
+          "name": "spineboy.png"
+        }
+      ],
+      "premultipliedExample": false,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/spineboy/export"
+    },
+    {
+      "version": "3.8",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "name": "tank",
+      "directory": "fixtures/official/3.8/tank",
+      "exportVersion": "3.8.55",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/3.8/tank/tank.atlas",
+      "pages": [
+        {
+          "name": "tank.png"
+        }
+      ],
+      "premultipliedExample": false,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/tank/export"
+    },
+    {
+      "version": "3.8",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "name": "raptor",
+      "directory": "fixtures/official/3.8/raptor",
+      "exportVersion": "3.8.55",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/3.8/raptor/raptor.atlas",
+      "pages": [
+        {
+          "name": "raptor.png"
+        }
+      ],
+      "premultipliedExample": false,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/raptor/export"
+    },
+    {
+      "version": "3.8",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "name": "spineboy-pma",
+      "directory": "fixtures/official/3.8/spineboy-pma",
+      "exportVersion": "3.8.55",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/3.8/spineboy-pma/spineboy-pma.atlas",
+      "pages": [
+        {
+          "name": "spineboy-pma.png"
+        }
+      ],
+      "premultipliedExample": true,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/spineboy/export"
+    },
+    {
+      "version": "4.0",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "name": "spineboy",
+      "directory": "fixtures/official/4.0/spineboy",
+      "exportVersion": "4.0.31",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/4.0/spineboy/spineboy.atlas",
+      "pages": [
+        {
+          "name": "spineboy.png"
+        }
+      ],
+      "premultipliedExample": false,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/425ce416bb218b28caeec47b317aa57cd7140375/examples/spineboy/export"
+    },
+    {
+      "version": "4.0",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "name": "tank",
+      "directory": "fixtures/official/4.0/tank",
+      "exportVersion": "4.0.31",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/4.0/tank/tank.atlas",
+      "pages": [
+        {
+          "name": "tank.png"
+        }
+      ],
+      "premultipliedExample": false,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/425ce416bb218b28caeec47b317aa57cd7140375/examples/tank/export"
+    },
+    {
+      "version": "4.0",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "name": "raptor",
+      "directory": "fixtures/official/4.0/raptor",
+      "exportVersion": "4.0.61",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/4.0/raptor/raptor.atlas",
+      "pages": [
+        {
+          "name": "raptor.png"
+        }
+      ],
+      "premultipliedExample": false,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/425ce416bb218b28caeec47b317aa57cd7140375/examples/raptor/export"
+    },
+    {
+      "version": "4.0",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "name": "spineboy-pma",
+      "directory": "fixtures/official/4.0/spineboy-pma",
+      "exportVersion": "4.0.31",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/4.0/spineboy-pma/spineboy-pma.atlas",
+      "pages": [
+        {
+          "name": "spineboy-pma.png",
+          "pma": true
+        }
+      ],
+      "premultipliedExample": true,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/425ce416bb218b28caeec47b317aa57cd7140375/examples/spineboy/export"
+    },
+    {
+      "version": "4.1",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "name": "spineboy",
+      "directory": "fixtures/official/4.1/spineboy",
+      "exportVersion": "4.1.17",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/4.1/spineboy/spineboy.atlas",
+      "pages": [
+        {
+          "name": "spineboy.png"
+        }
+      ],
+      "premultipliedExample": false,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/spineboy/export"
+    },
+    {
+      "version": "4.1",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "name": "tank",
+      "directory": "fixtures/official/4.1/tank",
+      "exportVersion": "4.1.17",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/4.1/tank/tank.atlas",
+      "pages": [
+        {
+          "name": "tank.png"
+        }
+      ],
+      "premultipliedExample": false,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/tank/export"
+    },
+    {
+      "version": "4.1",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "name": "raptor",
+      "directory": "fixtures/official/4.1/raptor",
+      "exportVersion": "4.1.17",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/4.1/raptor/raptor.atlas",
+      "pages": [
+        {
+          "name": "raptor.png"
+        }
+      ],
+      "premultipliedExample": false,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/raptor/export"
+    },
+    {
+      "version": "4.1",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "name": "spineboy-pma",
+      "directory": "fixtures/official/4.1/spineboy-pma",
+      "exportVersion": "4.1.17",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/4.1/spineboy-pma/spineboy-pma.atlas",
+      "pages": [
+        {
+          "name": "spineboy-pma.png",
+          "pma": true
+        }
+      ],
+      "premultipliedExample": true,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/spineboy/export"
+    },
+    {
+      "version": "4.2",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "name": "spineboy",
+      "directory": "fixtures/official/4.2/spineboy",
+      "exportVersion": "4.2.22",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/4.2/spineboy/spineboy.atlas",
+      "pages": [
+        {
+          "name": "spineboy.png"
+        }
+      ],
+      "premultipliedExample": false,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/spineboy/export"
+    },
+    {
+      "version": "4.2",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "name": "tank",
+      "directory": "fixtures/official/4.2/tank",
+      "exportVersion": "4.2.22",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/4.2/tank/tank.atlas",
+      "pages": [
+        {
+          "name": "tank.png"
+        }
+      ],
+      "premultipliedExample": false,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/tank/export"
+    },
+    {
+      "version": "4.2",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "name": "raptor",
+      "directory": "fixtures/official/4.2/raptor",
+      "exportVersion": "4.2.22",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/4.2/raptor/raptor.atlas",
+      "pages": [
+        {
+          "name": "raptor.png"
+        }
+      ],
+      "premultipliedExample": false,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/raptor/export"
+    },
+    {
+      "version": "4.2",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "name": "spineboy-pma",
+      "directory": "fixtures/official/4.2/spineboy-pma",
+      "exportVersion": "4.2.22",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/4.2/spineboy-pma/spineboy-pma.atlas",
+      "pages": [
+        {
+          "name": "spineboy-pma.png",
+          "pma": true
+        }
+      ],
+      "premultipliedExample": true,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/spineboy/export"
+    },
+    {
+      "version": "4.3",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "name": "spineboy",
+      "directory": "fixtures/official/4.3/spineboy",
+      "exportVersion": "4.3.75-beta",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/4.3/spineboy/spineboy.atlas",
+      "pages": [
+        {
+          "name": "spineboy.png"
+        }
+      ],
+      "premultipliedExample": false,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/spineboy/export"
+    },
+    {
+      "version": "4.3",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "name": "tank",
+      "directory": "fixtures/official/4.3/tank",
+      "exportVersion": "4.3.75-beta",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/4.3/tank/tank.atlas",
+      "pages": [
+        {
+          "name": "tank.png"
+        }
+      ],
+      "premultipliedExample": false,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/tank/export"
+    },
+    {
+      "version": "4.3",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "name": "raptor",
+      "directory": "fixtures/official/4.3/raptor",
+      "exportVersion": "4.3.75-beta",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/4.3/raptor/raptor.atlas",
+      "pages": [
+        {
+          "name": "raptor.png"
+        }
+      ],
+      "premultipliedExample": false,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/raptor/export"
+    },
+    {
+      "version": "4.3",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "name": "spineboy-pma",
+      "directory": "fixtures/official/4.3/spineboy-pma",
+      "exportVersion": "4.3.75-beta",
+      "formats": [
+        "json",
+        "binary"
+      ],
+      "atlas": "fixtures/official/4.3/spineboy-pma/spineboy-pma.atlas",
+      "pages": [
+        {
+          "name": "spineboy-pma.png",
+          "pma": true
+        }
+      ],
+      "premultipliedExample": true,
+      "source": "https://github.com/EsotericSoftware/spine-runtimes/tree/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/spineboy/export"
+    }
+  ],
+  "negativeResources": [
+    {
+      "path": "fixtures/negative/official-3.7-binary/spineboy.skel",
+      "version": "3.7",
+      "exportVersion": "3.7.90",
+      "format": "binary",
+      "expectedDiagnostic": "BINARY_37_UNSUPPORTED"
+    }
+  ],
+  "files": [
+    {
+      "path": "fixtures/negative/official-3.7-binary/LICENSE",
+      "upstreamPath": "LICENSE",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/LICENSE",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "sha256": "6142ee6cc2c03d3a918793e4750ae772bd3755c534d4a35e559e301acf51ec39",
+      "size": 1454
+    },
+    {
+      "path": "fixtures/negative/official-3.7-binary/spineboy.skel",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/examples/spineboy/export/spineboy-pro.skel",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "sha256": "6036a935ee72eb7e8daf35b79dca8391445ec9d378ba54efde99bd71cbb10743",
+      "size": 62515
+    },
+    {
+      "path": "fixtures/official/3.7/LICENSE",
+      "upstreamPath": "LICENSE",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/LICENSE",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "sha256": "6142ee6cc2c03d3a918793e4750ae772bd3755c534d4a35e559e301acf51ec39",
+      "size": 1454
+    },
+    {
+      "path": "fixtures/official/3.7/raptor/raptor.atlas",
+      "upstreamPath": "examples/raptor/export/raptor.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/examples/raptor/export/raptor.atlas",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "sha256": "b283f4c5c25f998995e2e86481b14e44ff26ed95eec1802c1e4185a3a51ce19a",
+      "size": 3938
+    },
+    {
+      "path": "fixtures/official/3.7/raptor/raptor.json",
+      "upstreamPath": "examples/raptor/export/raptor-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/examples/raptor/export/raptor-pro.json",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "sha256": "75a635b2ca2c516ac161ad0cdef58e4ab896e25587a5ed5dc725a5d81cb18e0f",
+      "size": 169009,
+      "exportVersion": "3.7.90"
+    },
+    {
+      "path": "fixtures/official/3.7/raptor/raptor.png",
+      "upstreamPath": "examples/raptor/export/raptor.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/examples/raptor/export/raptor.png",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "sha256": "879d84230024a1529ea994e7cd6416c5883f4b74b0d268b5e2dea1cbe2d00777",
+      "size": 480392
+    },
+    {
+      "path": "fixtures/official/3.7/spineboy-pma/spineboy-pma.atlas",
+      "upstreamPath": "examples/spineboy/export/spineboy-pma.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/examples/spineboy/export/spineboy-pma.atlas",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "sha256": "829ee567e7e1652f8b3bb1bc0ac154b2cb4a603567f6cb1793544cdb0121ae66",
+      "size": 4065
+    },
+    {
+      "path": "fixtures/official/3.7/spineboy-pma/spineboy-pma.json",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/examples/spineboy/export/spineboy-pro.json",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "sha256": "ca62ed6520dc10f1ec326c57e8aec073d0058b174eb2be41e4d749f557094d34",
+      "size": 175935,
+      "exportVersion": "3.7.90"
+    },
+    {
+      "path": "fixtures/official/3.7/spineboy-pma/spineboy-pma.png",
+      "upstreamPath": "examples/spineboy/export/spineboy-pma.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/examples/spineboy/export/spineboy-pma.png",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "sha256": "329772025bc8b329fb9c94f6b0dec5eb8bdbc0cd401291adb24abf327250d195",
+      "size": 263300
+    },
+    {
+      "path": "fixtures/official/3.7/spineboy/spineboy.atlas",
+      "upstreamPath": "examples/spineboy/export/spineboy.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/examples/spineboy/export/spineboy.atlas",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "sha256": "2a504910a91f8541d0fb1f83d80c07236edc80888c95901953009e86e53a8147",
+      "size": 4061
+    },
+    {
+      "path": "fixtures/official/3.7/spineboy/spineboy.json",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/examples/spineboy/export/spineboy-pro.json",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "sha256": "ca62ed6520dc10f1ec326c57e8aec073d0058b174eb2be41e4d749f557094d34",
+      "size": 175935,
+      "exportVersion": "3.7.90"
+    },
+    {
+      "path": "fixtures/official/3.7/spineboy/spineboy.png",
+      "upstreamPath": "examples/spineboy/export/spineboy.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/examples/spineboy/export/spineboy.png",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "sha256": "42e3d9411f5ca02146908fd22081968267419e048d66fcc5c721315146e114f6",
+      "size": 260801
+    },
+    {
+      "path": "fixtures/official/3.7/tank/tank.atlas",
+      "upstreamPath": "examples/tank/export/tank.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/examples/tank/export/tank.atlas",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "sha256": "3879f1981481a4eb66d2c1da68efcfdb349320d0dca038074bb4d1df33ce8315",
+      "size": 2494
+    },
+    {
+      "path": "fixtures/official/3.7/tank/tank.json",
+      "upstreamPath": "examples/tank/export/tank-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/examples/tank/export/tank-pro.json",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "sha256": "31b840907e1dfbdd48d85251ac8a8585d2d60e1223a8dbe80d6dfc04591d6a07",
+      "size": 157030,
+      "exportVersion": "3.7.90"
+    },
+    {
+      "path": "fixtures/official/3.7/tank/tank.png",
+      "upstreamPath": "examples/tank/export/tank.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/examples/tank/export/tank.png",
+      "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+      "sha256": "16a91607780407b7d954a05be1b38da4283be80a573ccb5a37072b091fdfc932",
+      "size": 611484
+    },
+    {
+      "path": "fixtures/official/3.8/LICENSE",
+      "upstreamPath": "LICENSE",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/LICENSE",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "sha256": "6142ee6cc2c03d3a918793e4750ae772bd3755c534d4a35e559e301acf51ec39",
+      "size": 1454
+    },
+    {
+      "path": "fixtures/official/3.8/raptor/raptor.atlas",
+      "upstreamPath": "examples/raptor/export/raptor.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/raptor/export/raptor.atlas",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "sha256": "b283f4c5c25f998995e2e86481b14e44ff26ed95eec1802c1e4185a3a51ce19a",
+      "size": 3938
+    },
+    {
+      "path": "fixtures/official/3.8/raptor/raptor.json",
+      "upstreamPath": "examples/raptor/export/raptor-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/raptor/export/raptor-pro.json",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "sha256": "9c422e5661a61bc119750ded0bf79074f72732547db77c038322d7d7a101dfb2",
+      "size": 157494,
+      "exportVersion": "3.8.55"
+    },
+    {
+      "path": "fixtures/official/3.8/raptor/raptor.png",
+      "upstreamPath": "examples/raptor/export/raptor.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/raptor/export/raptor.png",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "sha256": "879d84230024a1529ea994e7cd6416c5883f4b74b0d268b5e2dea1cbe2d00777",
+      "size": 480392
+    },
+    {
+      "path": "fixtures/official/3.8/raptor/raptor.skel",
+      "upstreamPath": "examples/raptor/export/raptor-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/raptor/export/raptor-pro.skel",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "sha256": "0fed0d5b15875c40c0012c8f1e6fd88054970abff2c6ae4a504bcf0b0d4abc85",
+      "size": 60900,
+      "exportVersion": "3.8.55"
+    },
+    {
+      "path": "fixtures/official/3.8/spineboy-pma/spineboy-pma.atlas",
+      "upstreamPath": "examples/spineboy/export/spineboy-pma.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/spineboy/export/spineboy-pma.atlas",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "sha256": "829ee567e7e1652f8b3bb1bc0ac154b2cb4a603567f6cb1793544cdb0121ae66",
+      "size": 4065
+    },
+    {
+      "path": "fixtures/official/3.8/spineboy-pma/spineboy-pma.json",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/spineboy/export/spineboy-pro.json",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "sha256": "d794ae5ecc8f245929fef6b6f5212ce511990fc7ffdbc3ed77422db72ab3b14c",
+      "size": 167257,
+      "exportVersion": "3.8.55"
+    },
+    {
+      "path": "fixtures/official/3.8/spineboy-pma/spineboy-pma.png",
+      "upstreamPath": "examples/spineboy/export/spineboy-pma.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/spineboy/export/spineboy-pma.png",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "sha256": "329772025bc8b329fb9c94f6b0dec5eb8bdbc0cd401291adb24abf327250d195",
+      "size": 263300
+    },
+    {
+      "path": "fixtures/official/3.8/spineboy-pma/spineboy-pma.skel",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/spineboy/export/spineboy-pro.skel",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "sha256": "d36f8e97a113e7ec2b1c9e20a706b0a1464914a92c057dc5541c921a3ec4123c",
+      "size": 61383,
+      "exportVersion": "3.8.55"
+    },
+    {
+      "path": "fixtures/official/3.8/spineboy/spineboy.atlas",
+      "upstreamPath": "examples/spineboy/export/spineboy.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/spineboy/export/spineboy.atlas",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "sha256": "2a504910a91f8541d0fb1f83d80c07236edc80888c95901953009e86e53a8147",
+      "size": 4061
+    },
+    {
+      "path": "fixtures/official/3.8/spineboy/spineboy.json",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/spineboy/export/spineboy-pro.json",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "sha256": "d794ae5ecc8f245929fef6b6f5212ce511990fc7ffdbc3ed77422db72ab3b14c",
+      "size": 167257,
+      "exportVersion": "3.8.55"
+    },
+    {
+      "path": "fixtures/official/3.8/spineboy/spineboy.png",
+      "upstreamPath": "examples/spineboy/export/spineboy.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/spineboy/export/spineboy.png",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "sha256": "42e3d9411f5ca02146908fd22081968267419e048d66fcc5c721315146e114f6",
+      "size": 260801
+    },
+    {
+      "path": "fixtures/official/3.8/spineboy/spineboy.skel",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/spineboy/export/spineboy-pro.skel",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "sha256": "d36f8e97a113e7ec2b1c9e20a706b0a1464914a92c057dc5541c921a3ec4123c",
+      "size": 61383,
+      "exportVersion": "3.8.55"
+    },
+    {
+      "path": "fixtures/official/3.8/tank/tank.atlas",
+      "upstreamPath": "examples/tank/export/tank.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/tank/export/tank.atlas",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "sha256": "3879f1981481a4eb66d2c1da68efcfdb349320d0dca038074bb4d1df33ce8315",
+      "size": 2494
+    },
+    {
+      "path": "fixtures/official/3.8/tank/tank.json",
+      "upstreamPath": "examples/tank/export/tank-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/tank/export/tank-pro.json",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "sha256": "fb6c1cb358cdbd20746ea5455718513aa20d3d913b4a3bc3684413436d525562",
+      "size": 155721,
+      "exportVersion": "3.8.55"
+    },
+    {
+      "path": "fixtures/official/3.8/tank/tank.png",
+      "upstreamPath": "examples/tank/export/tank.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/tank/export/tank.png",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "sha256": "16a91607780407b7d954a05be1b38da4283be80a573ccb5a37072b091fdfc932",
+      "size": 611484
+    },
+    {
+      "path": "fixtures/official/3.8/tank/tank.skel",
+      "upstreamPath": "examples/tank/export/tank-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/tank/export/tank-pro.skel",
+      "commit": "8b4844bd4b193ba9e54487ed397a777993cbad56",
+      "sha256": "2286d15b595ff26bcbf6ad353f07158f72de7fdbcbd9b4e895fe22496dad3b7f",
+      "size": 46517,
+      "exportVersion": "3.8.55"
+    },
+    {
+      "path": "fixtures/official/4.0/LICENSE",
+      "upstreamPath": "LICENSE",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/425ce416bb218b28caeec47b317aa57cd7140375/LICENSE",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "sha256": "6142ee6cc2c03d3a918793e4750ae772bd3755c534d4a35e559e301acf51ec39",
+      "size": 1454
+    },
+    {
+      "path": "fixtures/official/4.0/raptor/raptor.atlas",
+      "upstreamPath": "examples/raptor/export/raptor.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/425ce416bb218b28caeec47b317aa57cd7140375/examples/raptor/export/raptor.atlas",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "sha256": "c12e21c7fbc0f0bf955afc90e438883f215d9ba8846519c0408233a0182ee35c",
+      "size": 1805
+    },
+    {
+      "path": "fixtures/official/4.0/raptor/raptor.json",
+      "upstreamPath": "examples/raptor/export/raptor-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/425ce416bb218b28caeec47b317aa57cd7140375/examples/raptor/export/raptor-pro.json",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "sha256": "18998b3540a9241d78f1a40cd19bd7b6ec5edddbdd26dc300594d754d66d939c",
+      "size": 253722,
+      "exportVersion": "4.0.61"
+    },
+    {
+      "path": "fixtures/official/4.0/raptor/raptor.png",
+      "upstreamPath": "examples/raptor/export/raptor.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/425ce416bb218b28caeec47b317aa57cd7140375/examples/raptor/export/raptor.png",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "sha256": "7230d81444ab4d52b40c21fd06a9183a90768f8621e3469ba17e9ddab5988fcc",
+      "size": 481474
+    },
+    {
+      "path": "fixtures/official/4.0/raptor/raptor.skel",
+      "upstreamPath": "examples/raptor/export/raptor-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/425ce416bb218b28caeec47b317aa57cd7140375/examples/raptor/export/raptor-pro.skel",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "sha256": "29197c228a2a8d4fa7280932621e45729d4266b0412e656d2203dacac94a2131",
+      "size": 82189,
+      "exportVersion": "4.0.61"
+    },
+    {
+      "path": "fixtures/official/4.0/spineboy-pma/spineboy-pma.atlas",
+      "upstreamPath": "examples/spineboy/export/spineboy-pma.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/425ce416bb218b28caeec47b317aa57cd7140375/examples/spineboy/export/spineboy-pma.atlas",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "sha256": "d67e56e6b9a353d4cc9bd42d7140208ea3aa403f2e1d8e8e4d85149f0d34a521",
+      "size": 1775
+    },
+    {
+      "path": "fixtures/official/4.0/spineboy-pma/spineboy-pma.json",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/425ce416bb218b28caeec47b317aa57cd7140375/examples/spineboy/export/spineboy-pro.json",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "sha256": "30cb336cccf08ee909f9a5fa2b8b55b36df41e218828c185ddbba92b239e50a1",
+      "size": 220440,
+      "exportVersion": "4.0.31"
+    },
+    {
+      "path": "fixtures/official/4.0/spineboy-pma/spineboy-pma.png",
+      "upstreamPath": "examples/spineboy/export/spineboy-pma.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/425ce416bb218b28caeec47b317aa57cd7140375/examples/spineboy/export/spineboy-pma.png",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "sha256": "c28426b3bbdb5aad672e9e24246fa519ebcbc5fffc8624b2e024a7aafef25849",
+      "size": 250891
+    },
+    {
+      "path": "fixtures/official/4.0/spineboy-pma/spineboy-pma.skel",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/425ce416bb218b28caeec47b317aa57cd7140375/examples/spineboy/export/spineboy-pro.skel",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "sha256": "3347eeac9858b9eee5415cd36435d9b529c30793e66a04edb20c0a57b427e918",
+      "size": 67481,
+      "exportVersion": "4.0.31"
+    },
+    {
+      "path": "fixtures/official/4.0/spineboy/spineboy.atlas",
+      "upstreamPath": "examples/spineboy/export/spineboy.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/425ce416bb218b28caeec47b317aa57cd7140375/examples/spineboy/export/spineboy.atlas",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "sha256": "fdc4bbc4be5f1a638fa0ff384271007b1f2df72855dd80b4b239bcfe8a4ac31e",
+      "size": 1760
+    },
+    {
+      "path": "fixtures/official/4.0/spineboy/spineboy.json",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/425ce416bb218b28caeec47b317aa57cd7140375/examples/spineboy/export/spineboy-pro.json",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "sha256": "30cb336cccf08ee909f9a5fa2b8b55b36df41e218828c185ddbba92b239e50a1",
+      "size": 220440,
+      "exportVersion": "4.0.31"
+    },
+    {
+      "path": "fixtures/official/4.0/spineboy/spineboy.png",
+      "upstreamPath": "examples/spineboy/export/spineboy.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/425ce416bb218b28caeec47b317aa57cd7140375/examples/spineboy/export/spineboy.png",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "sha256": "0d9b45a631079e08973ef39799e5fffc6a57c8dae12421120bac1d559e564b96",
+      "size": 249068
+    },
+    {
+      "path": "fixtures/official/4.0/spineboy/spineboy.skel",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/425ce416bb218b28caeec47b317aa57cd7140375/examples/spineboy/export/spineboy-pro.skel",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "sha256": "3347eeac9858b9eee5415cd36435d9b529c30793e66a04edb20c0a57b427e918",
+      "size": 67481,
+      "exportVersion": "4.0.31"
+    },
+    {
+      "path": "fixtures/official/4.0/tank/tank.atlas",
+      "upstreamPath": "examples/tank/export/tank.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/425ce416bb218b28caeec47b317aa57cd7140375/examples/tank/export/tank.atlas",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "sha256": "34f821250be2ed50566760d7f755a77ee1e2bc84c475aec909e6d027d8ed49e8",
+      "size": 1032
+    },
+    {
+      "path": "fixtures/official/4.0/tank/tank.json",
+      "upstreamPath": "examples/tank/export/tank-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/425ce416bb218b28caeec47b317aa57cd7140375/examples/tank/export/tank-pro.json",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "sha256": "157079c2acb266c4db2fb31804e1da146127acc6cc2a44118d65415f3335151c",
+      "size": 157157,
+      "exportVersion": "4.0.31"
+    },
+    {
+      "path": "fixtures/official/4.0/tank/tank.png",
+      "upstreamPath": "examples/tank/export/tank.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/425ce416bb218b28caeec47b317aa57cd7140375/examples/tank/export/tank.png",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "sha256": "95e194ed7e8ac3d2a9ab36fe522afe3073895603b3f47f49d8248d77e2a5b397",
+      "size": 447662
+    },
+    {
+      "path": "fixtures/official/4.0/tank/tank.skel",
+      "upstreamPath": "examples/tank/export/tank-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/425ce416bb218b28caeec47b317aa57cd7140375/examples/tank/export/tank-pro.skel",
+      "commit": "425ce416bb218b28caeec47b317aa57cd7140375",
+      "sha256": "ed79f548125d9f59775cff66fcd92c3c49e3340e5d1ecd593f29800a7e4dec52",
+      "size": 46688,
+      "exportVersion": "4.0.31"
+    },
+    {
+      "path": "fixtures/official/4.1/LICENSE",
+      "upstreamPath": "LICENSE",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/77a5db0ec6d16331f5efbaa7662bba9355bd3424/LICENSE",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "sha256": "24f517153a2b090abc002972d4ec13f6aec3ac002c88d764b9067f2da1457a7e",
+      "size": 1467
+    },
+    {
+      "path": "fixtures/official/4.1/raptor/raptor.atlas",
+      "upstreamPath": "examples/raptor/export/raptor.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/raptor/export/raptor.atlas",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "sha256": "c12e21c7fbc0f0bf955afc90e438883f215d9ba8846519c0408233a0182ee35c",
+      "size": 1805
+    },
+    {
+      "path": "fixtures/official/4.1/raptor/raptor.json",
+      "upstreamPath": "examples/raptor/export/raptor-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/raptor/export/raptor-pro.json",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "sha256": "3bc76571fd696cc1efe0ce4e281062b69b2c0613b33a19457b3e359a1ea634c5",
+      "size": 253694,
+      "exportVersion": "4.1.17"
+    },
+    {
+      "path": "fixtures/official/4.1/raptor/raptor.png",
+      "upstreamPath": "examples/raptor/export/raptor.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/raptor/export/raptor.png",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "sha256": "597a01dbb1660cda9a8a5f11a9c0b94e628c4a9bc288f6aabad98f5804b919be",
+      "size": 423244
+    },
+    {
+      "path": "fixtures/official/4.1/raptor/raptor.skel",
+      "upstreamPath": "examples/raptor/export/raptor-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/raptor/export/raptor-pro.skel",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "sha256": "9c3ab8c1c02d8a1883aa1b4d9295548757bda154e7e0cfdbb86de99725b7295b",
+      "size": 82228,
+      "exportVersion": "4.1.17"
+    },
+    {
+      "path": "fixtures/official/4.1/spineboy-pma/spineboy-pma.atlas",
+      "upstreamPath": "examples/spineboy/export/spineboy-pma.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/spineboy/export/spineboy-pma.atlas",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "sha256": "d67e56e6b9a353d4cc9bd42d7140208ea3aa403f2e1d8e8e4d85149f0d34a521",
+      "size": 1775
+    },
+    {
+      "path": "fixtures/official/4.1/spineboy-pma/spineboy-pma.json",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/spineboy/export/spineboy-pro.json",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "sha256": "b7222ce40837f30ca08b05e5d5b2d00927f306fe2526a64db353e34df699b179",
+      "size": 220278,
+      "exportVersion": "4.1.17"
+    },
+    {
+      "path": "fixtures/official/4.1/spineboy-pma/spineboy-pma.png",
+      "upstreamPath": "examples/spineboy/export/spineboy-pma.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/spineboy/export/spineboy-pma.png",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "sha256": "8f34aacb646e10f68764032cbb7da9040a66575d4d5d42540410d7921b869076",
+      "size": 244631
+    },
+    {
+      "path": "fixtures/official/4.1/spineboy-pma/spineboy-pma.skel",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/spineboy/export/spineboy-pro.skel",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "sha256": "7104c7e8f45d3ce9af8fdcb7d50d95ab8cbbdddfda9e273e893845f6a234245c",
+      "size": 67563,
+      "exportVersion": "4.1.17"
+    },
+    {
+      "path": "fixtures/official/4.1/spineboy/spineboy.atlas",
+      "upstreamPath": "examples/spineboy/export/spineboy.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/spineboy/export/spineboy.atlas",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "sha256": "fdc4bbc4be5f1a638fa0ff384271007b1f2df72855dd80b4b239bcfe8a4ac31e",
+      "size": 1760
+    },
+    {
+      "path": "fixtures/official/4.1/spineboy/spineboy.json",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/spineboy/export/spineboy-pro.json",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "sha256": "b7222ce40837f30ca08b05e5d5b2d00927f306fe2526a64db353e34df699b179",
+      "size": 220278,
+      "exportVersion": "4.1.17"
+    },
+    {
+      "path": "fixtures/official/4.1/spineboy/spineboy.png",
+      "upstreamPath": "examples/spineboy/export/spineboy.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/spineboy/export/spineboy.png",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "sha256": "96c55a06237f1b7475cd1287a26ebc71644324f42984ac0ccd2d112c43bd135a",
+      "size": 244844
+    },
+    {
+      "path": "fixtures/official/4.1/spineboy/spineboy.skel",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/spineboy/export/spineboy-pro.skel",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "sha256": "7104c7e8f45d3ce9af8fdcb7d50d95ab8cbbdddfda9e273e893845f6a234245c",
+      "size": 67563,
+      "exportVersion": "4.1.17"
+    },
+    {
+      "path": "fixtures/official/4.1/tank/tank.atlas",
+      "upstreamPath": "examples/tank/export/tank.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/tank/export/tank.atlas",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "sha256": "34f821250be2ed50566760d7f755a77ee1e2bc84c475aec909e6d027d8ed49e8",
+      "size": 1032
+    },
+    {
+      "path": "fixtures/official/4.1/tank/tank.json",
+      "upstreamPath": "examples/tank/export/tank-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/tank/export/tank-pro.json",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "sha256": "97556dc8ede2b6e5a902a5865da135ebeb574662f06430f68586078ab52a8224",
+      "size": 157222,
+      "exportVersion": "4.1.17"
+    },
+    {
+      "path": "fixtures/official/4.1/tank/tank.png",
+      "upstreamPath": "examples/tank/export/tank.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/tank/export/tank.png",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "sha256": "d1f7064b2ffd9c71e3b28c6c1e23ce1dc10f13734bbb140252390f93dd786804",
+      "size": 430119
+    },
+    {
+      "path": "fixtures/official/4.1/tank/tank.skel",
+      "upstreamPath": "examples/tank/export/tank-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/77a5db0ec6d16331f5efbaa7662bba9355bd3424/examples/tank/export/tank-pro.skel",
+      "commit": "77a5db0ec6d16331f5efbaa7662bba9355bd3424",
+      "sha256": "5294476878a76c7ef2049bf0b86f70b78b5f8cc646cde30b3d37cefdbca732ac",
+      "size": 46960,
+      "exportVersion": "4.1.17"
+    },
+    {
+      "path": "fixtures/official/4.2/LICENSE",
+      "upstreamPath": "LICENSE",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/LICENSE",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "sha256": "b9d50158f6c23a704d123fd0200cc00633a693ccf9b0aacb15e5d5b9cf6c0d58",
+      "size": 1469
+    },
+    {
+      "path": "fixtures/official/4.2/raptor/raptor.atlas",
+      "upstreamPath": "examples/raptor/export/raptor.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/raptor/export/raptor.atlas",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "sha256": "60499dd637481439aa6ce89003358e69e9f558b4d8f305537c34ab44857e3056",
+      "size": 1715
+    },
+    {
+      "path": "fixtures/official/4.2/raptor/raptor.json",
+      "upstreamPath": "examples/raptor/export/raptor-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/raptor/export/raptor-pro.json",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "sha256": "b4dfddb8f288da8be49b7b95956355293e7339b93e8f909283cb102181f8a8a0",
+      "size": 253809,
+      "exportVersion": "4.2.22"
+    },
+    {
+      "path": "fixtures/official/4.2/raptor/raptor.png",
+      "upstreamPath": "examples/raptor/export/raptor.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/raptor/export/raptor.png",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "sha256": "a8131da0a9132540962082dfdb95c44c10612862448b69ba2c87318353f6fbca",
+      "size": 423005
+    },
+    {
+      "path": "fixtures/official/4.2/raptor/raptor.skel",
+      "upstreamPath": "examples/raptor/export/raptor-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/raptor/export/raptor-pro.skel",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "sha256": "db8e756bc1814a2ace08eb6bc78bc0a6660f2267970b0549444f6138c3e6dc65",
+      "size": 78705,
+      "exportVersion": "4.2.22"
+    },
+    {
+      "path": "fixtures/official/4.2/spineboy-pma/spineboy-pma.atlas",
+      "upstreamPath": "examples/spineboy/export/spineboy-pma.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/spineboy/export/spineboy-pma.atlas",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "sha256": "a53dd09fa8d304b395062c0a35a4c3952e979dda00e74b9cd95a5bc264cd6d5d",
+      "size": 1695
+    },
+    {
+      "path": "fixtures/official/4.2/spineboy-pma/spineboy-pma.json",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/spineboy/export/spineboy-pro.json",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "sha256": "488face411ddfad77ee3239b29431deb574d73f4feca7eca541452ad24bb6bfc",
+      "size": 220662,
+      "exportVersion": "4.2.22"
+    },
+    {
+      "path": "fixtures/official/4.2/spineboy-pma/spineboy-pma.png",
+      "upstreamPath": "examples/spineboy/export/spineboy-pma.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/spineboy/export/spineboy-pma.png",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "sha256": "eb8a9b9f105517acda7ab5c9961f6c487a6bc2ac28a6a123f6303a6af805dd3f",
+      "size": 244861
+    },
+    {
+      "path": "fixtures/official/4.2/spineboy-pma/spineboy-pma.skel",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/spineboy/export/spineboy-pro.skel",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "sha256": "1345de0e8e4729559f39060ed614429b21ab39bfc09ed2e1f58fcf054a8b5925",
+      "size": 64463,
+      "exportVersion": "4.2.22"
+    },
+    {
+      "path": "fixtures/official/4.2/spineboy/spineboy.atlas",
+      "upstreamPath": "examples/spineboy/export/spineboy.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/spineboy/export/spineboy.atlas",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "sha256": "fc90c2a604c14bb3ae1a81f9c950660863a41654cb29c869423a86e127fa75ae",
+      "size": 1680
+    },
+    {
+      "path": "fixtures/official/4.2/spineboy/spineboy.json",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/spineboy/export/spineboy-pro.json",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "sha256": "488face411ddfad77ee3239b29431deb574d73f4feca7eca541452ad24bb6bfc",
+      "size": 220662,
+      "exportVersion": "4.2.22"
+    },
+    {
+      "path": "fixtures/official/4.2/spineboy/spineboy.png",
+      "upstreamPath": "examples/spineboy/export/spineboy.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/spineboy/export/spineboy.png",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "sha256": "071a6adec73378eebd802a047d274deefe11abee3ce689a1e71acb4cb41e331e",
+      "size": 245321
+    },
+    {
+      "path": "fixtures/official/4.2/spineboy/spineboy.skel",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/spineboy/export/spineboy-pro.skel",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "sha256": "1345de0e8e4729559f39060ed614429b21ab39bfc09ed2e1f58fcf054a8b5925",
+      "size": 64463,
+      "exportVersion": "4.2.22"
+    },
+    {
+      "path": "fixtures/official/4.2/tank/tank.atlas",
+      "upstreamPath": "examples/tank/export/tank.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/tank/export/tank.atlas",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "sha256": "bcaafa241f51c58db0172734b3257def51fe8000673101b1363d098e42862b51",
+      "size": 1120
+    },
+    {
+      "path": "fixtures/official/4.2/tank/tank.json",
+      "upstreamPath": "examples/tank/export/tank-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/tank/export/tank-pro.json",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "sha256": "5035512282471b046711f6bd4d853fd7376321b9bca6cc35588554515af3558c",
+      "size": 157896,
+      "exportVersion": "4.2.22"
+    },
+    {
+      "path": "fixtures/official/4.2/tank/tank.png",
+      "upstreamPath": "examples/tank/export/tank.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/tank/export/tank.png",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "sha256": "a0e6136583054ef86c8221ffebde45e33903b1814ab8bb78e4c021a830992a8b",
+      "size": 469386
+    },
+    {
+      "path": "fixtures/official/4.2/tank/tank.skel",
+      "upstreamPath": "examples/tank/export/tank-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/e7dc1435fa4a0083ab431f1b28e083c14a1f5c68/examples/tank/export/tank-pro.skel",
+      "commit": "e7dc1435fa4a0083ab431f1b28e083c14a1f5c68",
+      "sha256": "b4bb4fd8a6d6386bdfafa2a4cce443cdfd1a81a5e54720c5a9c7af7caf313601",
+      "size": 44979,
+      "exportVersion": "4.2.22"
+    },
+    {
+      "path": "fixtures/official/4.3/LICENSE",
+      "upstreamPath": "LICENSE",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/LICENSE",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "sha256": "b9d50158f6c23a704d123fd0200cc00633a693ccf9b0aacb15e5d5b9cf6c0d58",
+      "size": 1469
+    },
+    {
+      "path": "fixtures/official/4.3/raptor/raptor.atlas",
+      "upstreamPath": "examples/raptor/export/raptor.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/raptor/export/raptor.atlas",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "sha256": "fb6e8532cb7665542b54ab661d0cadffe0171fcfe6b192595cd6ab622b08d8e6",
+      "size": 1604
+    },
+    {
+      "path": "fixtures/official/4.3/raptor/raptor.json",
+      "upstreamPath": "examples/raptor/export/raptor-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/raptor/export/raptor-pro.json",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "sha256": "2ba9fe06007bc7b44d412bdb5722b1cd8b5fbcd0f7a263ae1aa957a555e9742a",
+      "size": 293164,
+      "exportVersion": "4.3.75-beta"
+    },
+    {
+      "path": "fixtures/official/4.3/raptor/raptor.png",
+      "upstreamPath": "examples/raptor/export/raptor.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/raptor/export/raptor.png",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "sha256": "c2fcb6ac6c363f5b37f622feb727aed64fbd0205897a7ba8b6b45f8a091ab125",
+      "size": 418144
+    },
+    {
+      "path": "fixtures/official/4.3/raptor/raptor.skel",
+      "upstreamPath": "examples/raptor/export/raptor-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/raptor/export/raptor-pro.skel",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "sha256": "796a673fc1d0246bcd3673853e44a4e1b25d8fe2e146f4daa20d7eb402d8c726",
+      "size": 79378,
+      "exportVersion": "4.3.75-beta"
+    },
+    {
+      "path": "fixtures/official/4.3/spineboy-pma/spineboy-pma.atlas",
+      "upstreamPath": "examples/spineboy/export/spineboy-pma.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/spineboy/export/spineboy-pma.atlas",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "sha256": "b04b98b6ac9e28ee1cf660e4d96d6c7df21fbd5d47aa2382c84865ff18795db8",
+      "size": 1567
+    },
+    {
+      "path": "fixtures/official/4.3/spineboy-pma/spineboy-pma.json",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/spineboy/export/spineboy-pro.json",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "sha256": "24ccffc13e334e721dfd427ee2b8aea05c25b59167b5fb0bb0f9685e11d2a7d3",
+      "size": 255660,
+      "exportVersion": "4.3.75-beta"
+    },
+    {
+      "path": "fixtures/official/4.3/spineboy-pma/spineboy-pma.png",
+      "upstreamPath": "examples/spineboy/export/spineboy-pma.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/spineboy/export/spineboy-pma.png",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "sha256": "47bab0de0518a5b7daa829d953439972c5d43b78fc31b40e1557a2ed625a00b5",
+      "size": 241053
+    },
+    {
+      "path": "fixtures/official/4.3/spineboy-pma/spineboy-pma.skel",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/spineboy/export/spineboy-pro.skel",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "sha256": "e10de3f2473a37139c3ad1fda14e84b29ef401475ec9fa2129e7d2a311088845",
+      "size": 65335,
+      "exportVersion": "4.3.75-beta"
+    },
+    {
+      "path": "fixtures/official/4.3/spineboy/spineboy.atlas",
+      "upstreamPath": "examples/spineboy/export/spineboy.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/spineboy/export/spineboy.atlas",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "sha256": "fbd452640df513d637e0a34d21c1d3ea4edb27f57bd1856ffd5530b16ee83d00",
+      "size": 1552
+    },
+    {
+      "path": "fixtures/official/4.3/spineboy/spineboy.json",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/spineboy/export/spineboy-pro.json",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "sha256": "24ccffc13e334e721dfd427ee2b8aea05c25b59167b5fb0bb0f9685e11d2a7d3",
+      "size": 255660,
+      "exportVersion": "4.3.75-beta"
+    },
+    {
+      "path": "fixtures/official/4.3/spineboy/spineboy.png",
+      "upstreamPath": "examples/spineboy/export/spineboy.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/spineboy/export/spineboy.png",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "sha256": "ab874448a224f8a92188e133735062c86e5f93eb7286b0fc37c5d39864e6569f",
+      "size": 242791
+    },
+    {
+      "path": "fixtures/official/4.3/spineboy/spineboy.skel",
+      "upstreamPath": "examples/spineboy/export/spineboy-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/spineboy/export/spineboy-pro.skel",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "sha256": "e10de3f2473a37139c3ad1fda14e84b29ef401475ec9fa2129e7d2a311088845",
+      "size": 65335,
+      "exportVersion": "4.3.75-beta"
+    },
+    {
+      "path": "fixtures/official/4.3/tank/tank.atlas",
+      "upstreamPath": "examples/tank/export/tank.atlas",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/tank/export/tank.atlas",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "sha256": "003a119ec915ae5130582ba9100aa1ca37049727050d18c334261299f5d81cc5",
+      "size": 1011
+    },
+    {
+      "path": "fixtures/official/4.3/tank/tank.json",
+      "upstreamPath": "examples/tank/export/tank-pro.json",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/tank/export/tank-pro.json",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "sha256": "93916fbb35825b14ba4dbf3823a126d847f7980a4f7dcfec22004d898e9eadd5",
+      "size": 171221,
+      "exportVersion": "4.3.75-beta"
+    },
+    {
+      "path": "fixtures/official/4.3/tank/tank.png",
+      "upstreamPath": "examples/tank/export/tank.png",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/tank/export/tank.png",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "sha256": "52d92e423b47152c4611fac5c54ee07593a710cb6342fa2dd3ec72ee9b70576d",
+      "size": 444127
+    },
+    {
+      "path": "fixtures/official/4.3/tank/tank.skel",
+      "upstreamPath": "examples/tank/export/tank-pro.skel",
+      "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/1ad4e94bc3f16f4908a87a97d31e0de657f1788a/examples/tank/export/tank-pro.skel",
+      "commit": "1ad4e94bc3f16f4908a87a97d31e0de657f1788a",
+      "sha256": "f6565814bd520b06446584375ddf3ed42640e758be09d2646477321ab526aeca",
+      "size": 46041,
+      "exportVersion": "4.3.75-beta"
+    }
+  ]
+}

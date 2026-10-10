@@ -1,0 +1,21 @@
+{
+  "name": "@spine-preview/runtimes",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@spine-preview/core": "workspace:*",
+    "spine-webgl-40": "npm:@esotericsoftware/spine-webgl@4.0.31",
+    "spine-webgl-41": "npm:@esotericsoftware/spine-webgl@4.1.55",
+    "spine-webgl-42": "npm:@esotericsoftware/spine-webgl@4.2.120",
+    "spine-webgl-43": "npm:@esotericsoftware/spine-webgl@4.3.13"
+  },
+  "license": "MIT"
+}

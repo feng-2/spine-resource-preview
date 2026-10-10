@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Spine Preview 扩展开发宿主",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}/apps/vscode/dist/vsix-stage",
+        "--user-data-dir=${workspaceFolder}/.development/vscode-user-data",
+        "--extensions-dir=${workspaceFolder}/.development/vscode-extensions"
+      ],
+      "outFiles": ["${workspaceFolder}/apps/vscode/dist/extension.cjs"],
+      "preLaunchTask": "构建 Spine Preview 插件"
+    }
+  ]
+}

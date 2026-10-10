@@ -1,0 +1,98 @@
+[
+  {
+    "file": "3.7/LICENSE",
+    "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/spine-ts/LICENSE",
+    "sha256": "6142ee6cc2c03d3a918793e4750ae772bd3755c534d4a35e559e301acf51ec39",
+    "transformation": "none"
+  },
+  {
+    "file": "3.7/spineboy-ess/spineboy-ess.json",
+    "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/spine-ts/canvas/example/assets/spineboy-ess.json",
+    "sha256": "31713d436714796b50ad7c893f302ad100f11cb9c8f4469ff91d868b89e58e9f",
+    "transformation": "none",
+    "exportVersion": "3.7.90"
+  },
+  {
+    "file": "../official/3.7/spineboy-pma/spineboy-pma.atlas",
+    "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/spine-ts/player/example/assets/spineboy-pma.atlas",
+    "sha256": "829ee567e7e1652f8b3bb1bc0ac154b2cb4a603567f6cb1793544cdb0121ae66",
+    "transformation": "none"
+  },
+  {
+    "file": "../official/3.7/spineboy-pma/spineboy-pma.png",
+    "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/spine-ts/player/example/assets/spineboy-pma.png",
+    "sha256": "329772025bc8b329fb9c94f6b0dec5eb8bdbc0cd401291adb24abf327250d195",
+    "transformation": "none"
+  },
+  {
+    "file": "../official/3.7/spineboy/spineboy.json",
+    "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/spine-ts/player/example/assets/spineboy-pro.json",
+    "sha256": "ca62ed6520dc10f1ec326c57e8aec073d0058b174eb2be41e4d749f557094d34",
+    "transformation": "none",
+    "exportVersion": "3.7.90"
+  },
+  {
+    "file": "3.7/spineboy-ess/spineboy.atlas",
+    "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/spine-ts/canvas/example/assets/spineboy.atlas",
+    "sha256": "2a504910a91f8541d0fb1f83d80c07236edc80888c95901953009e86e53a8147",
+    "transformation": "none",
+    "copiedFrom": "../official/3.7/spineboy/spineboy.atlas"
+  },
+  {
+    "file": "3.7/spineboy-ess/spineboy.png",
+    "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/9639bcc81722d7178fd9d1cdc1a3d55a4c91f989/spine-ts/canvas/example/assets/spineboy.png",
+    "sha256": "42e3d9411f5ca02146908fd22081968267419e048d66fcc5c721315146e114f6",
+    "transformation": "none",
+    "copiedFrom": "../official/3.7/spineboy/spineboy.png"
+  },
+  {
+    "file": "3.8/LICENSE",
+    "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/spine-ts/LICENSE",
+    "sha256": "6142ee6cc2c03d3a918793e4750ae772bd3755c534d4a35e559e301acf51ec39",
+    "transformation": "none"
+  },
+  {
+    "file": "3.8/spineboy-ess/spineboy-ess.json",
+    "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/spine-ts/canvas/example/assets/spineboy-ess.json",
+    "sha256": "d88ae1012e85e961460667d82e097563f1f501bf20394bf19ecb0a8f42412fff",
+    "transformation": "none",
+    "exportVersion": "3.8.99"
+  },
+  {
+    "file": "3.8/spineboy-pro/spineboy-pma.atlas",
+    "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/spine-ts/webgl/example/assets/spineboy-pma.atlas",
+    "sha256": "31a282a87deb958def9ccddce16449d44770ddac57b55d7278c6a7bd8ef192a6",
+    "transformation": "none"
+  },
+  {
+    "file": "3.8/spineboy-pro/spineboy-pma.png",
+    "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/spine-ts/webgl/example/assets/spineboy-pma.png",
+    "sha256": "c6f1926bd80068af07a60069561b1d44a81e5fb7f67349f0cbb263f16dd93251",
+    "transformation": "none"
+  },
+  {
+    "file": "../official/3.8/spineboy/spineboy.json",
+    "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/examples/spineboy/export/spineboy-pro.json",
+    "sha256": "d794ae5ecc8f245929fef6b6f5212ce511990fc7ffdbc3ed77422db72ab3b14c",
+    "transformation": "none",
+    "exportVersion": "3.8.55"
+  },
+  {
+    "file": "3.8/spineboy-pro/spineboy-pro.skel",
+    "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/spine-ts/webgl/example/assets/spineboy-pro.skel",
+    "sha256": "e462168a6e6c105a26b2d4383ded153f5b96e5295a546773991bb516cc0bbc49",
+    "transformation": "none"
+  },
+  {
+    "file": "3.8/spineboy-ess/spineboy.atlas",
+    "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/spine-ts/canvas/example/assets/spineboy.atlas",
+    "sha256": "c9ed1ffc634068047d9e280df1969dc216298011a663ca3bea2c591b48269395",
+    "transformation": "none"
+  },
+  {
+    "file": "3.8/spineboy-ess/spineboy.png",
+    "url": "https://raw.githubusercontent.com/EsotericSoftware/spine-runtimes/8b4844bd4b193ba9e54487ed397a777993cbad56/spine-ts/canvas/example/assets/spineboy.png",
+    "sha256": "574f0bbb2452208387124f4ceb77f325fd340b2f2005786df960c8b455bf8c62",
+    "transformation": "none"
+  }
+]

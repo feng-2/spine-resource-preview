@@ -1,0 +1,5 @@
+{
+  "extension.displayName": "Spine 資源預覽",
+  "extension.description": "在本機預覽 Spine 3.7、3.8、4.0～4.3 動畫資源。",
+  "command.open.title": "預覽 Spine 資源"
+}

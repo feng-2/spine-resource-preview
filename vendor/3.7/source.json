@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/EsotericSoftware/spine-runtimes",
+  "commit": "9639bcc81722d7178fd9d1cdc1a3d55a4c91f989",
+  "upstreamPath": "spine-ts/build/spine-webgl.js",
+  "upstreamSha256": "4af855a371895649bd153d28ae428012ccfac3eaf7a8416b183a68b650604891",
+  "moduleSha256": "d6fe355f5ff589abb168c694da05c262d59804fb9b4dabd87a781cf6b0413bbc",
+  "licenseSha256": "6142ee6cc2c03d3a918793e4750ae772bd3755c534d4a35e559e301acf51ec39",
+  "transformation": "replace sourceMappingURL comment with plain comment; append export default spine; original var spine stays module-scoped"
+}

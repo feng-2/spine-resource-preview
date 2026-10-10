@@ -1,0 +1,5 @@
+{
+  "extension.displayName": "Просмотр ресурсов Spine",
+  "extension.description": "Локальный просмотр анимаций Spine 3.7, 3.8 и 4.0–4.3.",
+  "command.open.title": "Просмотреть ресурсы Spine"
+}
