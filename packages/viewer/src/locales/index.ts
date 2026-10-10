@@ -1,3 +1,4 @@
+import { LANGUAGES } from '../languages.js';
 import { en } from './en.js';
 import { zhCN } from './zh-CN.js';
 import { zhTW } from './zh-TW.js';
@@ -11,18 +12,14 @@ import { ru } from './ru.js';
 
 /** 语言统一登记；选项用本语言名称，便于任何界面语言下辨认。 */
 export const LOCALES = {
-  en: { label: 'English', description: 'English', messages: en },
-  'zh-CN': { label: '简体中文', description: 'Simplified Chinese', messages: zhCN },
-  'zh-TW': { label: '繁體中文', description: 'Traditional Chinese', messages: zhTW },
-  ja: { label: '日本語', description: 'Japanese', messages: ja },
-  ko: { label: '한국어', description: 'Korean', messages: ko },
-  de: { label: 'Deutsch', description: 'German', messages: de },
-  fr: { label: 'Français', description: 'French', messages: fr },
-  es: { label: 'Español', description: 'Spanish', messages: es },
-  'pt-BR': {
-    label: 'Português (Brasil)',
-    description: 'Portuguese (Brazil)',
-    messages: ptBR,
-  },
-  ru: { label: 'Русский', description: 'Russian', messages: ru },
+  en: { ...LANGUAGES.en, messages: en },
+  'zh-CN': { ...LANGUAGES['zh-CN'], messages: zhCN },
+  'zh-TW': { ...LANGUAGES['zh-TW'], messages: zhTW },
+  ja: { ...LANGUAGES.ja, messages: ja },
+  ko: { ...LANGUAGES.ko, messages: ko },
+  de: { ...LANGUAGES.de, messages: de },
+  fr: { ...LANGUAGES.fr, messages: fr },
+  es: { ...LANGUAGES.es, messages: es },
+  'pt-BR': { ...LANGUAGES['pt-BR'], messages: ptBR },
+  ru: { ...LANGUAGES.ru, messages: ru },
 } as const;

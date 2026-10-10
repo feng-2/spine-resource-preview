@@ -20,7 +20,7 @@ import {
   translate,
   type Locale,
 } from './i18n.js';
-import type { ViewerProps, ViewerSnapshot } from './types.js';
+import type { ViewerCommand, ViewerProps, ViewerSnapshot } from './types.js';
 
 const EMPTY: ViewerSnapshot = {
   revision: -1,
@@ -62,6 +62,14 @@ export function SpineViewer({ source }: ViewerProps) {
   const dragDepth = useRef(0);
   const sourceGeneration = useRef(0);
   const latestSnapshot = useRef(EMPTY);
+  const rememberedAnimation = useRef<{ resourceId: string; animation?: string } | null>(
+    null,
+  );
+  const controllerIdentity = useRef<{ resourceId: string; revision: number } | null>(
+    null,
+  );
+  const queuedCommand = useRef<ViewerCommand | null>(null);
+  const commandHandler = useRef<(command: ViewerCommand) => void>(() => {});
   if (!lifecycle.current)
     lifecycle.current = new PreviewLifecycle(createPreviewController);
 
@@ -78,6 +86,8 @@ export function SpineViewer({ source }: ViewerProps) {
     latestSnapshot.current = EMPTY;
     setSnapshot(EMPTY);
     setSelection(null);
+    rememberedAnimation.current = null;
+    queuedCommand.current = null;
     setActionError('');
     const unsubscribe = source.subscribe((next) => {
       if (generation === sourceGeneration.current) {
@@ -105,6 +115,7 @@ export function SpineViewer({ source }: ViewerProps) {
 
   useEffect(() => {
     controller.current = null;
+    controllerIdentity.current = null;
     setReady(false);
     setAnimations([]);
     setAnimation(undefined);
@@ -114,6 +125,10 @@ export function SpineViewer({ source }: ViewerProps) {
     setFailure(null);
     setLoading(Boolean(activeResource && snapshot.provider));
     if (!activeResource || !snapshot.provider || !host.current) {
+      if (!snapshot.loading && !activeResource) {
+        rememberedAnimation.current = null;
+        queuedCommand.current = null;
+      }
       void lifecycle.current!.replace(null);
       return;
     }
@@ -125,6 +140,15 @@ export function SpineViewer({ source }: ViewerProps) {
       options: {
         onChange: setView,
         onError: (error) => {
+          source.reportPreviewState?.({
+            revision: snapshot.revision,
+            resourceId: resource.id,
+            animations: [...(controller.current?.animations ?? [])],
+            ...(rememberedAnimation.current?.animation !== undefined
+              ? { animation: rememberedAnimation.current.animation }
+              : {}),
+            error: errorText(error),
+          });
           setFailure({
             code: 'RENDER_FAILED',
             stage: 'render',
@@ -135,13 +159,51 @@ export function SpineViewer({ source }: ViewerProps) {
       },
       ready: (next) => {
         controller.current = next;
+        controllerIdentity.current = {
+          resourceId: resource.id,
+          revision: snapshot.revision,
+        };
+        // 热重载优先保留有效动作；加载期间的显式播放请求具有更高优先级。
+        const pending = queuedCommand.current;
+        const previous = rememberedAnimation.current;
+        const preferred =
+          pending?.resourceId === resource.id
+            ? pending.animation
+            : source.externalNavigation && previous?.resourceId === resource.id
+              ? previous.animation
+              : undefined;
+        const chosen =
+          preferred !== undefined && next.animations.includes(preferred)
+            ? preferred
+            : next.animations[0];
+        queuedCommand.current = null;
+        if (chosen !== undefined && chosen !== next.animations[0])
+          next.play(chosen, true);
+        rememberedAnimation.current = {
+          resourceId: resource.id,
+          ...(chosen !== undefined ? { animation: chosen } : {}),
+        };
         setAnimations(next.animations);
-        setAnimation(next.animations[0]);
+        setAnimation(chosen);
         setReady(true);
         setLoading(false);
+        source.reportPreviewState?.({
+          revision: snapshot.revision,
+          resourceId: resource.id,
+          animations: [...next.animations],
+          ...(chosen !== undefined ? { animation: chosen } : {}),
+        });
       },
       failed: (error) => {
+        controller.current = null;
+        controllerIdentity.current = null;
         setLoading(false);
+        source.reportPreviewState?.({
+          revision: snapshot.revision,
+          resourceId: resource.id,
+          animations: [],
+          error: errorText(error),
+        });
         setFailure({
           code: 'PREVIEW_LOAD_FAILED',
           stage: 'load',
@@ -152,9 +214,10 @@ export function SpineViewer({ source }: ViewerProps) {
     });
     return () => {
       controller.current = null;
+      controllerIdentity.current = null;
       void lifecycle.current!.replace(null);
     };
-  }, [activeResource, snapshot.provider, snapshot.revision, retry]);
+  }, [activeResource, snapshot.provider, snapshot.revision, retry, source]);
 
   // 来源操作也带代际；旧导入的晚到拒绝不能盖住新来源状态。
   const run = (action: () => void | Promise<void>) => {
@@ -178,9 +241,50 @@ export function SpineViewer({ source }: ViewerProps) {
   };
   const play = (name: string) =>
     control((current) => {
-      current.play(name, loop);
+      try {
+        current.play(name, loop);
+      } catch (error) {
+        if (activeResource)
+          source.reportPreviewState?.({
+            revision: snapshot.revision,
+            resourceId: activeResource.id,
+            animations: [...current.animations],
+            ...(animation !== undefined ? { animation } : {}),
+            error: errorText(error),
+          });
+        throw error;
+      }
       setAnimation(name);
+      if (activeResource) {
+        rememberedAnimation.current = { resourceId: activeResource.id, animation: name };
+        source.reportPreviewState?.({
+          revision: snapshot.revision,
+          resourceId: activeResource.id,
+          animations: [...current.animations],
+          animation: name,
+        });
+      }
     });
+  commandHandler.current = (command) => {
+    const latest = latestSnapshot.current;
+    if (!latest.result.resources.some((resource) => resource.id === command.resourceId))
+      return;
+    const identity = controllerIdentity.current;
+    if (
+      !controller.current ||
+      identity?.resourceId !== command.resourceId ||
+      identity.revision !== latest.revision
+    ) {
+      queuedCommand.current = command;
+      return;
+    }
+    if (controller.current.animations.includes(command.animation))
+      play(command.animation);
+  };
+  useEffect(
+    () => source.subscribeCommands?.((command) => commandHandler.current(command)),
+    [source],
+  );
   const diagnostics = [...snapshot.result.diagnostics, ...(failure ? [failure] : [])];
   const busy = snapshot.loading || loading;
   const discoveryFailure = !resources.length && snapshot.result.diagnostics[0];
@@ -248,26 +352,30 @@ export function SpineViewer({ source }: ViewerProps) {
           saveLocale(value);
         }}
       />
-      <main className="workspace">
-        <aside className="sidebar" aria-label={t('resourceAndAnimation')}>
-          <ResourceList
-            locale={locale}
-            resources={resources}
-            selectedId={selected?.id}
-            loading={snapshot.loading}
-            onSelect={(id) => {
-              if (selected?.id === id && failure) setRetry((current) => current + 1);
-              else setSelection({ revision: snapshot.revision, id });
-            }}
-          />
-          <AnimationList
-            locale={locale}
-            animations={animations}
-            animation={animation}
-            ready={ready}
-            onPlay={play}
-          />
-        </aside>
+      <main
+        className={`workspace${source.externalNavigation ? ' external-navigation' : ''}`}
+      >
+        {!source.externalNavigation && (
+          <aside className="sidebar" aria-label={t('resourceAndAnimation')}>
+            <ResourceList
+              locale={locale}
+              resources={resources}
+              selectedId={selected?.id}
+              loading={snapshot.loading}
+              onSelect={(id) => {
+                if (selected?.id === id && failure) setRetry((current) => current + 1);
+                else setSelection({ revision: snapshot.revision, id });
+              }}
+            />
+            <AnimationList
+              locale={locale}
+              animations={animations}
+              animation={animation}
+              ready={ready}
+              onPlay={play}
+            />
+          </aside>
+        )}
         <section className="preview-panel" aria-label={t('preview')}>
           <PreviewToolbar
             locale={locale}

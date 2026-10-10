@@ -18,7 +18,8 @@ The web viewer after importing the official Spine 4.2 examples: resource browsin
 
 ## Features
 
-- **Folder-based discovery.** Import individual files or a folder in the web app. In VS Code, right-click a directory to find resources recursively.
+- **Folder-based discovery.** Import individual files or a folder in the web app. In VS Code, open the Spine sidebar to discover workspace resources, or right-click a directory to narrow the scope.
+- **Live VS Code navigation.** Native resource and animation trees, multiple workspace folders, and automatic updates when exports or their dependencies change. Unrelated changes keep the current animation playing.
 - **Animation browsing.** Select a resource, choose an animation, pause, replay, loop, and adjust playback speed. Resources without animations display their setup pose.
 - **Version-aware rendering.** Separate official runtimes for Spine 3.7, 3.8, 4.0, 4.1, 4.2, and 4.3, loaded as needed.
 - **A useful preview canvas.** Transparent checkerboard, scroll-to-zoom, drag-to-pan, automatic fitting for oversized resources, and a one-click return to a centered 100% view.
@@ -57,6 +58,10 @@ Page filenames come from the atlas; they do not have to match the skeleton filen
 
 ### VS Code extension
 
+![VS Code extension with native Resources and Animations views beside the Spineboy editor preview](assets/screenshots/vscode-preview-en.jpg)
+
+Browse resources and actions in the native sidebar; keep playback, zoom, and pan in the editor canvas. Example artwork © Esoteric Software; see the [original asset license](fixtures/official/4.2/LICENSE).
+
 Install [Spine Resource Preview from Marketplace](https://marketplace.visualstudio.com/items?itemName=cceevv.spine-resource-preview), or use the local VSIX build below.
 
 Requires **VS Code 1.90+**. Build the installation package from the repository root:
@@ -73,7 +78,11 @@ In VS Code, run **Extensions: Install from VSIX…** and select `apps/vscode/dis
 | Skeleton `.json` / `.skel` file | Scans skeletons in its containing directory, without recursively discovering skeletons in subdirectories; selects the clicked resource.     |
 | Atlas or image file             | Scans the containing directory and selects the associated resource when the association is unique. Ambiguous associations show diagnostics. |
 
-Right-click the selection and choose **Preview Spine Resources**. Dependencies referenced inside subdirectories can still be loaded when a file is selected. The panel also provides native file/folder selection and resource refresh.
+Click the **Spine** Activity Bar icon to scan all open workspace folders recursively. Select a resource in the native **Resources** view to open the editor preview, then choose an action in **Animations**. Scanning alone does not open a preview tab; binary animation names appear after loading.
+
+Right-click an Explorer selection and choose **Preview Spine Resources** to use the scope in the table above. **Return to Workspace** restores the complete workspace scope. Hover over the **Resources** heading and click its root-folder icon, or run **Spine: Return to Workspace** in the Command Palette. The button appears only for a temporary file/folder scope. **Refresh Resources** rescans the current scope; it does not restore the workspace. Dependencies referenced inside subdirectories can still be loaded when a file is selected. The preview also provides native file/folder selection.
+
+The active source is watched for additions, changes, moves, and deletions. Incomplete exports become available when their dependencies arrive. Changes to unrelated resources do not restart playback; a changed selected export reloads and keeps its selected animation if available. Deleting the selected resource clears the preview. Use **Refresh resources** in the sidebar toolbar to rescan manually. Common generated directories such as `.git`, `node_modules`, `dist`, and `build` are excluded.
 
 The extension runs from its bundled files and needs no development server. Its extension identifier is `cceevv.spine-resource-preview`.
 
@@ -98,7 +107,7 @@ Use a current browser with WebGL enabled. The build targets Chromium 108+ and Sa
 
 ## Language and privacy
 
-The viewer opens in **English** by default. Use the language selector in the header; your explicit choice is saved locally when storage is available. The VS Code command, progress notifications, and native dialogs follow the editor's display language independently.
+The viewer opens in **English** by default. Use the language selector in the header; your explicit choice is saved locally when storage is available. The VS Code sidebar, commands, progress notifications, and native dialogs follow the editor's display language independently.
 
 Resource names, animation names, paths, and original runtime error details remain unchanged. Known diagnostic descriptions are localized. Imported files are read through browser APIs or the VS Code file API and are not sent to a server. On remote VS Code workspaces, reads follow VS Code's remote file API; those environments have not yet been fully verified.
 
@@ -134,7 +143,7 @@ pnpm check:site
 pnpm preview:site
 ```
 
-Open <http://127.0.0.1:4181/>. The single deployment directory is `dist/site`: the product website lives at the root, and the compiled `apps/web` viewer lives at `app/`. All assets and runtime licenses are included. The website uses the checked-in English screenshot and provides English/Simplified Chinese content; the viewer keeps its independent ten-language selector.
+Open <http://127.0.0.1:4181/>. The single deployment directory is `dist/site`: the product website lives at the root, and the compiled `apps/web` viewer lives at `app/`. All assets and runtime licenses are included. The website uses the checked-in English screenshot and supports the same ten languages as the viewer; each saves its own language preference independently.
 
 For GitHub Pages:
 
@@ -147,7 +156,7 @@ For a project repository, the website will be at `https://<account>.github.io/<r
 
 The workflow reads the public repository URL from GitHub's own `GITHUB_REPOSITORY` environment variable. For a local build with source links, set `VITE_REPOSITORY_URL` to your HTTPS repository URL. Without it, the website links to its bundled documentation. Deployment is triggered only after the workflow is pushed; no GitHub upload is performed by local build commands.
 
-For website development, run `pnpm dev:site` on port 5181 and `pnpm dev` for the viewer on port 5180 in another terminal. Website source lives in `apps/site`; its copy is separated into `src/content.ts`. The VS Code section reads the publisher, version, and minimum editor version from the extension manifest. Builds query the public Marketplace listing; once indexed, the site displays Marketplace and VS Code installation links. If the query is unavailable, the site keeps its VSIX guide. For an offline build, `VITE_EXTENSION_PUBLISHED=true` / `false` can explicitly select the presentation state; visitors do not make Marketplace API requests.
+For website development, run `pnpm dev:site` on port 5181 and `pnpm dev` for the viewer on port 5180 in another terminal. Website source lives in `apps/site`; its copy is organized into one file per language in `src/locales/`. Site and viewer language codes and display names share the public `@spine-preview/viewer/languages` registry. The VS Code section reads the publisher, version, and minimum editor version from the extension manifest. Builds query the public Marketplace listing; once indexed, the site displays Marketplace and VS Code installation links. If the query is unavailable, the site keeps its VSIX guide. For an offline build, `VITE_EXTENSION_PUBLISHED=true` / `false` can explicitly select the presentation state; visitors do not make Marketplace API requests.
 
 ## Development and contributions
 

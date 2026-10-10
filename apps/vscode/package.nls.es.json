@@ -1,5 +1,10 @@
 {
   "extension.displayName": "Vista previa de recursos Spine",
   "extension.description": "Previsualiza localmente animaciones de Spine 3.7, 3.8 y 4.0–4.3.",
-  "command.open.title": "Previsualizar recursos Spine"
+  "command.open.title": "Previsualizar recursos Spine",
+  "command.refresh.title": "Actualizar recursos",
+  "command.workspace.title": "Volver al espacio de trabajo",
+  "view.resources.title": "Recursos",
+  "view.animations.title": "Animaciones",
+  "container.spine.title": "Vista previa de recursos Spine"
 }

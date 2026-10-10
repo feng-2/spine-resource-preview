@@ -1,6 +1,6 @@
 {
   "name": "@spine-preview/viewer",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "private": true,
   "type": "module",
   "exports": {
@@ -8,7 +8,8 @@
     "./style.css": "./src/style.css",
     "./assets": "./src/assets.ts",
     "./language-menu": "./src/components/LanguageMenu.tsx",
-    "./language-menu.css": "./src/components/language-menu.css"
+    "./language-menu.css": "./src/components/language-menu.css",
+    "./languages": "./src/languages.ts"
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json",

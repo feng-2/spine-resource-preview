@@ -1,6 +1,11 @@
 import { posix } from 'node:path';
 import type { Uri } from 'vscode';
-import type { ImageLease, ResourceFile, ResourceProvider } from '@spine-preview/core';
+import {
+  DEFAULT_EXCLUDED_DIRECTORIES,
+  type ImageLease,
+  type ResourceFile,
+  type ResourceProvider,
+} from '@spine-preview/core';
 
 /** 可注入的编辑器文件系统；测试不依赖真实 VS Code 进程。 */
 export interface ScannerServices {
@@ -10,7 +15,7 @@ export interface ScannerServices {
   stat(uri: Uri): PromiseLike<{ type: number; size: number }>;
   /** 按需读取文本或骨骼字节。 */
   readFile(uri: Uri): PromiseLike<Uint8Array>;
-  /** 将本地图片 URI 转换为受限 Webview URL。 */
+  /** 提供图片地址；索引可保留原 URI，展示时再转换为受限 Webview URL。 */
   imageUri(uri: Uri): string;
 }
 
@@ -40,19 +45,50 @@ export interface HostProvider extends ResourceProvider {
   get(fileId: string): ResourceFile | undefined;
 }
 
-const ignoredDirectories = new Set([
-  '.git',
-  'node_modules',
-  '.pnpm',
-  '.cache',
-  '.turbo',
-  'dist',
-  'build',
-]);
+const ignoredDirectories = new Set([...DEFAULT_EXCLUDED_DIRECTORIES, '.pnpm', '.turbo']);
+
+/** 只登记骨骼、图集和常见图片；其他依赖仍可通过 atlas 的精确路径按需解析。 */
+export function isSpineResourceFilePath(path: string): boolean {
+  return /\.(?:json|skel|atlas|png|jpe?g|webp|avif|gif|bmp|svg)$/iu.test(path);
+}
+
+/** 判断文件是否属于骨骼枚举范围，目录边界与默认排除规则和扫描保持一致。 */
+export function isUriInScanScope(uri: Uri, options: ScanOptions): boolean {
+  return (options.directories ?? [options.root]).some((directory) => {
+    let relative: string;
+    try {
+      relative = relativeUriPath(directory, uri);
+      relativeUriPath(options.root, uri);
+    } catch {
+      return false;
+    }
+    if (!relative) return false;
+    const recursive =
+      options.recursive ||
+      !!options.recursiveDirectories?.some(
+        (root) => root.toString() === directory.toString(),
+      );
+    const segments = relative.split('/');
+    return (
+      (recursive || segments.length === 1) &&
+      !segments.slice(0, -1).some((segment) => ignoredDirectories.has(segment))
+    );
+  });
+}
 
 /** 取消检查用于每次编辑器异步操作前后，防止晚到任务登记资源。 */
 export function checkCancelled(signal?: AbortSignal): void {
   if (signal?.aborted) throw new DOMException('扫描或读取已取消', 'AbortError');
+}
+
+/** 扫描期间被删除的文件允许跳过，权限等其他文件系统错误继续上报。 */
+function isFileNotFound(error: unknown): boolean {
+  return (
+    !!error &&
+    typeof error === 'object' &&
+    'code' in error &&
+    error.code === 'FileNotFound'
+  );
 }
 
 /** URI 路径相对化；跨 scheme/authority 的文件不能混入同一个 provider。 */
@@ -81,7 +117,14 @@ export async function scanProvider(
     const id = uri.toString();
     const cached = known.get(id);
     if (cached) return cached.file;
-    const info = await services.stat(uri);
+    let info: { type: number; size: number };
+    try {
+      info = await services.stat(uri);
+    } catch (error) {
+      checkCancelled(signal);
+      if (isFileNotFound(error)) return undefined;
+      throw error;
+    }
     checkCancelled(signal);
     // Symlink 标志可以与 File 联合；目录不作为可读取资源授权。
     if (!(info.type & 1)) return undefined;
@@ -100,12 +143,21 @@ export async function scanProvider(
     const visitId = `${directory.toString()}:${recursive}`;
     if (visited.has(visitId)) return;
     visited.add(visitId);
-    const children = await services.readDirectory(directory);
+    let children: [string, number][];
+    try {
+      children = await services.readDirectory(directory);
+    } catch (error) {
+      checkCancelled(options.signal);
+      // 根目录消失必须更新为空的失败索引；扫描途中消失的子目录只需跳过。
+      if (isFileNotFound(error) && directory.toString() !== options.root.toString())
+        return;
+      throw error;
+    }
     checkCancelled(options.signal);
     for (const [name, type] of children) {
       checkCancelled(options.signal);
       const uri = directory.with({ path: posix.join(directory.path, name) });
-      if (type & 1) {
+      if (type & 1 && isSpineResourceFilePath(name)) {
         const file = await describe(uri, options.signal);
         if (file && !listedIds.has(file.id)) {
           listedIds.add(file.id);
@@ -167,13 +219,7 @@ export async function scanProvider(
       } catch (error) {
         checkCancelled(signal);
         // FileNotFound 作为缺少依赖交给 core；权限与读取错误保留具体原因。
-        if (
-          error &&
-          typeof error === 'object' &&
-          'code' in error &&
-          error.code === 'FileNotFound'
-        )
-          return undefined;
+        if (isFileNotFound(error)) return undefined;
         throw error;
       }
     },

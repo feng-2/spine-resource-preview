@@ -28,11 +28,42 @@ describe('VS Code 原生本地化与扩展清单', () => {
     );
     expect(Object.keys(metadata).sort()).toEqual([
       'command.open.title',
+      'command.refresh.title',
+      'command.workspace.title',
+      'container.spine.title',
       'extension.description',
       'extension.displayName',
+      'view.animations.title',
+      'view.resources.title',
     ]);
     for (const text of Object.values(metadata)) expect(String(text).trim()).not.toBe('');
     expect(metadata['extension.displayName']).toBe(messages.panelTitle);
+  });
+
+  it('原生活动栏及两个视图声明存在的可迁移图标', () => {
+    const manifest = JSON.parse(
+      readFileSync(new URL('../package.json', import.meta.url), 'utf8'),
+    ) as {
+      contributes: {
+        viewsContainers: { activitybar: { id: string; icon: string }[] };
+        views: { spinePreview: { id: string; icon: string }[] };
+      };
+    };
+    const views = manifest.contributes.views.spinePreview;
+    expect(views.map((view) => view.id)).toEqual([
+      'spinePreview.resources',
+      'spinePreview.animations',
+    ]);
+    const container = manifest.contributes.viewsContainers.activitybar.find(
+      (item) => item.id === 'spinePreview',
+    );
+    expect(container).toBeDefined();
+    for (const contribution of [container!, ...views]) {
+      expect(contribution.icon).toBe('assets/sidebar.svg');
+      expect(
+        readFileSync(new URL(`../${contribution.icon}`, import.meta.url), 'utf8'),
+      ).toContain('<svg');
+    }
   });
 
   it.each([

@@ -124,6 +124,9 @@
   flex: 1;
   min-height: 0;
 }
+.spine-viewer .workspace.external-navigation {
+  grid-template-columns: minmax(0, 1fr);
+}
 .spine-viewer .sidebar {
   background: #171e2a;
   padding: 20px;

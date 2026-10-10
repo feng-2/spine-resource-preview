@@ -1,5 +1,10 @@
 {
   "extension.displayName": "Spine リソースプレビュー",
   "extension.description": "Spine 3.7、3.8、4.0～4.3 のアニメーションをローカルでプレビュー。",
-  "command.open.title": "Spine リソースをプレビュー"
+  "command.open.title": "Spine リソースをプレビュー",
+  "command.refresh.title": "リソースを更新",
+  "command.workspace.title": "ワークスペースに戻る",
+  "view.resources.title": "リソース",
+  "view.animations.title": "アニメーション",
+  "container.spine.title": "Spine リソースプレビュー"
 }

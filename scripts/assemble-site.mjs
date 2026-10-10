@@ -41,5 +41,11 @@ await cp(
   resolve(projectRoot, 'apps/vscode/README.md'),
   resolve(output, 'vscode/README.md'),
 );
+// 插件说明页的相对图片链接保留独立可访问的来源。
+await mkdir(resolve(output, 'vscode/assets'), { recursive: true });
+await cp(
+  resolve(projectRoot, 'assets/screenshots/vscode-preview-en.jpg'),
+  resolve(output, 'vscode/assets/preview.jpg'),
+);
 await writeFile(resolve(output, '.nojekyll'), '');
 console.log(`站点已生成：${output}\n宣传页 ./ · 预览工具 ./app/`);

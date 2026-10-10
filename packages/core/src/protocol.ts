@@ -3,6 +3,14 @@ import type { DiscoveryResult, ResourceFile } from './types.js';
 /** 扩展宿主向 Webview 发送的可序列化协议。 */
 export type HostMessage =
   | {
+      /** 从编辑器原生动画列表请求播放。 */
+      type: 'play-animation';
+      /** 仅操作当前选中的资源。 */
+      resourceId: string;
+      /** runtime 原始动画名称。 */
+      animation: string;
+    }
+  | {
       /** 扫描结果快照。 */
       type: 'snapshot';
       /** 新扫描代际。 */
@@ -39,6 +47,20 @@ export type HostMessage =
 
 /** Webview 向扩展宿主发送的请求。 */
 export type WebviewMessage =
+  | {
+      /** 把实际解析的动画和播放状态同步至编辑器原生列表。 */
+      type: 'preview-state';
+      /** 当前预览内容代际，旧实例的通知不得覆盖新选择。 */
+      revision: number;
+      /** 当前资源稳定身份。 */
+      resourceId: string;
+      /** runtime 实际返回的动画名称，二进制资源在加载后获得。 */
+      animations: string[];
+      /** 当前播放动画；没有动画时省略。 */
+      animation?: string;
+      /** 加载或渲染失败说明。 */
+      error?: string;
+    }
   | {
       /** 面板操作。 */
       type: 'ready' | 'refresh' | 'choose-files' | 'choose-folder';

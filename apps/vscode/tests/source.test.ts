@@ -7,6 +7,31 @@ import {
 import type { ViewerSnapshot } from '@spine-preview/viewer';
 import type { WebviewMessage } from '@spine-preview/core';
 
+/** 构造可供原生动画导航选择的资源快照。 */
+function selectedSnapshot(revision: number, id = 'hero') {
+  const value = snapshot(revision);
+  return {
+    ...value,
+    result: {
+      resources: [
+        {
+          id,
+          name: 'Hero',
+          version: '4.2',
+          exportVersion: '4.2.0',
+          format: 'json',
+          skeleton: value.files[0],
+          atlas: { id: 'file:///hero.atlas', path: 'hero.atlas', size: 2 },
+          pages: [],
+          animations: ['idle', 'walk'],
+        },
+      ],
+      diagnostics: [],
+      preferredResourceId: id,
+    },
+  };
+}
+
 /** 构造只含元数据的宿主索引，图片不使用 base64。 */
 function snapshot(revision: number) {
   return {
@@ -29,6 +54,95 @@ function snapshot(revision: number) {
 afterEach(() => vi.useRealTimers());
 
 describe('Webview 来源代际和按需读取', () => {
+  it('原生导航播放请求独立于快照和读取，挂载前请求只回放最新动作', async () => {
+    const source = new EditorSource({ postMessage: vi.fn() });
+    expect(source.externalNavigation).toBe(true);
+    let current: ViewerSnapshot | undefined;
+    source.subscribe((value) => {
+      current = value;
+    });
+    source.receive(selectedSnapshot(1));
+    const provider = current!.provider!;
+    const pending = provider.readText(provider.files[0]!);
+    source.receive({ type: 'play-animation', resourceId: 'hero', animation: 'idle' });
+    source.receive({ type: 'play-animation', resourceId: 'hero', animation: 'walk' });
+    const listener = vi.fn();
+    const unsubscribe = source.subscribeCommands(listener);
+    expect(listener).toHaveBeenCalledExactlyOnceWith({
+      type: 'play-animation',
+      resourceId: 'hero',
+      animation: 'walk',
+    });
+    source.receive({ type: 'play-animation', resourceId: 'deleted', animation: 'idle' });
+    expect(listener).toHaveBeenCalledTimes(1);
+    source.receive({ type: 'read-result', requestId: '1:1', text: '{}' });
+    expect(await pending).toBe('{}');
+    expect(current?.provider).toBe(provider);
+    unsubscribe();
+    source.receive({ type: 'play-animation', resourceId: 'hero', animation: 'idle' });
+    source.receive(selectedSnapshot(2, 'new-resource'));
+    source.subscribeCommands(listener);
+    expect(listener).toHaveBeenCalledTimes(1);
+    source.receive({
+      type: 'play-animation',
+      resourceId: 'new-resource',
+      animation: 'walk',
+    });
+    expect(listener).toHaveBeenCalledTimes(2);
+    source.dispose();
+    source.receive({
+      type: 'play-animation',
+      resourceId: 'new-resource',
+      animation: 'idle',
+    });
+    expect(listener).toHaveBeenCalledTimes(2);
+  });
+
+  it('实际 runtime 状态仅反馈当前资源和代际，关闭后停止反馈', () => {
+    const messages: WebviewMessage[] = [];
+    const source = new EditorSource({ postMessage: (message) => messages.push(message) });
+    source.receive(selectedSnapshot(2));
+    source.reportPreviewState({ revision: 1, resourceId: 'hero', animations: ['old'] });
+    source.reportPreviewState({ revision: 2, resourceId: 'other', animations: ['idle'] });
+    source.reportPreviewState({
+      revision: 2,
+      resourceId: 'hero',
+      animations: ['idle', 'walk'],
+      animation: 'walk',
+    });
+    source.reportPreviewState({
+      revision: 2,
+      resourceId: 'hero',
+      animations: [],
+      error: 'Runtime failed',
+    });
+    expect(messages).toEqual([
+      {
+        type: 'preview-state',
+        revision: 2,
+        resourceId: 'hero',
+        animations: ['idle', 'walk'],
+        animation: 'walk',
+      },
+      {
+        type: 'preview-state',
+        revision: 2,
+        resourceId: 'hero',
+        animations: [],
+        error: 'Runtime failed',
+      },
+    ]);
+    source.dispose();
+    source.reportPreviewState({ revision: 2, resourceId: 'hero', animations: [] });
+    expect(messages).toHaveLength(2);
+    expect(
+      parseHostMessage({ type: 'play-animation', resourceId: '', animation: 'idle' }),
+    ).toBeUndefined();
+    expect(
+      parseHostMessage({ type: 'play-animation', resourceId: 'hero', animation: 1 }),
+    ).toBeUndefined();
+  });
+
   it('订阅立即回放，使用请求身份匹配回复，图片只返回 URL', async () => {
     const messages: WebviewMessage[] = [];
     const source = new EditorSource({ postMessage: (message) => messages.push(message) });

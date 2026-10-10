@@ -64,6 +64,55 @@ function target(id: string): PreviewTarget {
 }
 
 describe('独占预览生命周期', () => {
+  it('恢复动作的就绪回调失败先释放已创建实例，再报告错误', async () => {
+    const disposed = deferred<void>();
+    const next = controller(() => disposed.promise);
+    const lifecycle = new PreviewLifecycle(
+      vi.fn<PreviewFactory>().mockResolvedValue(next),
+    );
+    const selected = target('hot-reloaded');
+    const error = new Error('Restored animation failed');
+    selected.ready = vi.fn(() => {
+      throw error;
+    });
+    const loaded = lifecycle.replace(selected);
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(next.dispose).toHaveBeenCalledOnce();
+    expect(selected.failed).not.toHaveBeenCalled();
+    disposed.resolve();
+    await loaded;
+    expect(selected.failed).toHaveBeenCalledExactlyOnceWith(error);
+    await lifecycle.replace(null);
+    expect(next.dispose).toHaveBeenCalledOnce();
+  });
+
+  it('就绪后恢复失败且释放失败时，下一次选择必须先重试释放', async () => {
+    const dispose = vi
+      .fn<() => Promise<void>>()
+      .mockRejectedValueOnce(new Error('cleanup failed'))
+      .mockResolvedValue(undefined);
+    const old = controller(dispose);
+    const next = controller();
+    const factory = vi
+      .fn<PreviewFactory>()
+      .mockResolvedValueOnce(old)
+      .mockResolvedValueOnce(next);
+    const lifecycle = new PreviewLifecycle(factory);
+    const failed = target('hot-reloaded');
+    failed.ready = vi.fn(() => {
+      throw new Error('Restored animation failed');
+    });
+    await lifecycle.replace(failed);
+    expect(failed.failed).toHaveBeenCalledOnce();
+    const retried = target('retry');
+    await lifecycle.replace(retried);
+    expect(dispose).toHaveBeenCalledTimes(2);
+    expect(factory).toHaveBeenCalledTimes(2);
+    expect(retried.ready).toHaveBeenCalledWith(next);
+    await lifecycle.replace(null);
+  });
+
   it('等待旧控制器释放，才创建新资源', async () => {
     const disposed = deferred<void>();
     const old = controller(() => disposed.promise);

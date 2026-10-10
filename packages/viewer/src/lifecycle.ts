@@ -71,7 +71,15 @@ export class PreviewLifecycle {
         this.active = undefined;
         return;
       }
-      target.ready(controller);
+      try {
+        target.ready(controller);
+      } catch (error) {
+        // 恢复动作或就绪通知失败也属于加载失败，立即释放已经创建的 GPU 会话。
+        // 清理失败仍保留所有权，下一次替换会先重试，避免并存独占实例。
+        await controller.dispose();
+        this.active = undefined;
+        throw error;
+      }
     };
     this.queue = this.queue.then(run).catch((error: unknown) => {
       if (target && current()) target.failed(error);

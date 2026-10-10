@@ -5,7 +5,12 @@ import type {
   ResourceProvider,
   WebviewMessage,
 } from '@spine-preview/core';
-import type { ViewerSnapshot, ViewerSource } from '@spine-preview/viewer';
+import type {
+  ViewerCommand,
+  ViewerPreviewState,
+  ViewerSnapshot,
+  ViewerSource,
+} from '@spine-preview/viewer';
 
 /** VS Code 只允许 acquireVsCodeApi 一次，由入口将消息发送能力传入来源。 */
 export interface WebviewApi {
@@ -106,6 +111,15 @@ export function parseHostMessage(value: unknown): HostMessage | undefined {
         data.bytes.every((byte) => Number.isInteger(byte) && byte >= 0 && byte <= 255)))
   )
     return data as unknown as HostMessage;
+  if (
+    data.type === 'play-animation' &&
+    typeof data.resourceId === 'string' &&
+    data.resourceId.length > 0 &&
+    data.resourceId.length <= 16384 &&
+    typeof data.animation === 'string' &&
+    data.animation.length <= 16384
+  )
+    return data as unknown as HostMessage;
   if (!Number.isSafeInteger(data.revision) || Number(data.revision) < 0) return undefined;
   if (
     data.type === 'status' &&
@@ -149,6 +163,8 @@ export function readDroppedUris(transfer: Pick<DataTransfer, 'getData'>): string
 
 /** 共用 viewer 的编辑器来源；JSON/skel 走按需消息，图片走受限本地 URI。 */
 export class EditorSource implements ViewerSource {
+  /** VS Code 原生侧栏负责资源和动画导航。 */
+  readonly externalNavigation = true;
   private snapshot: ViewerSnapshot = {
     revision: 0,
     label: 'VS Code local resources',
@@ -158,6 +174,8 @@ export class EditorSource implements ViewerSource {
     message: 'Choose resource files or a folder.',
   };
   private readonly listeners = new Set<(snapshot: ViewerSnapshot) => void>();
+  private readonly commandListeners = new Set<(command: ViewerCommand) => void>();
+  private queuedCommand: ViewerCommand | undefined;
   private readonly pending = new Map<string, PendingRead>();
   private requestSequence = 0;
   private disposed = false;
@@ -174,6 +192,26 @@ export class EditorSource implements ViewerSource {
     this.listeners.add(listener);
     listener(this.snapshot);
     return () => this.listeners.delete(listener);
+  }
+  /** 挂载前收到的最后一次播放请求在订阅时回放，避免 ready 时序丢失动作。 */
+  subscribeCommands(listener: (command: ViewerCommand) => void): () => void {
+    if (this.disposed) return () => {};
+    this.commandListeners.add(listener);
+    if (this.queuedCommand) {
+      listener(this.queuedCommand);
+      this.queuedCommand = undefined;
+    }
+    return () => this.commandListeners.delete(listener);
+  }
+  /** 仅反馈当前代际的资源状态，过期实例无法覆盖原生树选择。 */
+  reportPreviewState(state: ViewerPreviewState): void {
+    if (
+      this.disposed ||
+      state.revision !== this.snapshot.revision ||
+      !this.snapshot.result.resources.some((resource) => resource.id === state.resourceId)
+    )
+      return;
+    this.api.postMessage({ type: 'preview-state', ...state });
   }
   /** 刷新命令由宿主执行，旧读取在新代际到达时取消。 */
   async refresh(): Promise<void> {
@@ -213,8 +251,22 @@ export class EditorSource implements ViewerSource {
       else pending.resolve(message);
       return;
     }
+    if (message.type === 'play-animation') {
+      if (
+        !this.snapshot.result.resources.some(
+          (resource) => resource.id === message.resourceId,
+        )
+      )
+        return;
+      if (!this.commandListeners.size) this.queuedCommand = message;
+      else for (const listener of this.commandListeners) listener(message);
+      return;
+    }
     if (message.revision < this.snapshot.revision) return;
-    if (message.revision > this.snapshot.revision) this.cancelReads('资源来源已替换');
+    if (message.revision > this.snapshot.revision) {
+      this.queuedCommand = undefined;
+      this.cancelReads('资源来源已替换');
+    }
     if (message.type === 'status') {
       const replaced = message.revision > this.snapshot.revision;
       this.publish({
@@ -324,5 +376,7 @@ export class EditorSource implements ViewerSource {
     this.disposed = true;
     this.cancelReads('预览页面已关闭');
     this.listeners.clear();
+    this.commandListeners.clear();
+    this.queuedCommand = undefined;
   }
 }

@@ -32,6 +32,15 @@ assert.deepEqual(
 );
 await stat(resolve(siteRoot, 'licenses/example-assets/LICENSE'));
 await stat(resolve(siteRoot, 'assets/screenshots/preview-en.jpg'));
+// 检查插件文档和宣传截图同步，防止部署后出现缺图或旧版截图。
+const extensionScreenshot = await readFile(
+  resolve(projectRoot, 'assets/screenshots/vscode-preview-en.jpg'),
+);
+for (const path of [
+  'assets/screenshots/vscode-preview-en.jpg',
+  'vscode/assets/preview.jpg',
+])
+  assert.deepEqual(await readFile(resolve(siteRoot, path)), extensionScreenshot);
 assert.deepEqual(
   await readFile(resolve(siteRoot, 'licenses/LICENSE')),
   await readFile(resolve(projectRoot, 'LICENSE')),

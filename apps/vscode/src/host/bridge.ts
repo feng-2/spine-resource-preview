@@ -8,6 +8,28 @@ export function parseWebviewMessage(value: unknown): WebviewMessage | undefined 
   if (['ready', 'refresh', 'choose-files', 'choose-folder'].includes(String(data.type)))
     return { type: data.type as 'ready' | 'refresh' | 'choose-files' | 'choose-folder' };
   if (
+    data.type === 'preview-state' &&
+    Number.isSafeInteger(data.revision) &&
+    Number(data.revision) >= 0 &&
+    typeof data.resourceId === 'string' &&
+    data.resourceId.length <= 16384 &&
+    Array.isArray(data.animations) &&
+    data.animations.length <= 10000 &&
+    data.animations.every((name) => typeof name === 'string' && name.length <= 16384) &&
+    (data.animation === undefined ||
+      (typeof data.animation === 'string' && data.animation.length <= 16384)) &&
+    (data.error === undefined ||
+      (typeof data.error === 'string' && data.error.length <= 65536))
+  )
+    return {
+      type: 'preview-state',
+      revision: Number(data.revision),
+      resourceId: data.resourceId,
+      animations: data.animations as string[],
+      ...(typeof data.animation === 'string' ? { animation: data.animation } : {}),
+      ...(typeof data.error === 'string' ? { error: data.error } : {}),
+    };
+  if (
     data.type === 'read' &&
     typeof data.requestId === 'string' &&
     data.requestId.length <= 128 &&

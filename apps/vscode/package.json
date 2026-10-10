@@ -2,7 +2,7 @@
   "name": "@spine-preview/vscode",
   "displayName": "%extension.displayName%",
   "description": "%extension.description%",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "publisher": "cceevv",
   "private": true,
   "type": "module",
@@ -19,6 +19,18 @@
         "command": "spinePreview.open",
         "title": "%command.open.title%",
         "category": "Spine"
+      },
+      {
+        "command": "spinePreview.refresh",
+        "title": "%command.refresh.title%",
+        "category": "Spine",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "spinePreview.workspace",
+        "title": "%command.workspace.title%",
+        "category": "Spine",
+        "icon": "$(root-folder)"
       }
     ],
     "menus": {
@@ -26,6 +38,41 @@
         {
           "command": "spinePreview.open",
           "group": "navigation@90"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "spinePreview.refresh",
+          "when": "view == spinePreview.resources",
+          "group": "navigation@1"
+        },
+        {
+          "command": "spinePreview.workspace",
+          "when": "view == spinePreview.resources && spinePreview.temporaryScope",
+          "group": "navigation@2"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "spinePreview",
+          "title": "%container.spine.title%",
+          "icon": "assets/sidebar.svg"
+        }
+      ]
+    },
+    "views": {
+      "spinePreview": [
+        {
+          "id": "spinePreview.resources",
+          "name": "%view.resources.title%",
+          "icon": "assets/sidebar.svg"
+        },
+        {
+          "id": "spinePreview.animations",
+          "name": "%view.animations.title%",
+          "icon": "assets/sidebar.svg"
         }
       ]
     }

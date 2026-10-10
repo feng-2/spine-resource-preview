@@ -15,4 +15,27 @@ export const en = {
   resourceFilter: 'Spine resources',
   chooseFolder: 'Import resource folder',
   error: 'Spine resource preview: {reason}',
+  resourcesTitle: 'Resources',
+  animationsTitle: 'Animations',
+  refreshTitle: 'Refresh Resources',
+  workspaceTitle: 'Return to Workspace',
+  treeScanning: 'Scanning resources…',
+  treeEmpty: 'No Spine resources found. Right-click a folder to preview its resources.',
+  animationsSelect: 'Select a resource to see its animations.',
+  animationsEmpty: 'No animations in this resource.',
+  diagnosticsTitle: 'Resource diagnostics',
+  resourceCount: '{count} resources',
+  resourceDiagnostic: 'The resource has a diagnostic: {code}',
+  diagnosticAtlasMissing: 'The matching atlas is missing.',
+  diagnosticPageMissing: 'An atlas page image is missing.',
+  diagnosticDependencyAmbiguous:
+    'Multiple files match a dependency. Import a folder preserving its directory structure.',
+  diagnosticBinary37Unsupported:
+    'Spine 3.7 binary is not supported. Use a 3.7 JSON export.',
+  diagnosticVersionPrerelease:
+    'This resource uses a beta export; the matching runtime will validate it.',
+  diagnosticPreferredAmbiguous:
+    'The selected file belongs to multiple skeletons. Select a resource from the list.',
+  diagnosticPreferredUnassociated:
+    'The selected file is not associated with a complete Spine resource.',
 } as const;

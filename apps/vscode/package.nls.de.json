@@ -1,5 +1,10 @@
 {
   "extension.displayName": "Spine-Ressourcenvorschau",
   "extension.description": "Lokale Animationsressourcen aus Spine 3.7, 3.8 und 4.0–4.3 ansehen.",
-  "command.open.title": "Spine-Ressourcen anzeigen"
+  "command.open.title": "Spine-Ressourcen anzeigen",
+  "command.refresh.title": "Ressourcen aktualisieren",
+  "command.workspace.title": "Zum Arbeitsbereich zurückkehren",
+  "view.resources.title": "Ressourcen",
+  "view.animations.title": "Animationen",
+  "container.spine.title": "Spine-Ressourcenvorschau"
 }

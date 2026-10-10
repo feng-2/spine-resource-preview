@@ -12,13 +12,14 @@
   --line: #dbe0d6;
   --green: #526d39;
   --lime: #dbf7a1;
+  --site-header-height: 102px;
 }
 * {
   box-sizing: border-box;
 }
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 30px;
+  scroll-padding-top: calc(var(--site-header-height) + 24px);
 }
 body {
   margin: 0;
@@ -52,7 +53,7 @@ img {
 }
 .skip-link {
   position: absolute;
-  z-index: 10;
+  z-index: 200;
   top: -70px;
   left: 20px;
   padding: 14px 20px;
@@ -63,12 +64,18 @@ img {
   top: 16px;
 }
 .site-header {
-  min-height: 102px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #f5f6f0;
+  border-bottom: 1px solid var(--line);
+}
+.site-header-inner {
+  min-height: var(--site-header-height);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 32px;
-  border-bottom: 1px solid var(--line);
 }
 .brand {
   display: inline-flex;
@@ -649,7 +656,7 @@ h3 {
   .wrap {
     width: calc(100% - 56px);
   }
-  .site-header {
+  .site-header-inner {
     gap: 20px;
   }
   .site-header nav {
@@ -696,11 +703,13 @@ h3 {
   }
 }
 @media (max-width: 760px) {
+  :root {
+    --site-header-height: 80px;
+  }
   .wrap {
     width: calc(100% - 40px);
   }
-  .site-header {
-    min-height: 80px;
+  .site-header-inner {
     gap: 14px;
   }
   .site-header nav {
@@ -1026,85 +1035,48 @@ h3 {
     monospace;
   letter-spacing: 0;
 }
-.explorer-illustration {
-  position: relative;
-  padding: 18px 14px 25px;
-  background: #1c242a;
-  border: 1px solid #303b3e;
+/* 插件专区使用原生侧栏说明及单独的实机截图，窄屏仍可打开原图。 */
+.extension-return-note {
+  border: 1px solid #c4d3b5;
   border-radius: 6px;
-  color: #ccd4d0;
-  font:
-    12px ui-monospace,
-    monospace;
+  padding: 16px;
+  margin-bottom: 22px;
+  background: #e3ebda;
 }
-.explorer-line {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  min-height: 28px;
+.extension-return-note h3 {
+  margin: 0 0 8px;
+  color: #415937;
+  font-size: 13px;
 }
-.explorer-line.level-one {
-  padding-left: 15px;
+.extension-return-note p {
+  margin: 0;
+  color: #627456;
+  font-size: 12px;
+  line-height: 1.8;
 }
-.explorer-line.level-two {
-  padding-left: 30px;
+.extension-preview-figure {
+  margin: 38px 0 0;
 }
-.explorer-line.level-three {
-  padding-left: 45px;
+.extension-preview-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid #39414d;
+  border-radius: 9px;
 }
-.explorer-line.level-four {
-  padding-left: 65px;
-}
-.selected-folder {
-  background: #304237;
-  margin: 3px -14px;
-  padding-right: 14px;
-  color: #ddf3c4;
-}
-.selected-folder.level-three {
-  padding-left: 59px;
-}
-.folder-target {
-  margin-left: auto;
-  color: #b8d889;
-}
-.file-symbol {
-  width: 16px;
-  text-align: center;
-  font-size: 10px;
-}
-.file-symbol.json {
-  white-space: nowrap;
-  letter-spacing: -1px;
-  color: #dcb679;
-}
-.file-symbol.atlas {
-  color: #b3c097;
-  font-size: 16px;
-}
-.file-symbol.image {
-  color: #9bb9d0;
-  font-size: 15px;
-}
-.explorer-menu {
+.extension-preview-figure figcaption {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
-  align-items: center;
-  margin: 15px 0 0 34px;
-  padding: 13px;
-  border-radius: 4px;
-  border: 1px solid #45604e;
-  background: #273d30;
-  color: #daf1c1;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 13px;
+  color: var(--muted);
   font-size: 11px;
-  box-shadow: 0 8px 18px #1116;
+  line-height: 1.7;
 }
-.menu-play {
-  font-size: 16px;
-}
-.explorer-menu > span:nth-child(2) {
-  flex: 1;
+.extension-preview-figure figcaption a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 .editor-workflow-steps {
   padding-left: 20px;
@@ -1177,8 +1149,5 @@ h3 {
   }
   .hero-buttons .button-outline {
     gap: 10px;
-  }
-  .explorer-menu {
-    margin-left: 10px;
   }
 }

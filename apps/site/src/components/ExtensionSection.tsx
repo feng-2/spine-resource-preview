@@ -1,19 +1,21 @@
 import { NewTabLink } from './NewTabLink.js';
-import type { en } from '../content.js';
+import type { SiteMessages } from '../locales/index.js';
+import extensionPreview from '../../../../assets/screenshots/vscode-preview-en.jpg';
 
 /** 插件介绍区的语言内容与文档入口。 */
 interface ExtensionSectionProps {
   /** 与英文契约对应的全部宣传文案。 */
-  text: { [Key in keyof typeof en]: string };
+  text: SiteMessages;
   /** 当前语言的 VSIX 安装说明地址。 */
   docsHref: string;
 }
 
-/** 独立展示编辑器工作流、发布状态和安装方式，不把示意图当作实机截图。 */
+/** 展示原生侧栏工作流、实际插件截图与独立安装入口。 */
 export function ExtensionSection({ text: t, docsHref }: ExtensionSectionProps) {
   const metadata = __EXTENSION__;
   const features = [
     [t.extensionFolderTitle, t.extensionFolderBody],
+    [t.extensionLiveTitle, t.extensionLiveBody],
     [t.extensionFileTitle, t.extensionFileBody],
     [t.extensionPlaybackTitle, t.extensionPlaybackBody],
   ];
@@ -86,49 +88,15 @@ export function ExtensionSection({ text: t, docsHref }: ExtensionSectionProps) {
             <span>{t.extensionExplorer}</span>
             <span aria-hidden="true">&lt;/&gt;</span>
           </div>
-          <div
-            className="explorer-illustration"
-            role="img"
-            aria-label={t.extensionIllustration}
-          >
-            <div className="explorer-line">
-              ⌄ <span>game-project</span>
-            </div>
-            <div className="explorer-line level-one">
-              ⌄ <span>assets</span>
-            </div>
-            <div className="explorer-line level-two">
-              ⌄ <span>spine</span>
-            </div>
-            <div className="explorer-line level-three selected-folder">
-              ⌄ <span>hero</span>
-              <span className="folder-target">↗</span>
-            </div>
-            <div className="explorer-line level-four">
-              <span className="file-symbol json">{`{ }`}</span>
-              <span>hero.json</span>
-            </div>
-            <div className="explorer-line level-four">
-              <span className="file-symbol atlas">≡</span>
-              <span>hero.atlas</span>
-            </div>
-            <div className="explorer-line level-four">
-              <span className="file-symbol image">▧</span>
-              <span>page.png</span>
-            </div>
-            <div className="explorer-menu">
-              <span className="menu-play" aria-hidden="true">
-                ▷
-              </span>
-              <span>{t.extensionContextCommand}</span>
-              <span aria-hidden="true">↗</span>
-            </div>
-          </div>
           <ol className="editor-workflow-steps">
             <li>{t.extensionWorkflowOne}</li>
             <li>{t.extensionWorkflowTwo}</li>
             <li>{t.extensionWorkflowThree}</li>
           </ol>
+          <div className="extension-return-note">
+            <h3>{t.extensionReturnTitle}</h3>
+            <p>{t.extensionReturnBody}</p>
+          </div>
           <div className="extension-id">
             <span>{t.extensionIdLabel}</span>
             <code>{metadata.id}</code>
@@ -136,6 +104,26 @@ export function ExtensionSection({ text: t, docsHref }: ExtensionSectionProps) {
           <p className="extension-offline">{t.extensionOffline}</p>
         </div>
       </div>
+      <figure className="extension-preview-figure">
+        <NewTabLink href={extensionPreview} aria-label={t.extensionPreviewAlt}>
+          <img
+            src={extensionPreview}
+            width="1280"
+            height="720"
+            alt={t.extensionPreviewAlt}
+            loading="lazy"
+          />
+        </NewTabLink>
+        <figcaption>
+          <span>{t.extensionPreviewCaption}</span>
+          <span>
+            {t.screenshotCredit}{' '}
+            <NewTabLink href="./licenses/example-assets/LICENSE">
+              {t.assetLicense}
+            </NewTabLink>
+          </span>
+        </figcaption>
+      </figure>
     </section>
   );
 }

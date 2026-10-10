@@ -14,4 +14,10 @@ export {
   translate,
 } from './i18n.js';
 export type { Locale, MessageKey, TranslationParams } from './i18n.js';
-export type { ViewerProps, ViewerSnapshot, ViewerSource } from './types.js';
+export type {
+  ViewerCommand,
+  ViewerPreviewState,
+  ViewerProps,
+  ViewerSnapshot,
+  ViewerSource,
+} from './types.js';

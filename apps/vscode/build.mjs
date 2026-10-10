@@ -19,6 +19,8 @@ await mkdir('dist', { recursive: true });
 await mkdir('assets', { recursive: true });
 // 插件图标从唯一共享 logo 同步，每次构建覆盖旧占位图标。
 await cp('../../packages/viewer/src/assets/logo.png', 'assets/icon.png');
+// 文档图片从共享来源同步，Marketplace 与宣传页使用相同的新版素材。
+await cp('../../assets/screenshots/vscode-preview-en.jpg', 'assets/preview.jpg');
 await rm('dist/licenses', { recursive: true, force: true });
 // Web 与 VSIX 共用完整的第三方许可收集逻辑。
 await copyLicenses('dist/licenses');

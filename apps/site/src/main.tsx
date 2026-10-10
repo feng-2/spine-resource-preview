@@ -2,31 +2,16 @@ import { NewTabLink } from './components/NewTabLink.js';
 import { useEffect, useState, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { LOGO_URL } from '@spine-preview/viewer/assets';
-import { LanguageMenu, type LanguageOption } from '@spine-preview/viewer/language-menu';
+import { LanguageMenu } from '@spine-preview/viewer/language-menu';
 import previewImage from '../../../assets/screenshots/preview-en.jpg';
-import { en, zhCN } from './content.js';
+import { LANGUAGES } from '@spine-preview/viewer/languages';
+import { SITE_LOCALES, type SiteLocale } from './locales/index.js';
+import { readSiteLocale, saveSiteLocale, SITE_LANGUAGE_OPTIONS } from './i18n.js';
 import { ExtensionSection } from './components/ExtensionSection.js';
 import './style.css';
 
-/** 宣传页仅提供英中语言，预览工具保留自己的十种语言设置。 */
-type SiteLocale = 'en' | 'zh-CN';
-/** 网站只提供实际已翻译的语言，选项始终显示完整自称。 */
-const siteLanguages: readonly LanguageOption<SiteLocale>[] = [
-  { value: 'en', label: 'English', description: 'English' },
-  { value: 'zh-CN', label: '简体中文', description: 'Simplified Chinese' },
-];
-const storageKey = 'spine-resource-preview.site.locale';
 const viewerHref = import.meta.env.DEV ? 'http://127.0.0.1:5180/' : './app/';
 const repositoryHref = __REPOSITORY_URL__;
-
-/** 禁用本地存储时仍能使用默认英文，不自动猜测系统语言。 */
-function initialLocale(): SiteLocale {
-  try {
-    return localStorage.getItem(storageKey) === 'zh-CN' ? 'zh-CN' : 'en';
-  } catch {
-    return 'en';
-  }
-}
 
 /** 共用箭头图标，文字提供链接的完整可访问名称。 */
 function Arrow({ diagonal = false }: { diagonal?: boolean }) {
@@ -75,8 +60,8 @@ function OpenLink({ children }: { children: ReactNode }) {
 
 /** 产品宣传页，展示真实功能并将用户引导到本地资源预览工具。 */
 function Site() {
-  const [locale, setLocale] = useState<SiteLocale>(initialLocale);
-  const t = locale === 'zh-CN' ? zhCN : en;
+  const [locale, setLocale] = useState<SiteLocale>(readSiteLocale);
+  const t = SITE_LOCALES[locale];
   const docsHref = locale === 'zh-CN' ? './README.zh-CN.md' : './README.md';
   useEffect(() => {
     // React 挂载后再定位初始片段，使直接打开插件专区链接也能正确滚动。
@@ -91,11 +76,7 @@ function Site() {
     document
       .querySelector('meta[name="description"]')
       ?.setAttribute('content', t.description);
-    try {
-      localStorage.setItem(storageKey, locale);
-    } catch {
-      /* 存储失败不能影响语言切换。 */
-    }
+    saveSiteLocale(locale);
   }, [locale, t]);
   const features = [
     { kind: 'runtime' as const, title: t.runtimeTitle, body: t.runtimeBody },
@@ -119,32 +100,34 @@ function Site() {
       <a className="skip-link" href="#main">
         {t.skip}
       </a>
-      <header className="site-header wrap">
-        <a className="brand" href="#" aria-label="Spine Resource Preview">
-          <img src={LOGO_URL} alt="" width="36" height="36" />
-          <span>
-            Spine Resource<span className="brand-second">Preview</span>
-          </span>
-        </a>
-        <nav aria-label={locale === 'en' ? 'Main navigation' : '主导航'}>
-          <a href="#features">{t.navFeatures}</a>
-          <a href="#workflow">{t.navWorkflow}</a>
-          <a href="#versions">{t.navVersions}</a>
-          <a href="#vscode">{t.navExtension}</a>
-        </nav>
-        <div className="header-actions">
-          <LanguageMenu<SiteLocale>
-            value={locale}
-            options={siteLanguages}
-            label={t.language}
-            onChange={setLocale}
-            theme="light"
-            compactLabel={locale === 'en' ? 'EN' : '中文'}
-          />
-          <NewTabLink className="header-open" href={viewerHref}>
-            {t.open}
-            <Arrow diagonal />
-          </NewTabLink>
+      <header className="site-header">
+        <div className="site-header-inner wrap">
+          <a className="brand" href="#" aria-label="Spine Resource Preview">
+            <img src={LOGO_URL} alt="" width="36" height="36" />
+            <span>
+              Spine Resource<span className="brand-second">Preview</span>
+            </span>
+          </a>
+          <nav aria-label={t.mainNavigation}>
+            <a href="#features">{t.navFeatures}</a>
+            <a href="#workflow">{t.navWorkflow}</a>
+            <a href="#versions">{t.navVersions}</a>
+            <a href="#vscode">{t.navExtension}</a>
+          </nav>
+          <div className="header-actions">
+            <LanguageMenu<SiteLocale>
+              value={locale}
+              options={SITE_LANGUAGE_OPTIONS}
+              label={t.language}
+              onChange={setLocale}
+              theme="light"
+              compactLabel={LANGUAGES[locale].compactLabel}
+            />
+            <NewTabLink className="header-open" href={viewerHref}>
+              {t.open}
+              <Arrow diagonal />
+            </NewTabLink>
+          </div>
         </div>
       </header>
       <main id="main">
@@ -389,7 +372,7 @@ function Site() {
             </a>
             <p>{t.footerTagline}</p>
           </div>
-          <nav aria-label={locale === 'en' ? 'Resources' : '相关资源'}>
+          <nav aria-label={t.resourceNavigation}>
             {repositoryHref && <NewTabLink href={repositoryHref}>GitHub</NewTabLink>}
             <a href="#vscode">{t.navExtension}</a>
             <NewTabLink href={docsHref}>{t.documentation}</NewTabLink>

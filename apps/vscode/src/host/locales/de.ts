@@ -18,4 +18,28 @@ export const de: { [Key in keyof typeof en]: string } = {
   resourceFilter: 'Spine-Ressourcen',
   chooseFolder: 'Ressourcenordner importieren',
   error: 'Spine-Ressourcenvorschau: {reason}',
+  resourcesTitle: 'Ressourcen',
+  animationsTitle: 'Animationen',
+  refreshTitle: 'Ressourcen aktualisieren',
+  workspaceTitle: 'Zum Arbeitsbereich zurückkehren',
+  treeScanning: 'Ressourcen werden gesucht…',
+  treeEmpty:
+    'Keine Spine-Ressourcen gefunden. Klicken Sie mit der rechten Maustaste auf einen Ordner, um Ressourcen anzuzeigen.',
+  animationsSelect: 'Wählen Sie eine Ressource, um ihre Animationen anzuzeigen.',
+  animationsEmpty: 'Diese Ressource enthält keine Animationen.',
+  diagnosticsTitle: 'Ressourcendiagnosen',
+  resourceCount: '{count} Ressourcen',
+  resourceDiagnostic: 'Ressourcendiagnose: {code}',
+  diagnosticAtlasMissing: 'Der passende Atlas fehlt.',
+  diagnosticPageMissing: 'Ein vom Atlas referenziertes Seitenbild fehlt.',
+  diagnosticDependencyAmbiguous:
+    'Mehrere Dateien passen zu einer Abhängigkeit. Importieren Sie einen Ordner mit unveränderter Verzeichnisstruktur.',
+  diagnosticBinary37Unsupported:
+    'Spine-3.7-Binärdateien werden nicht unterstützt. Verwenden Sie einen 3.7-JSON-Export.',
+  diagnosticVersionPrerelease:
+    'Diese Ressource wurde mit einer Betaversion exportiert. Die passende Laufzeit prüft die Daten.',
+  diagnosticPreferredAmbiguous:
+    'Die ausgewählte Datei gehört zu mehreren Skeletten. Wählen Sie eine Ressource aus der Liste.',
+  diagnosticPreferredUnassociated:
+    'Die ausgewählte Datei gehört zu keiner vollständigen Spine-Ressource.',
 };

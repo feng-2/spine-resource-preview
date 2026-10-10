@@ -19,4 +19,28 @@ export const es: { [Key in keyof typeof en]: string } = {
   resourceFilter: 'Recursos Spine',
   chooseFolder: 'Importar carpeta de recursos',
   error: 'Vista previa de recursos Spine: {reason}',
+  resourcesTitle: 'Recursos',
+  animationsTitle: 'Animaciones',
+  refreshTitle: 'Actualizar recursos',
+  workspaceTitle: 'Volver al espacio de trabajo',
+  treeScanning: 'Buscando recursos…',
+  treeEmpty:
+    'No se encontraron recursos Spine. Haga clic derecho en una carpeta para ver sus recursos.',
+  animationsSelect: 'Seleccione un recurso para ver sus animaciones.',
+  animationsEmpty: 'Este recurso no contiene animaciones.',
+  diagnosticsTitle: 'Diagnósticos de recursos',
+  resourceCount: '{count} recursos',
+  resourceDiagnostic: 'Diagnóstico del recurso: {code}',
+  diagnosticAtlasMissing: 'Falta el atlas correspondiente.',
+  diagnosticPageMissing: 'Falta una imagen de página del atlas.',
+  diagnosticDependencyAmbiguous:
+    'Varios archivos coinciden con una dependencia. Importe una carpeta conservando su estructura.',
+  diagnosticBinary37Unsupported:
+    'El formato binario de Spine 3.7 no está admitido. Use una exportación JSON 3.7.',
+  diagnosticVersionPrerelease:
+    'Este recurso se exportó con una versión beta. El runtime correspondiente validará los datos.',
+  diagnosticPreferredAmbiguous:
+    'El archivo seleccionado pertenece a varios esqueletos. Seleccione un recurso de la lista.',
+  diagnosticPreferredUnassociated:
+    'El archivo seleccionado no está asociado con un recurso Spine completo.',
 };

@@ -54,6 +54,7 @@ const stageFiles = await files(stage);
 assert(!stageFiles.some((name) => /(?:node_modules|fixtures|\.map$)/.test(name)));
 for (const name of [
   'dist/extension.cjs',
+  'assets/sidebar.svg',
   'package.nls.json',
   'package.nls.zh-cn.json',
   'dist/webview/main.js',
@@ -100,6 +101,10 @@ const sourceLogo = await readFile(
 for (const name of ['assets/icon.png', 'dist/webview/logo.png']) {
   assert.deepEqual(await readFile(resolve(stage, name)), sourceLogo);
 }
+assert.deepEqual(
+  await readFile(resolve(stage, 'assets/preview.jpg')),
+  await readFile(resolve(projectRoot, 'assets/screenshots/vscode-preview-en.jpg')),
+);
 const vsix = await stat(
   resolve(projectRoot, 'apps/vscode/dist/spine-resource-preview.vsix'),
 );
