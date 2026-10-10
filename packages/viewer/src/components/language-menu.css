@@ -1,0 +1,192 @@
+.sp-language-menu,
+.sp-language-menu-panel {
+  --lm-surface: #1b2330;
+  --lm-trigger: #202a38;
+  --lm-hover: #2b3748;
+  --lm-active: #263b55;
+  --lm-border: #384659;
+  --lm-text: #e4ecf6;
+  --lm-muted: #95a4b8;
+  --lm-accent: #93b7ff;
+  --lm-focus: #789eff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--lm-text);
+  box-sizing: border-box;
+}
+.sp-language-menu[data-theme='light'],
+.sp-language-menu-panel[data-theme='light'] {
+  --lm-surface: #fcfdf9;
+  --lm-trigger: #f5f6f0;
+  --lm-hover: #edf2e6;
+  --lm-active: #e7efdb;
+  --lm-border: #d9e0d2;
+  --lm-text: #24321f;
+  --lm-muted: #7a8571;
+  --lm-accent: #527335;
+  --lm-focus: #7b9a4b;
+}
+.sp-language-menu {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+.sp-language-menu .sp-language-menu__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 8px 11px;
+  border: 1px solid var(--lm-border);
+  border-radius: 7px;
+  background: var(--lm-trigger);
+  color: var(--lm-text);
+  font:
+    500 12px/1.3 -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  cursor: pointer;
+  box-shadow: 0 1px 2px #00000008;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+.sp-language-menu .sp-language-menu__trigger:hover,
+.sp-language-menu .sp-language-menu__trigger[aria-expanded='true'] {
+  background: var(--lm-hover);
+  border-color: var(--lm-muted);
+}
+.sp-language-menu .sp-language-menu__trigger:focus-visible {
+  outline: 2px solid var(--lm-focus);
+  outline-offset: 3px;
+}
+.sp-language-menu__current {
+  max-width: 155px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sp-language-menu__globe {
+  stroke: currentColor;
+  stroke-width: 1.4;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+.sp-language-menu__chevron {
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+  opacity: 0.6;
+  transition: transform 0.15s;
+}
+.sp-language-menu__trigger[aria-expanded='true'] .sp-language-menu__chevron {
+  transform: rotate(180deg);
+}
+.sp-language-menu-panel {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 5px;
+  border: 1px solid var(--lm-border);
+  border-radius: 11px;
+  background: var(--lm-surface);
+  box-shadow:
+    0 16px 48px #09111e29,
+    0 3px 10px #09111e14;
+}
+.sp-language-menu-panel * {
+  box-sizing: border-box;
+}
+.sp-language-menu__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 12px 9px;
+  flex-shrink: 0;
+  color: var(--lm-muted);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+}
+.sp-language-menu__options {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--lm-border) transparent;
+}
+.sp-language-menu-panel .sp-language-menu__option {
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 6px;
+  color: var(--lm-text);
+  background: transparent;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+}
+.sp-language-menu-panel .sp-language-menu__option:hover {
+  background: var(--lm-hover);
+}
+.sp-language-menu-panel .sp-language-menu__option[aria-checked='true'] {
+  background: var(--lm-active);
+}
+.sp-language-menu-panel .sp-language-menu__option:focus-visible {
+  outline: 2px solid var(--lm-focus);
+  outline-offset: -2px;
+  background: var(--lm-hover);
+}
+.sp-language-menu-panel .sp-language-menu__option[aria-checked='true']:focus-visible {
+  background: var(--lm-active);
+}
+.sp-language-menu__names {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.sp-language-menu__native {
+  font-size: 13px;
+  font-weight: 550;
+  line-height: 1.4;
+}
+.sp-language-menu__description {
+  color: var(--lm-muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+.sp-language-menu__check {
+  flex-shrink: 0;
+  stroke: var(--lm-accent);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sp-language-menu .sp-language-menu__trigger,
+  .sp-language-menu__chevron {
+    transition: none;
+  }
+}
+
+.sp-language-menu__count {
+  flex-shrink: 0;
+  min-width: 20px;
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: var(--lm-hover);
+  text-align: center;
+  font-size: 9px;
+  letter-spacing: 0;
+}

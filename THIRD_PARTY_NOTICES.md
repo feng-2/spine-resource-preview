@@ -41,7 +41,7 @@ These files are included for development and regression testing and are excluded
 
 ## Documentation screenshots
 
-Images under `assets/screenshots` capture the actual application displaying the official Spineboy example. The depicted example artwork is copyrighted by Esoteric Software LLC and retains the upstream asset terms recorded in `fixtures/official/4.2/LICENSE`. The project MIT license does not relicense that artwork. Documentation screenshots are not bundled into the standalone Web or VSIX application builds. The product website displays the English screenshot and includes its example-asset license under `licenses/example-assets/LICENSE`.
+Images under `assets/screenshots` and `apps/vscode/assets/preview.jpg` capture the actual shared web preview interface displaying the official Spineboy example. The depicted example artwork is copyrighted by Esoteric Software LLC and retains the upstream asset terms recorded in `fixtures/official/4.2/LICENSE`. The project MIT license does not relicense that artwork. The standalone Web application does not bundle documentation screenshots. The product website displays the English screenshot and includes its example-asset license under `licenses/example-assets/LICENSE`. The VSIX includes the same screenshot for its user-facing README, explicitly identified as the shared web interface, and preserves the example-asset license under `dist/licenses/example-assets/LICENSE`.
 
 ## Distribution contents
 

@@ -14,11 +14,15 @@ export const DEFAULT_LOCALE: Locale = 'en';
 export const LOCALE_STORAGE_KEY = 'spine-resource-preview.locale';
 
 /** 两端共享的语言选项，由登记表生成以避免与词条支持范围脱节。 */
-export const LOCALE_OPTIONS: ReadonlyArray<{ value: Locale; label: string }> =
-  Object.entries(LOCALES).map(([value, { label }]) => ({
-    value: value as Locale,
-    label,
-  }));
+export const LOCALE_OPTIONS: ReadonlyArray<{
+  value: Locale;
+  label: string;
+  description: string;
+}> = Object.entries(LOCALES).map(([value, { label, description }]) => ({
+  value: value as Locale,
+  label,
+  description,
+}));
 
 /** 检查存储与选择器中的语言值，排除原型属性和未登记的语言。 */
 export function isLocale(value: unknown): value is Locale {

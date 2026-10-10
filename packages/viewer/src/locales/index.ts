@@ -11,14 +11,18 @@ import { ru } from './ru.js';
 
 /** 语言统一登记；选项用本语言名称，便于任何界面语言下辨认。 */
 export const LOCALES = {
-  en: { label: 'English', messages: en },
-  'zh-CN': { label: '简体中文', messages: zhCN },
-  'zh-TW': { label: '繁體中文', messages: zhTW },
-  ja: { label: '日本語', messages: ja },
-  ko: { label: '한국어', messages: ko },
-  de: { label: 'Deutsch', messages: de },
-  fr: { label: 'Français', messages: fr },
-  es: { label: 'Español', messages: es },
-  'pt-BR': { label: 'Português (Brasil)', messages: ptBR },
-  ru: { label: 'Русский', messages: ru },
+  en: { label: 'English', description: 'English', messages: en },
+  'zh-CN': { label: '简体中文', description: 'Simplified Chinese', messages: zhCN },
+  'zh-TW': { label: '繁體中文', description: 'Traditional Chinese', messages: zhTW },
+  ja: { label: '日本語', description: 'Japanese', messages: ja },
+  ko: { label: '한국어', description: 'Korean', messages: ko },
+  de: { label: 'Deutsch', description: 'German', messages: de },
+  fr: { label: 'Français', description: 'French', messages: fr },
+  es: { label: 'Español', description: 'Spanish', messages: es },
+  'pt-BR': {
+    label: 'Português (Brasil)',
+    description: 'Portuguese (Brazil)',
+    messages: ptBR,
+  },
+  ru: { label: 'Русский', description: 'Russian', messages: ru },
 } as const;

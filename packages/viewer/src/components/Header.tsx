@@ -1,5 +1,6 @@
 import { LOGO_URL } from '../assets.js';
-import { createTranslator, isLocale, LOCALE_OPTIONS, type Locale } from '../i18n.js';
+import { LanguageMenu } from './LanguageMenu.js';
+import { createTranslator, LOCALE_OPTIONS, type Locale } from '../i18n.js';
 
 /** 共享品牌、语言设置与来源刷新入口。 */
 interface HeaderProps {
@@ -31,21 +32,12 @@ export function Header({ locale, loading, onRefresh, onLanguageChange }: HeaderP
             {t('refresh')}
           </button>
         )}
-        <select
-          className="language-select"
-          aria-label={t('language')}
+        <LanguageMenu
           value={locale}
-          onChange={(event) => {
-            const value = event.currentTarget.value;
-            if (isLocale(value)) onLanguageChange(value);
-          }}
-        >
-          {LOCALE_OPTIONS.map(({ value, label }) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
+          options={LOCALE_OPTIONS}
+          label={t('language')}
+          onChange={onLanguageChange}
+        />
       </div>
     </header>
   );

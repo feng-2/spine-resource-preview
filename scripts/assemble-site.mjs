@@ -36,5 +36,10 @@ for (const name of [
   await mkdir(dirname(resolve(output, name)), { recursive: true });
   await cp(resolve(projectRoot, name), resolve(output, name));
 }
+await mkdir(resolve(output, 'vscode'), { recursive: true });
+await cp(
+  resolve(projectRoot, 'apps/vscode/README.md'),
+  resolve(output, 'vscode/README.md'),
+);
 await writeFile(resolve(output, '.nojekyll'), '');
 console.log(`站点已生成：${output}\n宣传页 ./ · 预览工具 ./app/`);

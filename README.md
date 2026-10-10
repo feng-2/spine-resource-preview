@@ -28,7 +28,7 @@ The web viewer after importing the official Spine 4.2 examples: resource browsin
 
 ## Getting started
 
-The web viewer and product website can be deployed together to GitHub Pages. The VS Code extension is currently available as a source build; Marketplace publishing is deferred.
+The web viewer and product website can be deployed together to GitHub Pages. The VS Code extension is available on [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=cceevv.spine-resource-preview), or as a source build.
 
 ### Web app
 
@@ -57,6 +57,8 @@ Page filenames come from the atlas; they do not have to match the skeleton filen
 
 ### VS Code extension
 
+Install [Spine Resource Preview from Marketplace](https://marketplace.visualstudio.com/items?itemName=cceevv.spine-resource-preview), or use the local VSIX build below.
+
 Requires **VS Code 1.90+**. Build the installation package from the repository root:
 
 ```sh
@@ -73,7 +75,7 @@ In VS Code, run **Extensions: Install from VSIX…** and select `apps/vscode/dis
 
 Right-click the selection and choose **Preview Spine Resources**. Dependencies referenced inside subdirectories can still be loaded when a file is selected. The panel also provides native file/folder selection and resource refresh.
 
-The extension runs from its bundled files and needs no development server. Its current publisher, `local-spine-preview`, is a development identifier, not a Marketplace publisher.
+The extension runs from its bundled files and needs no development server. Its extension identifier is `cceevv.spine-resource-preview`.
 
 ## Compatibility
 
@@ -120,7 +122,7 @@ pnpm package:vscode
 
 The web build is written to `apps/web/dist`; preview runs at <http://127.0.0.1:4180/>. Deploy the **entire** directory, including its `licenses/` folder, with a static HTTP server. Asset references are relative (`./assets/...`), source maps are disabled, and all runtimes are bundled locally.
 
-The VSIX is written to `apps/vscode/dist/spine-resource-preview.vsix`. Before a Marketplace release, configure the actual publisher and repository metadata and complete the environment checks listed above.
+The VSIX is written to `apps/vscode/dist/spine-resource-preview.vsix`. Before publishing an update, complete the environment checks listed above.
 
 ### Product website and GitHub Pages
 
@@ -145,7 +147,7 @@ For a project repository, the website will be at `https://<account>.github.io/<r
 
 The workflow reads the public repository URL from GitHub's own `GITHUB_REPOSITORY` environment variable. For a local build with source links, set `VITE_REPOSITORY_URL` to your HTTPS repository URL. Without it, the website links to its bundled documentation. Deployment is triggered only after the workflow is pushed; no GitHub upload is performed by local build commands.
 
-For website development, run `pnpm dev:site` on port 5181 and `pnpm dev` for the viewer on port 5180 in another terminal. Website source lives in `apps/site`; its copy is separated into `src/content.ts`.
+For website development, run `pnpm dev:site` on port 5181 and `pnpm dev` for the viewer on port 5180 in another terminal. Website source lives in `apps/site`; its copy is separated into `src/content.ts`. The VS Code section reads the publisher, version, and minimum editor version from the extension manifest. Builds query the public Marketplace listing; once indexed, the site displays Marketplace and VS Code installation links. If the query is unavailable, the site keeps its VSIX guide. For an offline build, `VITE_EXTENSION_PUBLISHED=true` / `false` can explicitly select the presentation state; visitors do not make Marketplace API requests.
 
 ## Development and contributions
 

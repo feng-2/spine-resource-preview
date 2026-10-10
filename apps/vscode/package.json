@@ -2,8 +2,8 @@
   "name": "@spine-preview/vscode",
   "displayName": "%extension.displayName%",
   "description": "%extension.description%",
-  "version": "1.0.0",
-  "publisher": "local-spine-preview",
+  "version": "1.0.1",
+  "publisher": "cceevv",
   "private": true,
   "type": "module",
   "engines": {
@@ -56,5 +56,14 @@
     "vitest": "catalog:"
   },
   "icon": "assets/icon.png",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/feng-2/spine-resource-preview.git",
+    "directory": "apps/vscode"
+  },
+  "homepage": "https://feng-2.github.io/spine-resource-preview/",
+  "bugs": {
+    "url": "https://github.com/feng-2/spine-resource-preview/issues"
+  }
 }

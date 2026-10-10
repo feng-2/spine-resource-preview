@@ -22,6 +22,9 @@ await cp('../../packages/viewer/src/assets/logo.png', 'assets/icon.png');
 await rm('dist/licenses', { recursive: true, force: true });
 // Web 与 VSIX 共用完整的第三方许可收集逻辑。
 await copyLicenses('dist/licenses');
+// 插件说明中的官方示例截图随 VSIX 发布，保留该素材的原始许可。
+await mkdir('dist/licenses/example-assets', { recursive: true });
+await cp('../../fixtures/official/4.2/LICENSE', 'dist/licenses/example-assets/LICENSE');
 if (watch) {
   const runner = await context(host);
   await runner.watch();

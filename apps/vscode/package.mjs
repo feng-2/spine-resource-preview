@@ -32,6 +32,11 @@ for (const file of ['extension.cjs', 'webview', 'licenses'])
 const require = createRequire(import.meta.url);
 const manager = resolve(dirname(require.resolve('@vscode/vsce/package.json')), 'vsce');
 const output = resolve('dist/spine-resource-preview.vsix');
+// Marketplace 的相对链接默认以仓库根为基础，需要显式保留扩展子目录。
+const repositoryUrl = manifest.repository.url.replace(/\.git$/, '').replace(/\/$/, '');
+const repositoryDirectory = manifest.repository.directory.replace(/^\/+|\/+$/g, '');
+const contentUrl = `${repositoryUrl}/blob/main/${repositoryDirectory}/`;
+const imagesUrl = `${repositoryUrl}/raw/main/${repositoryDirectory}/`;
 const code = await new Promise((success, failure) => {
   const child = spawn(
     process.execPath,
@@ -39,7 +44,10 @@ const code = await new Promise((success, failure) => {
       manager,
       'package',
       '--no-dependencies',
-      '--allow-missing-repository',
+      '--baseContentUrl',
+      contentUrl,
+      '--baseImagesUrl',
+      imagesUrl,
       '--out',
       output,
     ],

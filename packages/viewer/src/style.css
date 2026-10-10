@@ -1,3 +1,5 @@
+@import './components/language-menu.css';
+
 .spine-viewer {
   font-family:
     Inter,
@@ -473,10 +475,6 @@
 }
 .spine-viewer .header-actions button {
   font-size: 12px;
-}
-.spine-viewer .language-select {
-  min-width: 120px;
-  min-height: 34px;
 }
 .spine-viewer .status-row {
   display: flex;

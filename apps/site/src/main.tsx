@@ -1,12 +1,20 @@
+import { NewTabLink } from './components/NewTabLink.js';
 import { useEffect, useState, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { LOGO_URL } from '@spine-preview/viewer/assets';
+import { LanguageMenu, type LanguageOption } from '@spine-preview/viewer/language-menu';
 import previewImage from '../../../assets/screenshots/preview-en.jpg';
 import { en, zhCN } from './content.js';
+import { ExtensionSection } from './components/ExtensionSection.js';
 import './style.css';
 
 /** 宣传页仅提供英中语言，预览工具保留自己的十种语言设置。 */
 type SiteLocale = 'en' | 'zh-CN';
+/** 网站只提供实际已翻译的语言，选项始终显示完整自称。 */
+const siteLanguages: readonly LanguageOption<SiteLocale>[] = [
+  { value: 'en', label: 'English', description: 'English' },
+  { value: 'zh-CN', label: '简体中文', description: 'Simplified Chinese' },
+];
 const storageKey = 'spine-resource-preview.site.locale';
 const viewerHref = import.meta.env.DEV ? 'http://127.0.0.1:5180/' : './app/';
 const repositoryHref = __REPOSITORY_URL__;
@@ -58,10 +66,10 @@ function FeatureIcon({ kind }: { kind: 'runtime' | 'local' | 'animation' }) {
 /** 开启工具的主操作在各处使用同一路径，兼容 GitHub Pages 子目录。 */
 function OpenLink({ children }: { children: ReactNode }) {
   return (
-    <a className="button button-dark" href={viewerHref}>
+    <NewTabLink className="button button-dark" href={viewerHref}>
       {children}
       <Arrow />
-    </a>
+    </NewTabLink>
   );
 }
 
@@ -70,6 +78,13 @@ function Site() {
   const [locale, setLocale] = useState<SiteLocale>(initialLocale);
   const t = locale === 'zh-CN' ? zhCN : en;
   const docsHref = locale === 'zh-CN' ? './README.zh-CN.md' : './README.md';
+  useEffect(() => {
+    // React 挂载后再定位初始片段，使直接打开插件专区链接也能正确滚动。
+    document.getElementById(window.location.hash.slice(1))?.scrollIntoView({
+      block: 'start',
+      behavior: 'instant',
+    });
+  }, []);
   useEffect(() => {
     document.documentElement.lang = locale;
     document.title = t.title;
@@ -96,6 +111,7 @@ function Site() {
     [t.questionFiles, t.answerFiles],
     [t.questionUpload, t.answerUpload],
     [t.questionLanguage, t.answerLanguage],
+    [t.questionExtension, t.answerExtension],
     [t.questionLicense, t.answerLicense],
   ];
   return (
@@ -114,22 +130,21 @@ function Site() {
           <a href="#features">{t.navFeatures}</a>
           <a href="#workflow">{t.navWorkflow}</a>
           <a href="#versions">{t.navVersions}</a>
+          <a href="#vscode">{t.navExtension}</a>
         </nav>
         <div className="header-actions">
-          <select
-            aria-label={t.language}
+          <LanguageMenu<SiteLocale>
             value={locale}
-            onChange={(event) =>
-              setLocale(event.currentTarget.value === 'zh-CN' ? 'zh-CN' : 'en')
-            }
-          >
-            <option value="en">EN</option>
-            <option value="zh-CN">中文</option>
-          </select>
-          <a className="header-open" href={viewerHref}>
+            options={siteLanguages}
+            label={t.language}
+            onChange={setLocale}
+            theme="light"
+            compactLabel={locale === 'en' ? 'EN' : '中文'}
+          />
+          <NewTabLink className="header-open" href={viewerHref}>
             {t.open}
             <Arrow diagonal />
-          </a>
+          </NewTabLink>
         </div>
       </header>
       <main id="main">
@@ -148,11 +163,15 @@ function Site() {
               <p>{t.intro}</p>
               <div className="hero-buttons">
                 <OpenLink>{t.open}</OpenLink>
+                <a className="button button-outline" href="#vscode">
+                  {t.getExtension}
+                  <Arrow diagonal />
+                </a>
                 {repositoryHref && (
-                  <a className="text-link" href={repositoryHref}>
+                  <NewTabLink className="text-link" href={repositoryHref}>
                     {t.source}
                     <Arrow diagonal />
-                  </a>
+                  </NewTabLink>
                 )}
               </div>
               <p className="privacy">
@@ -187,7 +206,7 @@ function Site() {
                 <span>{t.viewerLabel}</span>
                 <span className="preview-format">{t.viewerFormat}</span>
               </div>
-              <a href={viewerHref} aria-label={t.open}>
+              <NewTabLink href={viewerHref} aria-label={t.open}>
                 <img
                   src={previewImage}
                   width="1280"
@@ -195,13 +214,15 @@ function Site() {
                   alt={t.screenshotAlt}
                   fetchPriority="high"
                 />
-              </a>
+              </NewTabLink>
             </div>
             <figcaption>
               <span>{t.screenshotCaption}</span>
               <span>
                 {t.screenshotCredit}{' '}
-                <a href="./licenses/example-assets/LICENSE">{t.assetLicense}</a>
+                <NewTabLink href="./licenses/example-assets/LICENSE">
+                  {t.assetLicense}
+                </NewTabLink>
               </span>
             </figcaption>
           </figure>
@@ -264,25 +285,15 @@ function Site() {
               </li>
             ))}
           </ol>
-          <aside className="extension">
-            <div className="editor-icon" aria-hidden="true">
-              &lt;/&gt;
-            </div>
-            <div>
-              <span className="eyebrow">{t.extensionLabel}</span>
-              <h3>{t.extensionTitle}</h3>
-              <p>{t.extensionBody}</p>
-              <span className="extension-status">{t.extensionStatus}</span>
-            </div>
-            <a
-              className="text-link"
-              href={repositoryHref ? `${repositoryHref}#vs-code-extension` : docsHref}
-            >
-              {t.extensionLink}
-              <Arrow diagonal />
-            </a>
-          </aside>
         </section>
+        <ExtensionSection
+          text={t}
+          docsHref={
+            repositoryHref
+              ? `${repositoryHref}/blob/main/apps/vscode/README.md`
+              : './vscode/README.md'
+          }
+        />
         <section
           id="versions"
           className="versions-section"
@@ -293,13 +304,13 @@ function Site() {
               <span className="eyebrow">{t.versionsEyebrow}</span>
               <h2 id="versions-title">{t.versionsTitle}</h2>
               <p>{t.versionsIntro}</p>
-              <a
+              <NewTabLink
                 className="text-link"
                 href={repositoryHref ? `${repositoryHref}#compatibility` : docsHref}
               >
                 {t.details}
                 <Arrow diagonal />
-              </a>
+              </NewTabLink>
               <div className="version-art" aria-hidden="true">
                 <span>3.7</span>
                 <span>3.8</span>
@@ -379,10 +390,11 @@ function Site() {
             <p>{t.footerTagline}</p>
           </div>
           <nav aria-label={locale === 'en' ? 'Resources' : '相关资源'}>
-            {repositoryHref && <a href={repositoryHref}>GitHub</a>}
-            <a href={docsHref}>{t.documentation}</a>
-            <a href="./licenses/LICENSE">{t.projectLicense}</a>
-            <a href="./licenses/NOTICE.md">{t.thirdParty}</a>
+            {repositoryHref && <NewTabLink href={repositoryHref}>GitHub</NewTabLink>}
+            <a href="#vscode">{t.navExtension}</a>
+            <NewTabLink href={docsHref}>{t.documentation}</NewTabLink>
+            <NewTabLink href="./licenses/LICENSE">{t.projectLicense}</NewTabLink>
+            <NewTabLink href="./licenses/NOTICE.md">{t.thirdParty}</NewTabLink>
           </nav>
         </div>
         <div className="footer-bottom">

@@ -1,61 +1,108 @@
 # Spine Resource Preview
 
-**Browse your Spine exports without leaving VS Code.**
+**Preview Spine animations right beside your project files.**
 
-A local animation viewer for artists, animators, and game developers. Right-click a resource folder, discover complete exports, and play their animations in a shared preview panel powered by version-matched official spine-ts WebGL runtimes.
+A local animation viewer for artists, animators, and game developers. Open a folder from VS Code Explorer, browse its Spine resources, and play animations using the official runtime for each supported export version.
 
-## Features
+[Install from Marketplace](https://marketplace.visualstudio.com/items?itemName=cceevv.spine-resource-preview) · [Product website](https://feng-2.github.io/spine-resource-preview/) · [Report an issue](https://github.com/feng-2/spine-resource-preview/issues)
 
-- Recursive discovery from a directory, or immediate selection of a clicked skeleton file.
-- A resource list and animation list with pause, replay, loop, and playback-speed controls.
-- Transparent checkerboard, scroll-to-zoom, drag-to-pan, automatic fitting for oversized resources, and a centered 100% reset.
-- Clear diagnostics for missing pages, ambiguous dependencies, unsupported versions, and runtime errors.
-- Local resource processing with bundled runtimes; no runtime CDN or Vite server required.
-- Ten interface languages: English, 简体中文, 繁體中文, 日本語, 한국어, Deutsch, Français, Español, Português (Brasil), and Русский.
+## Preview
 
-## Use
+![Shared preview interface with imported Spine resources and the Spineboy run animation playing](assets/preview.jpg)
 
-1. In Explorer, right-click a folder or resource file.
-2. Choose **Preview Spine Resources** (localized to your VS Code display language).
-3. Select a resource and click an animation to play it.
+The extension shares this preview interface with the web viewer. This screenshot was captured in the web version using the official Spine 4.2 Spineboy example. Artwork © Esoteric Software; its original license is included under `dist/licenses/example-assets/LICENSE`.
 
-A folder is scanned recursively. A file opens resources in its containing directory without recursively discovering skeletons in subdirectories. Referenced dependencies inside subdirectories can still be read. A selected skeleton is opened directly; an atlas/image selects its associated resource when the association is unique.
+## What you can do
 
-Include the complete **`.json` / `.skel` + `.atlas` + all atlas page images**. Preserve relative paths. Missing images are not replaced by another directory's same-named files.
+- Browse complete resource sets in a folder and its subfolders.
+- Open a specific skeleton directly from Explorer.
+- Select animations, pause, replay, loop, and adjust playback speed.
+- Inspect details with scroll-to-zoom and drag-to-pan, or fit the resource to the canvas.
+- Preview transparency against a checkerboard background.
+- Read diagnostics for missing files, ambiguous dependencies, unsupported versions, and runtime errors.
+- Choose from ten interface languages, with English as the default.
 
-The preview also provides native file/folder selection and refresh. Some platforms do not expose dragged file URIs to Webviews; use the context menu or selection buttons in that case.
+## Install
 
-## Compatibility
+Install **Spine Resource Preview** from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=cceevv.spine-resource-preview), or search for `cceevv.spine-resource-preview` in VS Code's Extensions view.
 
-| Spine version         | JSON |                          Binary `.skel`                           |
-| --------------------- | :--: | :---------------------------------------------------------------: |
-| 3.7                   | Yes  |                                No                                 |
-| 3.8                   | Yes  | Yes, except explicitly rejected historical exports such as 3.8.75 |
-| 4.0 / 4.1 / 4.2 / 4.3 | Yes  |                                Yes                                |
+Requires **VS Code 1.90 or later** and **WebGL** support. The runtimes are bundled with the extension; you do not need Node.js, a development server, or a runtime CDN to use it.
 
-Each export uses its matching major/minor official runtime. Patch compatibility is determined by that runtime. The 4.3 test samples are beta exports and do not establish support for all historical beta versions. Resources without animations show their setup pose.
+## Open your resources
 
-Requires **VS Code 1.90+** and WebGL. Remote SSH, Dev Containers, VS Code Web, platform-specific Explorer drops, and real Webview GPU playback still need environment acceptance testing.
+1. In **Explorer**, right-click a resource folder or skeleton file.
+2. Choose **Preview Spine Resources**. The command name follows VS Code's display language; in Simplified Chinese it is **预览 Spine 资源**.
+3. Select a resource in the preview panel, then click an animation to start playback.
 
-## Language and privacy
+| What you select              | What the extension opens                                                                                                   |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| A folder                     | Complete resources in that folder and all subfolders.                                                                      |
+| A `.json` / `.skel` skeleton | The selected resource, plus other skeletons in its containing directory. Skeletons in subdirectories are not scanned.      |
+| An atlas or image            | Its associated resource when the association is unique. Multiple associations are reported so you can choose the resource. |
 
-The viewer defaults to English and remembers explicit language choices when local storage is available. Native command titles, notifications, and dialogs follow VS Code's language independently. Resource names and original error details remain unchanged.
+Dependencies referenced inside subdirectories can still be read when a skeleton file is selected. You can also use the panel's native file/folder selection buttons and **Refresh resources** to rescan the current source.
 
-The application does not upload imported resources. File reads use the VS Code file API; images use authorized Webview URIs. Remote workspaces follow VS Code's remote file API.
+## Include the complete export
 
-## Installation from source
+Import the skeleton, its atlas, and **every page image referenced by the atlas**:
 
-From the repository root, with Node.js 22.12+ and pnpm 10.20.0:
-
-```sh
-pnpm install --frozen-lockfile
-pnpm package:vscode
+```text
+hero/
+├── hero.json              # or a supported hero.skel
+├── hero.atlas
+├── page-1.png
+└── page-2.png             # include all referenced pages
 ```
 
-Run **Extensions: Install from VSIX…** and select `apps/vscode/dist/spine-resource-preview.vsix`. The current identifier is `local-spine-preview.spine-resource-preview`; it is a development publisher and no Marketplace release is provided yet.
+Keep relative paths and subfolders intact. Image names come from the atlas and do not have to match the skeleton filename. Missing pages are not substituted with same-named images from another directory.
+
+## Playback and canvas controls
+
+| Control                      | Action                                                 |
+| ---------------------------- | ------------------------------------------------------ |
+| Animation list               | Start the selected animation from the beginning.       |
+| Pause / Resume               | Stop or continue playback.                             |
+| Replay                       | Restart the current animation.                         |
+| Loop                         | Repeat the current animation.                          |
+| Speed                        | Adjust playback speed.                                 |
+| Mouse wheel / zoom slider    | Zoom in or out.                                        |
+| Drag the canvas              | Pan the view.                                          |
+| Fit to canvas / Restore view | Fit the current pose, or restore a centered 100% view. |
+
+Large resources automatically fit when first opened; resources that fit already display at actual size. Resources without animations show their setup pose. Fitting uses the current pose bounds, so an action with a larger motion range may need fitting again.
+
+## Supported Spine versions
+
+| Export version        | JSON | Binary `.skel` |
+| --------------------- | :--: | :------------: |
+| 3.7                   | Yes  |       No       |
+| 3.8                   | Yes  |      Yes¹      |
+| 4.0 / 4.1 / 4.2 / 4.3 | Yes  |      Yes²      |
+
+¹ Some historical 3.8 binaries, including 3.8.75, require a compatible re-export and are explicitly rejected.
+
+² The checked-in 4.3 examples are beta exports. They do not establish compatibility with every historical beta version.
+
+Each export is loaded with its matching major/minor official Spine runtime. Export and runtime versions are visible in the panel. Unsupported or damaged data produces diagnostics rather than a silent conversion.
+
+## Language and local processing
+
+The preview language menu supports **English, 简体中文, 繁體中文, 日本語, 한국어, Deutsch, Français, Español, Português (Brasil), and Русский**. Your explicit choice is saved locally when storage is available. Command titles and native dialogs independently follow VS Code's language. Resource names, animation names, and paths stay unchanged.
+
+Imported files are read through the VS Code file API and rendered locally in the preview Webview. The extension does not upload your resources. Remote workspaces use VS Code's remote file API.
+
+## When a preview needs attention
+
+Check the panel's diagnostics if a resource is missing or fails to load. Include the full export and preserve its relative paths. Unexpected transparency may require checking atlas PMA metadata and the exported images.
+
+If drag-and-drop does not expose a file URI on your platform, use the Explorer context menu or native selection buttons. If the WebGL context is lost, reload or reselect the resource.
+
+Remote SSH, Dev Containers, VS Code Web, platform-specific Explorer drops, and real VS Code Webview GPU playback have not completed environment acceptance testing. Use a local desktop workspace for the currently documented workflow.
+
+For problems, [open an issue](https://github.com/feng-2/spine-resource-preview/issues) with your extension and VS Code versions, operating system, full Spine export version, JSON/binary format, reproduction steps, and diagnostic text. Share a minimal resource only when you have permission to distribute it.
 
 ## License
 
-Project-authored code is MIT; see the included `LICENSE`. Official Spine runtimes retain the **Spine Runtimes License Agreement**, including the applicable Spine Editor license conditions. React, React DOM, and Scheduler retain their MIT licenses. The extension includes `THIRD_PARTY_NOTICES.md` and original licenses under `dist/licenses`; preserve them when redistributing it.
+Project-authored code is MIT. Official Spine runtimes and example artwork retain their upstream licenses, including the applicable Spine Editor license conditions. React, React DOM, and Scheduler retain their MIT licenses. Original notices are included in `LICENSE`, `THIRD_PARTY_NOTICES.md`, and `dist/licenses`.
 
 This project is independently maintained and is not affiliated with or endorsed by Esoteric Software.

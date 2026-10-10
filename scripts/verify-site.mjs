@@ -26,6 +26,10 @@ assert(
   '仅许可证目录允许 runtime 来源 JSON。',
 );
 await stat(resolve(siteRoot, '.nojekyll'));
+assert.deepEqual(
+  await readFile(resolve(siteRoot, 'vscode/README.md')),
+  await readFile(resolve(projectRoot, 'apps/vscode/README.md')),
+);
 await stat(resolve(siteRoot, 'licenses/example-assets/LICENSE'));
 await stat(resolve(siteRoot, 'assets/screenshots/preview-en.jpg'));
 assert.deepEqual(

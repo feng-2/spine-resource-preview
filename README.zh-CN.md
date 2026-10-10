@@ -28,7 +28,7 @@
 
 ## 快速开始
 
-Web 工具与产品宣传页可以一起部署到 GitHub Pages。VS Code 插件目前提供源码构建方式，Marketplace 发布暂缓。
+Web 工具与产品宣传页可以一起部署到 GitHub Pages。VS Code 插件已在 [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=cceevv.spine-resource-preview) 上架，也可从源码构建安装。
 
 ### Web 版本
 
@@ -55,6 +55,8 @@ hero/
 
 ### VS Code 插件
 
+可从 [Marketplace 安装 Spine Resource Preview](https://marketplace.visualstudio.com/items?itemName=cceevv.spine-resource-preview)，或使用下面的本地 VSIX 构建方式。
+
 要求 **VS Code 1.90+**。在仓库根目录构建安装包：
 
 ```sh
@@ -71,7 +73,7 @@ pnpm package:vscode
 
 右键选择 **Preview Spine Resources**；简体中文 VS Code 显示 **预览 Spine 资源**。选择文件时，其引用的子目录依赖仍然可以加载。预览页也提供原生文件／文件夹选择按钮和刷新入口。
 
-插件从打包文件直接运行，无需开发服务器。目前的 `local-spine-preview` 是开发用 publisher 标识，不是 Marketplace 发布账号。
+插件从打包文件直接运行，无需开发服务器。插件标识为 `cceevv.spine-resource-preview`。
 
 ## 兼容范围
 
@@ -118,7 +120,7 @@ pnpm package:vscode
 
 Web 产物位于 `apps/web/dist`，本地预览地址为 <http://127.0.0.1:4180/>。通过静态 HTTP 服务部署**整个目录**，包括 `licenses/`。资源引用使用相对路径 `./assets/...`，不生成 source map，运行时全部随构建打包。
 
-VSIX 位于 `apps/vscode/dist/spine-resource-preview.vsix`。正式发布 Marketplace 前需配置真实 publisher、仓库元信息，并完成上述环境验收。
+VSIX 位于 `apps/vscode/dist/spine-resource-preview.vsix`。发布后续更新前需完成上述环境验收。
 
 ### 产品宣传页与 GitHub Pages
 
@@ -143,7 +145,7 @@ pnpm preview:site
 
 工作流会从 GitHub 提供的 `GITHUB_REPOSITORY` 环境变量自动生成公开仓库链接。本地构建可设置 HTTPS 格式的 `VITE_REPOSITORY_URL`；未配置时，宣传页链接到随站点附带的使用文档。只有工作流提交到远程后才会触发部署，本地构建命令不会上传 GitHub。
 
-开发宣传页使用 `pnpm dev:site`（5181 端口），在另一个终端运行 `pnpm dev` 提供工具入口（5180 端口）。页面源码位于 `apps/site`，宣传文案独立放在 `src/content.ts`。
+开发宣传页使用 `pnpm dev:site`（5181 端口），在另一个终端运行 `pnpm dev` 提供工具入口（5180 端口）。页面源码位于 `apps/site`，宣传文案独立放在 `src/content.ts`。VS Code 专区从插件清单读取 publisher、版本和最低编辑器版本；构建时检查公开商店索引，上架可检索后显示商店链接与 VS Code 安装入口。查询不可用时仍保留 VSIX 说明。离线构建可用 `VITE_EXTENSION_PUBLISHED=true` / `false` 明确选择展示状态，访客浏览器不会请求商店 API。
 
 ## 开发与贡献
 
