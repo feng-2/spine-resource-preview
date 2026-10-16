@@ -95,7 +95,13 @@ function session(
   };
   return {
     objects,
-    session: new LegacySession(version, parsed.data, objects, new LegacyOwnership()),
+    session: new LegacySession(
+      version,
+      parsed.data,
+      objects,
+      new LegacyOwnership(),
+      runtime,
+    ),
   };
 }
 
@@ -146,6 +152,9 @@ describe('官方旧 runtime 的来源与真实格式', () => {
       const result = session(runtime, version, binary, pro);
       expect(result.session.animations).toContain('idle');
       expect(result.session.skins).toContain('default');
+      expect(result.session.getAnimationDuration('idle')).toBeGreaterThan(0);
+      expect(result.session.getAnimationDuration('death')).toBeGreaterThan(0);
+      expect(result.session.getAnimationDuration('missing')).toBeUndefined();
       result.session.play('idle', true);
       const initial = result.session.getBounds();
       expect(initial.width).toBeGreaterThan(200);
@@ -160,6 +169,42 @@ describe('官方旧 runtime 的来源与真实格式', () => {
       result.session.dispose();
       result.session.dispose();
       expect(() => result.session.update(0)).toThrow('已释放');
+      expect(() => result.session.getAnimationDuration('idle')).toThrow('已释放');
+    },
+  );
+
+  it.each([
+    ['3.7', spine37],
+    ['3.8', spine38],
+  ] as const)(
+    '%s 动画固定范围包含播放姿态，采样及缓存不改变播放轨道',
+    (version, runtime) => {
+      const { session: preview, objects } = session(runtime, version);
+      preview.play('run', true);
+      preview.update(0.3);
+      const pose = preview.getBounds();
+      const apply = vi.spyOn(objects.state, 'apply');
+      const bounds = preview.getAnimationBounds('run')!;
+      expect(bounds.width).toBeGreaterThan(0);
+      expect(bounds.height).toBeGreaterThan(0);
+      expect(bounds.x).toBeLessThanOrEqual(pose.x + 1);
+      expect(bounds.y).toBeLessThanOrEqual(pose.y + 1);
+      expect(bounds.x + bounds.width).toBeGreaterThanOrEqual(pose.x + pose.width - 1);
+      expect(bounds.y + bounds.height).toBeGreaterThanOrEqual(pose.y + pose.height - 1);
+      expect(preview.getBounds()).toEqual(pose);
+      expect(apply).not.toHaveBeenCalled();
+      preview.update(0.2);
+      expect(preview.getAnimationBounds('run')).toEqual(bounds);
+      expect(preview.getAnimationBounds('missing')).toBeUndefined();
+      const construct = vi.spyOn(runtime, 'Skeleton');
+      expect(preview.getAnimationBounds('run')).toEqual(bounds);
+      expect(construct).not.toHaveBeenCalled();
+      preview.setSkin('default');
+      preview.getAnimationBounds('run');
+      expect(construct).toHaveBeenCalledOnce();
+      construct.mockRestore();
+      preview.dispose();
+      expect(() => preview.getAnimationBounds('run')).toThrow('已释放');
     },
   );
 

@@ -158,6 +158,7 @@ async function loadLegacySession(
         size: new runtime.Vector2(),
       },
       ownership,
+      runtime,
     );
   } catch (error) {
     try {

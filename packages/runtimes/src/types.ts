@@ -44,6 +44,10 @@ export interface RuntimeSession {
   render(camera: CameraState): void;
   /** 当前姿态边界。 */
   getBounds(): PoseBounds;
+  /** 官方动画数据中的时长（秒），未知动作返回 undefined。 */
+  getAnimationDuration?(name: string): number | undefined;
+  /** 当前皮肤下整个动作采样合并的固定边界，不改变当前播放姿态。 */
+  getAnimationBounds?(name: string): PoseBounds | undefined;
   /** 释放所有 GPU 对象、纹理和图片地址，可重复调用。 */
   dispose(): void | Promise<void>;
 }
@@ -76,6 +80,12 @@ export interface PreviewState {
   fitted: boolean;
   /** 是否暂停。 */
   paused: boolean;
+  /** 当前动画完整时间线采样合并的固定世界坐标边界；无动画时为 setup 姿态边界。 */
+  animationBounds?: PoseBounds;
+  /** 当前动画的原始时长（秒），不受播放速度影响。 */
+  animationDuration?: number;
+  /** 实际绘制帧率，后台或绘制失败时为零。 */
+  fps?: number;
 }
 
 /** 共用预览控制器，独占会话、DOM 监听和动画更新。 */

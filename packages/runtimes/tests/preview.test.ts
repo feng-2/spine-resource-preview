@@ -133,7 +133,7 @@ describe('真实预览控制器', () => {
       onChange: (state) => states.push(state),
     });
     expect(session.play).toHaveBeenCalledWith('idle', true);
-    expect(states.at(-1)).toEqual({ zoom: 1, fitted: false, paused: false });
+    expect(states.at(-1)).toMatchObject({ zoom: 1, fitted: false, paused: false });
     step(1000);
     expect(rendered[0]).toMatchObject({ centerX: 60, centerY: 120, zoom: 1 });
     preview.toggleFit();
@@ -164,6 +164,132 @@ describe('真实预览控制器', () => {
     preview.setSpeed(2);
     step(50_100);
     expect(session.update).toHaveBeenLastCalledWith(0.2);
+    await preview.dispose();
+  });
+
+  it('动画尺寸在播放和相机变化时保持固定，FPS 独立采样并排除后台时间', async () => {
+    session = { ...session, animations: ['idle', 'run'] };
+    session.getAnimationDuration = (name) => ({ idle: 2.5, run: 0.75 })[name];
+    session.getAnimationBounds = (name) =>
+      name === 'idle'
+        ? { x: 10, y: 20, width: 100, height: 200 }
+        : { x: -5, y: 0, width: 300, height: 80 };
+    mock.load.mockResolvedValue(session);
+    const preview = await createPreviewController(host, resource, provider, {
+      onChange: (state) => states.push(state),
+    });
+    expect(states.at(-1)).toMatchObject({
+      animationBounds: { width: 100, height: 200 },
+      animationDuration: 2.5,
+      fps: 0,
+    });
+    step(0);
+    for (let index = 1; index <= 4; index += 1) step(index * 50);
+    expect(states).toHaveLength(1);
+    session.getBounds = () => ({ x: 3, y: 5, width: 120, height: 220 });
+    step(250);
+    expect(states).toHaveLength(2);
+    expect(states.at(-1)).toMatchObject({
+      animationBounds: { x: 10, y: 20, width: 100, height: 200 },
+      fps: 20,
+    });
+    preview.toggleFit();
+    preview.setZoom(0.5);
+    expect(states.at(-1)?.animationBounds).toEqual({
+      x: 10,
+      y: 20,
+      width: 100,
+      height: 200,
+    });
+    documentState.hidden = true;
+    documentState.dispatchEvent(new Event('visibilitychange'));
+    expect(states.at(-1)?.fps).toBe(0);
+    step(20_000);
+    documentState.hidden = false;
+    documentState.dispatchEvent(new Event('visibilitychange'));
+    step(30_000);
+    step(30_250);
+    expect(states.at(-1)?.fps).toBe(4);
+    preview.setSpeed(2);
+    preview.play('run', true);
+    expect(states.at(-1)).toMatchObject({
+      animationDuration: 0.75,
+      animationBounds: { x: -5, y: 0, width: 300, height: 80 },
+      fps: 0,
+    });
+    preview.play('run', false);
+    preview.setPaused(true);
+    preview.toggleFit();
+    expect(states.at(-1)?.animationBounds).toEqual({
+      x: -5,
+      y: 0,
+      width: 300,
+      height: 80,
+    });
+    const count = states.length;
+    await preview.dispose();
+    documentState.dispatchEvent(new Event('visibilitychange'));
+    expect(states).toHaveLength(count);
+    expect(frames.size).toBe(0);
+  });
+
+  it('整数 FPS 未变化时不重复通知，帧率下降后仍及时发布', async () => {
+    const preview = await createPreviewController(host, resource, provider, {
+      onChange: (state) => states.push(state),
+    });
+    step(0);
+    for (let frame = 1; frame <= 75; frame++) step(frame * 10 + (frame > 50 ? 0.4 : 0));
+    // 三个采样窗口都显示 100 FPS，包括不影响显示值的时间抖动。
+    expect(states.map((state) => Math.round(state.fps ?? 0))).toEqual([0, 100]);
+    for (let frame = 1; frame <= 15; frame++) step(750.4 + frame * 20);
+    expect(states.map((state) => Math.round(state.fps ?? 0))).toEqual([0, 100, 50]);
+    expect(rendered).toHaveLength(91);
+    await preview.dispose();
+  });
+
+  it('无动画或兼容会话的尺寸不会随每帧姿态改变', async () => {
+    session = { ...session, animations: [] };
+    mock.load.mockResolvedValue(session);
+    const preview = await createPreviewController(host, resource, provider, {
+      onChange: (state) => states.push(state),
+    });
+    session.getBounds = () => ({ x: 0, y: 0, width: 10, height: 20 });
+    step(0);
+    step(250);
+    preview.toggleFit();
+    expect(states.at(-1)?.animationBounds).toEqual({
+      x: 10,
+      y: 20,
+      width: 100,
+      height: 200,
+    });
+    expect(states.at(-1)?.animationDuration).toBeUndefined();
+    await preview.dispose();
+  });
+
+  it('绘制故障后 FPS 归零，通知保留最后有效边界且不再读取已失效上下文', async () => {
+    const onError = vi.fn();
+    const preview = await createPreviewController(host, resource, provider, {
+      onChange: (state) => states.push(state),
+      onError,
+    });
+    step(0);
+    step(250);
+    expect(states.at(-1)?.fps).toBe(4);
+    session.render = () => {
+      throw new Error('绘制失败');
+    };
+    session.getBounds = () => {
+      throw new Error('上下文不可访问');
+    };
+    step(500);
+    expect(states.at(-1)).toMatchObject({
+      paused: true,
+      fps: 0,
+      animationBounds: { width: 100, height: 200 },
+    });
+    expect(onError).toHaveBeenCalledOnce();
+    expect(frames.size).toBe(0);
     await preview.dispose();
   });
 

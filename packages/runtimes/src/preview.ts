@@ -2,6 +2,7 @@ import type { ResourceProvider, SpineResource } from '@spine-preview/core';
 import { loadRuntime } from './registry.js';
 import type {
   CameraState,
+  PoseBounds,
   PreviewController,
   PreviewOptions,
   RuntimeSession,
@@ -58,6 +59,11 @@ class LocalPreview implements PreviewController {
   private speed = 1;
   private fitted = false;
   private lastFrame: number | undefined;
+  private animationBounds: PoseBounds = { x: 0, y: 0, width: 0, height: 0 };
+  private animationDuration: number | undefined;
+  private fps = 0;
+  private sampleStarted: number | undefined;
+  private sampleFrames = 0;
   private frame = 0;
   private disposed = false;
   private disposal: Promise<void> | undefined;
@@ -86,6 +92,11 @@ class LocalPreview implements PreviewController {
       centerY: 0,
     };
     const bounds = this.centerPose();
+    const first = session.animations[0];
+    this.animationBounds =
+      (first !== undefined ? session.getAnimationBounds?.(first) : undefined) ?? bounds;
+    this.animationDuration =
+      first !== undefined ? session.getAnimationDuration?.(first) : undefined;
     // 首次按实际画布判断：只有原始姿态越界时才缩小，较小资源保持100%。
     if (bounds.width > this.camera.width || bounds.height > this.camera.height) {
       this.camera.zoom = this.fitZoom(bounds);
@@ -136,8 +147,12 @@ class LocalPreview implements PreviewController {
     this.assertOpen();
     this.session.play(name, loop);
     this.session.update(0);
+    this.animationBounds =
+      this.session.getAnimationBounds?.(name) ?? this.measureBounds();
+    this.animationDuration = this.session.getAnimationDuration?.(name);
     this.paused = false;
     this.lastFrame = undefined;
+    this.resetFps();
     this.notify();
     if (!this.frame) this.frame = requestAnimationFrame(this.tick);
   }
@@ -201,15 +216,44 @@ class LocalPreview implements PreviewController {
   }
 
   private centerPose() {
+    const bounds = this.measureBounds();
+    this.camera.centerX = bounds.x + bounds.width / 2;
+    this.camera.centerY = bounds.y + bounds.height / 2;
+    return bounds;
+  }
+
+  private measureBounds(): PoseBounds {
     const bounds = this.session.getBounds();
-    if ([bounds.x, bounds.y, bounds.width, bounds.height].every(Number.isFinite)) {
-      this.camera.centerX = bounds.x + bounds.width / 2;
-      this.camera.centerY = bounds.y + bounds.height / 2;
-      return bounds;
+    return [bounds.x, bounds.y, bounds.width, bounds.height].every(Number.isFinite)
+      ? {
+          ...bounds,
+          width: Math.max(0, bounds.width),
+          height: Math.max(0, bounds.height),
+        }
+      : { x: 0, y: 0, width: 0, height: 0 };
+  }
+
+  private resetFps(): void {
+    this.fps = 0;
+    this.sampleStarted = undefined;
+    this.sampleFrames = 0;
+  }
+
+  /** 只统计成功的绘制，每 250 ms 更新 FPS；动画尺寸保持固定。 */
+  private sampleMetrics(now: number): void {
+    if (this.sampleStarted === undefined) {
+      this.sampleStarted = now;
+      return;
     }
-    this.camera.centerX = 0;
-    this.camera.centerY = 0;
-    return { x: 0, y: 0, width: 0, height: 0 };
+    this.sampleFrames += 1;
+    const elapsed = now - this.sampleStarted;
+    if (elapsed < 250) return;
+    const previous = Math.round(this.fps);
+    this.fps = (this.sampleFrames * 1000) / elapsed;
+    this.sampleStarted = now;
+    this.sampleFrames = 0;
+    // 状态栏显示整数 FPS；相同显示值不触发整棵 React 工作台更新。
+    if (Math.round(this.fps) !== previous) this.notify();
   }
 
   /** 使用统一留白比例计算适应缩放，空姿态按原始尺寸显示。 */
@@ -246,11 +290,17 @@ class LocalPreview implements PreviewController {
             Math.min(Math.max((now - this.lastFrame) / 1000, 0), 0.1) * this.speed,
           );
         this.session.render(this.camera);
+        this.sampleMetrics(now);
+      } else {
+        const hadFps = this.fps !== 0;
+        this.resetFps();
+        if (hadFps) this.notify();
       }
       this.lastFrame = document.hidden || this.paused ? undefined : now;
     } catch (error) {
       this.paused = true;
       this.lastFrame = undefined;
+      this.resetFps();
       this.notify();
       this.options.onError?.(error);
       return;
@@ -260,6 +310,8 @@ class LocalPreview implements PreviewController {
 
   private readonly visibility = (): void => {
     this.lastFrame = undefined;
+    this.resetFps();
+    this.notify();
     if (document.hidden) this.endDrag();
   };
 
@@ -268,6 +320,8 @@ class LocalPreview implements PreviewController {
     this.paused = true;
     cancelAnimationFrame(this.frame);
     this.frame = 0;
+    this.lastFrame = undefined;
+    this.resetFps();
     this.notify();
     this.options.onError?.(new Error('WebGL 上下文已丢失，请重新选择资源以恢复'));
   };
@@ -343,6 +397,11 @@ class LocalPreview implements PreviewController {
       zoom: this.camera.zoom,
       fitted: this.fitted,
       paused: this.paused,
+      animationBounds: { ...this.animationBounds },
+      ...(this.animationDuration === undefined
+        ? {}
+        : { animationDuration: this.animationDuration }),
+      fps: this.fps,
     });
   }
   private assertOpen(): void {

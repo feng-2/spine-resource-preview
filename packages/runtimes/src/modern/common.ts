@@ -32,6 +32,10 @@ export interface ModernBackend {
   render(camera: CameraState): void;
   /** 当前姿态边界。 */
   getBounds(): PoseBounds;
+  /** 官方动画数据中的秒数。 */
+  getAnimationDuration(name: string): number | undefined;
+  /** 独立采样整个动画，不改变播放状态。 */
+  getAnimationBounds(name: string): PoseBounds | undefined;
 }
 
 /** 每个加载任务独立的后进先出清理栈，失败也执行完整释放。 */
@@ -229,6 +233,14 @@ export async function loadModernSession(
       getBounds() {
         active();
         return safeBounds(backend.getBounds());
+      },
+      getAnimationDuration(name) {
+        active();
+        return backend.getAnimationDuration(name);
+      },
+      getAnimationBounds(name) {
+        active();
+        return backend.getAnimationBounds(name);
       },
       dispose() {
         if (!disposed) {

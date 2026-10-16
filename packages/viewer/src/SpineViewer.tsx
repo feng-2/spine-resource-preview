@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { Diagnostic } from '@spine-preview/core';
 import { createPreviewController } from '@spine-preview/runtimes';
 import type { PreviewController, PreviewState } from '@spine-preview/runtimes';
@@ -6,6 +6,7 @@ import { PreviewLifecycle } from './lifecycle.js';
 import { Header } from './components/Header.js';
 import { ResourceList } from './components/ResourceList.js';
 import { AnimationList } from './components/AnimationList.js';
+import { SidebarResizeHandle } from './components/SidebarResizeHandle.js';
 import { ImportEmpty } from './components/ImportEmpty.js';
 import { PreviewToolbar } from './components/PreviewToolbar.js';
 import { PlaybackControls } from './components/PlaybackControls.js';
@@ -41,6 +42,7 @@ function errorText(error: unknown): string {
 export function SpineViewer({ source }: ViewerProps) {
   const [locale, setLocale] = useState<Locale>(readLocale);
   const t = createTranslator(locale);
+  const sidebarId = useId();
   const [snapshot, setSnapshot] = useState<ViewerSnapshot>(EMPTY);
   const [selection, setSelection] = useState<{ revision: number; id: string } | null>(
     null,
@@ -220,51 +222,71 @@ export function SpineViewer({ source }: ViewerProps) {
   }, [activeResource, snapshot.provider, snapshot.revision, retry, source]);
 
   // 来源操作也带代际；旧导入的晚到拒绝不能盖住新来源状态。
-  const run = (action: () => void | Promise<void>) => {
-    const generation = sourceGeneration.current;
-    const revision = snapshot.revision;
-    setActionError('');
-    try {
-      Promise.resolve(action()).catch((error: unknown) => {
-        if (
-          generation === sourceGeneration.current &&
-          latestSnapshot.current.revision === revision
-        )
-          setActionError(errorText(error));
-      });
-    } catch (error) {
-      setActionError(errorText(error));
-    }
-  };
-  const control = (action: (current: PreviewController) => void) => {
-    if (controller.current) run(() => action(controller.current!));
-  };
-  const play = (name: string) =>
-    control((current) => {
+  const run = useCallback(
+    (action: () => void | Promise<void>) => {
+      const generation = sourceGeneration.current;
+      const revision = snapshot.revision;
+      setActionError('');
       try {
-        current.play(name, loop);
+        Promise.resolve(action()).catch((error: unknown) => {
+          if (
+            generation === sourceGeneration.current &&
+            latestSnapshot.current.revision === revision
+          )
+            setActionError(errorText(error));
+        });
       } catch (error) {
-        if (activeResource)
+        setActionError(errorText(error));
+      }
+    },
+    [snapshot.revision],
+  );
+  const control = useCallback(
+    (action: (current: PreviewController) => void) => {
+      const current = controller.current;
+      if (current) run(() => action(current));
+    },
+    [run],
+  );
+  const play = useCallback(
+    (name: string) =>
+      control((current) => {
+        try {
+          current.play(name, loop);
+        } catch (error) {
+          if (activeResource)
+            source.reportPreviewState?.({
+              revision: snapshot.revision,
+              resourceId: activeResource.id,
+              animations: [...current.animations],
+              ...(animation !== undefined ? { animation } : {}),
+              error: errorText(error),
+            });
+          throw error;
+        }
+        setAnimation(name);
+        if (activeResource) {
+          rememberedAnimation.current = {
+            resourceId: activeResource.id,
+            animation: name,
+          };
           source.reportPreviewState?.({
             revision: snapshot.revision,
             resourceId: activeResource.id,
             animations: [...current.animations],
-            ...(animation !== undefined ? { animation } : {}),
-            error: errorText(error),
+            animation: name,
           });
-        throw error;
-      }
-      setAnimation(name);
-      if (activeResource) {
-        rememberedAnimation.current = { resourceId: activeResource.id, animation: name };
-        source.reportPreviewState?.({
-          revision: snapshot.revision,
-          resourceId: activeResource.id,
-          animations: [...current.animations],
-          animation: name,
-        });
-      }
-    });
+        }
+      }),
+    [control, loop, activeResource, snapshot.revision, source, animation],
+  );
+  const selectResource = useCallback(
+    (id: string) => {
+      if (selected?.id === id && failure) setRetry((current) => current + 1);
+      else setSelection({ revision: snapshot.revision, id });
+    },
+    [selected?.id, failure, snapshot.revision],
+  );
   commandHandler.current = (command) => {
     const latest = latestSnapshot.current;
     if (!latest.result.resources.some((resource) => resource.id === command.resourceId))
@@ -346,6 +368,9 @@ export function SpineViewer({ source }: ViewerProps) {
       <Header
         locale={locale}
         loading={snapshot.loading}
+        ready={ready}
+        fitted={view.fitted}
+        onToggleFit={() => control((current) => current.toggleFit())}
         onRefresh={source.refresh ? () => run(() => source.refresh!()) : undefined}
         onLanguageChange={(value) => {
           setLocale(value);
@@ -356,17 +381,19 @@ export function SpineViewer({ source }: ViewerProps) {
         className={`workspace${source.externalNavigation ? ' external-navigation' : ''}`}
       >
         {!source.externalNavigation && (
-          <aside className="sidebar" aria-label={t('resourceAndAnimation')}>
+          <aside
+            id={sidebarId}
+            className="sidebar"
+            aria-label={t('resourceAndAnimation')}
+          >
             <ResourceList
               locale={locale}
               resources={resources}
               selectedId={selected?.id}
               loading={snapshot.loading}
-              onSelect={(id) => {
-                if (selected?.id === id && failure) setRetry((current) => current + 1);
-                else setSelection({ revision: snapshot.revision, id });
-              }}
+              onSelect={selectResource}
             />
+            <SidebarResizeHandle locale={locale} sidebarId={sidebarId} axis="height" />
             <AnimationList
               locale={locale}
               animations={animations}
@@ -376,17 +403,14 @@ export function SpineViewer({ source }: ViewerProps) {
             />
           </aside>
         )}
+        {!source.externalNavigation && (
+          <SidebarResizeHandle locale={locale} sidebarId={sidebarId} />
+        )}
         <section className="preview-panel" aria-label={t('preview')}>
-          <PreviewToolbar
-            locale={locale}
-            resource={selected}
-            label={snapshot.label}
-            ready={ready}
-            fitted={view.fitted}
-            onToggleFit={() => control((current) => current.toggleFit())}
-          />
           <div className="canvas-area" aria-busy={busy}>
             <div className="canvas-host" ref={host} />
+            <PreviewToolbar locale={locale} resource={selected} />
+            <span className="canvas-hint">{t('canvasHint')}</span>
             {!ready && (
               <ImportEmpty
                 locale={locale}
@@ -426,17 +450,20 @@ export function SpineViewer({ source }: ViewerProps) {
             }}
             onZoom={(value) => control((current) => current.setZoom(value))}
           />
+          <StatusBar
+            locale={locale}
+            animation={animation}
+            ready={ready}
+            view={view}
+            status={status}
+            error={Boolean(actionError || failure || discoveryFailure || sourceNotice)}
+            diagnostics={diagnostics}
+            revision={snapshot.revision}
+            open={!resources.length || Boolean(failure)}
+            onRetry={failure ? () => setRetry((current) => current + 1) : undefined}
+          />
         </section>
       </main>
-      <StatusBar
-        locale={locale}
-        status={status}
-        error={Boolean(actionError || failure || discoveryFailure || sourceNotice)}
-        diagnostics={diagnostics}
-        revision={snapshot.revision}
-        open={!resources.length || Boolean(failure)}
-        onRetry={failure ? () => setRetry((current) => current + 1) : undefined}
-      />
     </div>
   );
 }

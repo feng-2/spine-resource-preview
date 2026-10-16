@@ -6,5 +6,9 @@
   "command.workspace.title": "ワークスペースに戻る",
   "view.resources.title": "リソース",
   "view.animations.title": "アニメーション",
-  "container.spine.title": "Spine リソースプレビュー"
+  "container.spine.title": "Spine リソースプレビュー",
+  "command.copyName.title": "名前をコピー",
+  "command.copyPath.title": "パスをコピー",
+  "command.copyRelativePath.title": "相対パスをコピー",
+  "command.copyAnimationName.title": "アニメーション名をコピー"
 }

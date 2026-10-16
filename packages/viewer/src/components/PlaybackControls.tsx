@@ -104,16 +104,6 @@ export function PlaybackControls({
           <output htmlFor={zoomId}>{t('zoomValue', { value: zoomPercent })}</output>
         </div>
       </div>
-      <footer className="preview-footer">
-        <span>
-          {animation !== undefined
-            ? t('currentAnimation', { name: animation })
-            : ready
-              ? t('setupPose')
-              : t('noAnimation')}
-        </span>
-        <span>{t('canvasHint')}</span>
-      </footer>
     </>
   );
 }

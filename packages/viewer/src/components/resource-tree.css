@@ -1,0 +1,68 @@
+.spine-viewer .resource-list.resource-tree {
+  display: block;
+  overflow: auto;
+  gap: 0;
+}
+.spine-viewer button.resource-tree-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 28px;
+  padding: 3px 5px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  gap: 5px;
+  text-align: left;
+  white-space: nowrap;
+  font-size: 12px;
+}
+.spine-viewer button.resource-tree-row:hover,
+.spine-viewer button.resource-tree-row.context-active {
+  background: #263248;
+}
+.spine-viewer button.resource-tree-row.selected {
+  background: #2a3c5b;
+  border-color: #536f9e;
+}
+.spine-viewer button.resource-tree-row:focus-visible {
+  outline-offset: -2px;
+}
+.spine-viewer .resource-tree-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 10px;
+  height: 16px;
+  flex-shrink: 0;
+  font-size: 19px;
+}
+.spine-viewer .resource-tree-chevron.expanded {
+  transform: rotate(90deg);
+}
+.spine-viewer .resource-tree-icon {
+  flex-shrink: 0;
+}
+.spine-viewer .resource-tree-icon.folder {
+  color: #a5b3ca;
+}
+.spine-viewer .resource-tree-icon.skeleton {
+  color: #ddb66d;
+}
+.spine-viewer .resource-tree-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 24px;
+}
+.spine-viewer .resource-tree-description {
+  color: var(--muted);
+  flex-shrink: 0;
+  font-size: 11px;
+  margin-left: auto;
+  padding-left: 5px;
+}
+.spine-viewer .resource-copy-error {
+  color: #efaaa9;
+  font-size: 11px;
+  margin-top: 6px;
+}

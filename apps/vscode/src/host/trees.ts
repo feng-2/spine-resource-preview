@@ -13,6 +13,9 @@ interface ResourceNode {
   resource?: SpineResource;
   diagnostic?: Diagnostic;
   root?: vscode.Uri;
+  /** 文件系统定位与相对扫描范围的路径，供原生复制菜单使用。 */
+  uri?: vscode.Uri;
+  relativePath?: string;
   /** 合并目录保留末端实际相对路径，用于悬浮定位。 */
   folderPath?: string;
   resourceCount?: number;
@@ -41,6 +44,8 @@ function compactFolders(node: ResourceNode): void {
     // 末端路径不因上层链长变化而改变，有利于保持展开状态。
     node.id = child.id;
     if (child.folderPath !== undefined) node.folderPath = child.folderPath;
+    if (child.uri !== undefined) node.uri = child.uri;
+    if (child.relativePath !== undefined) node.relativePath = child.relativePath;
     node.children = child.children;
     for (const descendant of node.children) descendant.parent = node;
   }
@@ -56,6 +61,7 @@ export class SpineTrees implements vscode.Disposable {
   private readonly subscriptions: vscode.Disposable[] = [];
   private roots: ResourceNode[] = [];
   private readonly resourceNodes = new Map<string, ResourceNode>();
+  private readonly copyNodes = new Map<string, ResourceNode>();
   private animationNodes: AnimationNode[] = [];
   private selectedId: string | undefined;
   private selectedAnimation: string | undefined;
@@ -100,6 +106,30 @@ export class SpineTrees implements vscode.Disposable {
         )
           onSelectAnimation(name);
       }),
+      ...(['copyName', 'copyPath', 'copyRelativePath'] as const).map((action) =>
+        vscode.commands.registerCommand(`spinePreview.${action}`, (value: unknown) => {
+          if (action === 'copyName') {
+            const animation = this.animationNodes.find((entry) => entry === value);
+            if (animation) return vscode.env.clipboard.writeText(animation.name);
+          }
+          const node = this.currentCopyNode(value);
+          if (!node?.uri) return;
+          const content =
+            action === 'copyPath'
+              ? node.uri.fsPath
+              : action === 'copyRelativePath'
+                ? (node.relativePath ?? '.')
+                : node.uri.path.replace(/\/$/u, '').split('/').pop() || node.label;
+          return vscode.env.clipboard.writeText(content);
+        }),
+      ),
+      vscode.commands.registerCommand(
+        'spinePreview.copyAnimationName',
+        (value: unknown) => {
+          const node = this.animationNodes.find((entry) => entry === value);
+          if (node) return vscode.env.clipboard.writeText(node.name);
+        },
+      ),
       this.resourceView.onDidChangeVisibility(({ visible }) => {
         if (visible) onVisible();
       }),
@@ -120,6 +150,7 @@ export class SpineTrees implements vscode.Disposable {
   setGroups(groups: readonly IndexedGroup[]): void {
     if (this.disposed) return;
     this.resourceNodes.clear();
+    this.copyNodes.clear();
     this.roots = groups.map((group) => {
       const root: ResourceNode = {
         id: `scope:${group.scope.id}`,
@@ -127,8 +158,11 @@ export class SpineTrees implements vscode.Disposable {
         kind: 'scope',
         children: [],
         root: group.scope.root,
+        uri: group.scope.root,
+        relativePath: '.',
         resourceCount: group.result.resources.length,
       };
+      this.copyNodes.set(root.id, root);
       const folders = new Map<string, ResourceNode>();
       for (const resource of group.result.resources) {
         const parts = resource.skeleton.path.replaceAll('\\', '/').split('/');
@@ -144,6 +178,8 @@ export class SpineTrees implements vscode.Disposable {
               label: part,
               kind: 'folder',
               folderPath: folderPath.slice(1),
+              uri: vscode.Uri.joinPath(group.scope.root, folderPath.slice(1)),
+              relativePath: folderPath.slice(1),
               children: [],
               parent,
             };
@@ -160,9 +196,12 @@ export class SpineTrees implements vscode.Disposable {
           children: [],
           parent,
           resource,
+          uri: vscode.Uri.parse(resource.skeleton.id),
+          relativePath: resource.skeleton.path,
         };
         parent.children.push(node);
         this.resourceNodes.set(resource.id, node);
+        this.copyNodes.set(node.id, node);
       }
       if (group.result.diagnostics.length) {
         const diagnostics: ResourceNode = {
@@ -197,6 +236,11 @@ export class SpineTrees implements vscode.Disposable {
         node.children.forEach(sortChildren);
       };
       compactFolders(root);
+      const registerFolders = (node: ResourceNode): void => {
+        if (node.kind === 'folder') this.copyNodes.set(node.id, node);
+        node.children.forEach(registerFolders);
+      };
+      registerFolders(root);
       sortChildren(root);
       return root;
     });
@@ -241,8 +285,15 @@ export class SpineTrees implements vscode.Disposable {
     this.disposed = true;
     this.subscriptions.splice(0).forEach((subscription) => subscription.dispose());
     this.resourceNodes.clear();
+    this.copyNodes.clear();
     this.roots = [];
     this.animationNodes = [];
+  }
+
+  private currentCopyNode(value: unknown): ResourceNode | undefined {
+    if (!value || typeof value !== 'object' || !('id' in value)) return undefined;
+    const node = typeof value.id === 'string' ? this.copyNodes.get(value.id) : undefined;
+    return node === value ? node : undefined;
   }
 
   private updateMessages(): void {

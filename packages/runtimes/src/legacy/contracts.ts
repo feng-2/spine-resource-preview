@@ -17,7 +17,10 @@ export interface LegacyTexture extends LegacyDisposable {
 /** 骨骼共享数据，只读取原始动画和皮肤名称。 */
 export interface LegacySkeletonData {
   /** 原始动画数据的名称。 */
-  animations: { /** 动画名。 */ name: string }[];
+  animations: {
+    /** 动画名。 */ name: string;
+    /** 原始时长（秒）。 */ duration: number;
+  }[];
   /** 官方解析结果保留的完整导出版本。 */
   version: string;
   /** 原始皮肤数据的名称。 */

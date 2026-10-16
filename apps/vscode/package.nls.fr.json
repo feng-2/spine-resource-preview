@@ -6,5 +6,9 @@
   "command.workspace.title": "Revenir à l’espace de travail",
   "view.resources.title": "Ressources",
   "view.animations.title": "Animations",
-  "container.spine.title": "Aperçu des ressources Spine"
+  "container.spine.title": "Aperçu des ressources Spine",
+  "command.copyName.title": "Copier le nom",
+  "command.copyPath.title": "Copier le chemin",
+  "command.copyRelativePath.title": "Copier le chemin relatif",
+  "command.copyAnimationName.title": "Copier le nom de l’animation"
 }

@@ -27,6 +27,10 @@ describe('VS Code 原生本地化与扩展清单', () => {
       readFileSync(new URL(`../${filename}`, import.meta.url), 'utf8'),
     );
     expect(Object.keys(metadata).sort()).toEqual([
+      'command.copyAnimationName.title',
+      'command.copyName.title',
+      'command.copyPath.title',
+      'command.copyRelativePath.title',
       'command.open.title',
       'command.refresh.title',
       'command.workspace.title',
@@ -38,6 +42,46 @@ describe('VS Code 原生本地化与扩展清单', () => {
     ]);
     for (const text of Object.values(metadata)) expect(String(text).trim()).not.toBe('');
     expect(metadata['extension.displayName']).toBe(messages.panelTitle);
+  });
+
+  it('目录和文件复制菜单及动画行内按钮仅出现在对应树中', () => {
+    const manifest = JSON.parse(
+      readFileSync(new URL('../package.json', import.meta.url), 'utf8'),
+    );
+    const menus = manifest.contributes.menus['view/item/context'] as {
+      command: string;
+      when: string;
+      group: string;
+    }[];
+    for (const command of ['copyName', 'copyPath', 'copyRelativePath']) {
+      const menu = menus.find((entry) => entry.command === `spinePreview.${command}`)!;
+      expect(menu.when).toBe(
+        'view == spinePreview.resources && viewItem =~ /^spinePreview\\.(scope|folder|resource)$/',
+      );
+      expect(menu.group).toMatch(/^clipboard@/);
+    }
+    const copyAnimation = menus.find(
+      (entry) => entry.command === 'spinePreview.copyAnimationName',
+    )!;
+    expect(copyAnimation.group).toBe('inline@1');
+    expect(copyAnimation.when).toBe(
+      'view == spinePreview.animations && viewItem == spinePreview.animation',
+    );
+    const animationContextMenu = menus.filter(
+      (entry) => entry.when === copyAnimation.when && !entry.group.startsWith('inline'),
+    );
+    expect(animationContextMenu).toEqual([
+      {
+        command: 'spinePreview.copyName',
+        when: copyAnimation.when,
+        group: 'clipboard@1',
+      },
+    ]);
+    expect(
+      manifest.contributes.commands.find(
+        (command: { command: string }) => command.command === copyAnimation.command,
+      ).icon,
+    ).toBe('$(copy)');
   });
 
   it('原生活动栏及两个视图声明存在的可迁移图标', () => {

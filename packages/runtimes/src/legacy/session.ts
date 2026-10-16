@@ -1,4 +1,5 @@
 import type { CameraState, RuntimeSession, PoseBounds } from '../types.js';
+import { sampleAnimationBounds } from '../animation-bounds.js';
 import type {
   LegacyRuntime,
   LegacySkeleton,
@@ -47,6 +48,10 @@ export class LegacySession implements RuntimeSession {
   private objects: LegacySessionObjects | undefined;
   private readonly vertices: number[] = [];
   private readonly matrix = new Float32Array(16);
+  private readonly durations: ReadonlyMap<string, number>;
+  private readonly animationBounds = new Map<string, PoseBounds>();
+  private data: LegacySkeletonData | undefined;
+  private currentSkin: string | undefined;
 
   /** 接收已准备好的官方对象和其完整清理责任，不追加异步任务。 */
   constructor(
@@ -54,11 +59,16 @@ export class LegacySession implements RuntimeSession {
     data: LegacySkeletonData,
     objects: LegacySessionObjects,
     private readonly ownership: LegacyOwnership,
+    private readonly runtime: LegacyRuntime,
   ) {
     this.version = version;
     this.animations = Object.freeze(data.animations.map((animation) => animation.name));
     this.skins = Object.freeze(data.skins.map((skin) => skin.name));
+    this.durations = new Map(
+      data.animations.map(({ name, duration }) => [name, duration]),
+    );
     this.objects = objects;
+    this.data = data;
   }
 
   play(name: string, loop: boolean): void {
@@ -76,6 +86,8 @@ export class LegacySession implements RuntimeSession {
     const { skeleton, state } = this.active();
     if (!this.skins.includes(name)) throw new Error(`Spine 皮肤不存在：${name}`);
     skeleton.setSkinByName(name);
+    this.currentSkin = name;
+    this.animationBounds.clear();
     skeleton.setSlotsToSetupPose();
     state.apply(skeleton);
     skeleton.updateWorldTransform();
@@ -103,6 +115,44 @@ export class LegacySession implements RuntimeSession {
       width: Math.max(0, size.x),
       height: Math.max(0, size.y),
     };
+  }
+
+  getAnimationDuration(name: string): number | undefined {
+    this.active();
+    return this.durations.get(name);
+  }
+
+  getAnimationBounds(name: string): PoseBounds | undefined {
+    this.active();
+    const duration = this.durations.get(name);
+    if (duration === undefined || !this.data) return undefined;
+    const cached = this.animationBounds.get(name);
+    if (cached) return { ...cached };
+    const skeleton = new this.runtime.Skeleton(this.data);
+    const state = new this.runtime.AnimationState(
+      new this.runtime.AnimationStateData(this.data),
+    );
+    if (this.currentSkin !== undefined) skeleton.setSkinByName(this.currentSkin);
+    skeleton.setToSetupPose();
+    state.setAnimation(0, name, false);
+    const offset = new this.runtime.Vector2();
+    const size = new this.runtime.Vector2();
+    const vertices: number[] = [];
+    try {
+      const bounds = sampleAnimationBounds(duration, (seconds) => {
+        skeleton.update(seconds);
+        state.update(seconds);
+        state.apply(skeleton);
+        skeleton.updateWorldTransform();
+        skeleton.getBounds(offset, size, vertices);
+        return { x: offset.x, y: offset.y, width: size.x, height: size.y };
+      });
+      this.animationBounds.set(name, bounds);
+      return { ...bounds };
+    } finally {
+      state.clearTracks();
+      state.clearListeners();
+    }
   }
 
   render(camera: CameraState): void {
@@ -161,6 +211,8 @@ export class LegacySession implements RuntimeSession {
   dispose(): void {
     // 先关闭会话入口；即使某个 GPU 删除失败也不允许后续更新已关闭实例。
     this.objects = undefined;
+    this.data = undefined;
+    this.animationBounds.clear();
     this.vertices.length = 0;
     this.ownership.dispose();
   }

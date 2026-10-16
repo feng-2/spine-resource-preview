@@ -31,6 +31,27 @@
         "title": "%command.workspace.title%",
         "category": "Spine",
         "icon": "$(root-folder)"
+      },
+      {
+        "command": "spinePreview.copyName",
+        "title": "%command.copyName.title%",
+        "category": "Spine"
+      },
+      {
+        "command": "spinePreview.copyPath",
+        "title": "%command.copyPath.title%",
+        "category": "Spine"
+      },
+      {
+        "command": "spinePreview.copyRelativePath",
+        "title": "%command.copyRelativePath.title%",
+        "category": "Spine"
+      },
+      {
+        "command": "spinePreview.copyAnimationName",
+        "title": "%command.copyAnimationName.title%",
+        "category": "Spine",
+        "icon": "$(copy)"
       }
     ],
     "menus": {
@@ -50,6 +71,51 @@
           "command": "spinePreview.workspace",
           "when": "view == spinePreview.resources && spinePreview.temporaryScope",
           "group": "navigation@2"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "spinePreview.copyName",
+          "when": "view == spinePreview.resources && viewItem =~ /^spinePreview\\.(scope|folder|resource)$/",
+          "group": "clipboard@1"
+        },
+        {
+          "command": "spinePreview.copyPath",
+          "when": "view == spinePreview.resources && viewItem =~ /^spinePreview\\.(scope|folder|resource)$/",
+          "group": "clipboard@2"
+        },
+        {
+          "command": "spinePreview.copyRelativePath",
+          "when": "view == spinePreview.resources && viewItem =~ /^spinePreview\\.(scope|folder|resource)$/",
+          "group": "clipboard@3"
+        },
+        {
+          "command": "spinePreview.copyAnimationName",
+          "when": "view == spinePreview.animations && viewItem == spinePreview.animation",
+          "group": "inline@1"
+        },
+        {
+          "command": "spinePreview.copyName",
+          "when": "view == spinePreview.animations && viewItem == spinePreview.animation",
+          "group": "clipboard@1"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "spinePreview.copyName",
+          "when": "false"
+        },
+        {
+          "command": "spinePreview.copyPath",
+          "when": "false"
+        },
+        {
+          "command": "spinePreview.copyRelativePath",
+          "when": "false"
+        },
+        {
+          "command": "spinePreview.copyAnimationName",
+          "when": "false"
         }
       ]
     },

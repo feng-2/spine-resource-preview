@@ -6,5 +6,9 @@
   "command.workspace.title": "Вернуться в рабочую область",
   "view.resources.title": "Ресурсы",
   "view.animations.title": "Анимации",
-  "container.spine.title": "Просмотр ресурсов Spine"
+  "container.spine.title": "Просмотр ресурсов Spine",
+  "command.copyName.title": "Копировать имя",
+  "command.copyPath.title": "Копировать путь",
+  "command.copyRelativePath.title": "Копировать относительный путь",
+  "command.copyAnimationName.title": "Копировать имя анимации"
 }

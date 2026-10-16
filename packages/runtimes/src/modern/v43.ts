@@ -1,5 +1,6 @@
 import * as spine from 'spine-webgl-43';
-import type { RuntimeAdapter, RuntimeLoadOptions } from '../types';
+import type { PoseBounds, RuntimeAdapter, RuntimeLoadOptions } from '../types';
+import { sampleAnimationBounds } from '../animation-bounds.js';
 import {
   loadModernSession,
   checkExportVersion,
@@ -37,6 +38,8 @@ function buildBackend(
     state.clearTracks();
     state.clearListeners();
   });
+  const animationBounds = new Map<string, PoseBounds>();
+  scope.own(() => animationBounds.clear());
   const renderer = new spine.SceneRenderer(canvas, context, true);
   scope.own(() => renderer.dispose());
   renderer.skeletonRenderer.pmaAdditiveBatching = false;
@@ -44,6 +47,38 @@ function buildBackend(
   return {
     animations: data.animations.map((animation) => animation.name),
     skins: data.skins.map((skin) => skin.name),
+    getAnimationDuration(name) {
+      return data.findAnimation(name)?.duration;
+    },
+    getAnimationBounds(name) {
+      const animation = data.findAnimation(name);
+      if (!animation) return undefined;
+      const cached = animationBounds.get(name);
+      if (cached) return { ...cached };
+      const sampleSkeleton = new spine.Skeleton(data);
+      const sampleState = new spine.AnimationState(new spine.AnimationStateData(data));
+      if (skeleton.skin) sampleSkeleton.setSkin(skeleton.skin);
+      sampleSkeleton.setupPose();
+      sampleState.setAnimation(0, name, false);
+      let first = true;
+      try {
+        const bounds = sampleAnimationBounds(animation.duration, (seconds) => {
+          sampleSkeleton.update(seconds);
+          sampleState.update(seconds);
+          sampleState.apply(sampleSkeleton);
+          sampleSkeleton.updateWorldTransform(
+            first ? spine.Physics.reset : spine.Physics.update,
+          );
+          first = false;
+          return sampleSkeleton.getBoundsRect();
+        });
+        animationBounds.set(name, bounds);
+        return { ...bounds };
+      } finally {
+        sampleState.clearTracks();
+        sampleState.clearListeners();
+      }
+    },
     play(name, loop) {
       if (!data.findAnimation(name)) throw new Error(`动作不存在：${name}`);
       state.clearTracks();
@@ -54,6 +89,7 @@ function buildBackend(
     },
     setSkin(name) {
       skeleton.setSkin(name);
+      animationBounds.clear();
       skeleton.setupPoseSlots();
       state.apply(skeleton);
       skeleton.updateWorldTransform(spine.Physics.reset);

@@ -1,10 +1,15 @@
 import type { Diagnostic } from '@spine-preview/core';
+import type { PreviewState } from '@spine-preview/runtimes';
 import { createTranslator, formatDiagnostic, type Locale } from '../i18n.js';
 
-/** 底部状态、原始原因诊断和固定隐私提示。 */
+/** 单行加载状态、动画指标与可展开的诊断。 */
 interface StatusBarProps {
   /** 当前界面语言。 */
   locale: Locale;
+  /** 当前运行时采样信息，原始文本允许选择复制。 */
+  animation: string | undefined;
+  ready: boolean;
+  view: PreviewState;
   /** 已整理的加载状态或实际错误。 */
   status: string;
   /** 状态是否需要处理。 */
@@ -19,9 +24,12 @@ interface StatusBarProps {
   onRetry?: (() => void) | undefined;
 }
 
-/** 底部状态、原始原因诊断和固定隐私提示。 */
+/** 单行加载状态、动画指标与可展开的诊断。 */
 export function StatusBar({
   locale,
+  animation,
+  ready,
+  view,
   status,
   error,
   diagnostics,
@@ -30,6 +38,9 @@ export function StatusBar({
   onRetry,
 }: StatusBarProps) {
   const t = createTranslator(locale);
+  const number = new Intl.NumberFormat(locale, { maximumFractionDigits: 2 });
+  const bounds = ready ? view.animationBounds : undefined;
+  const duration = ready ? view.animationDuration : undefined;
   return (
     <section className="status-bar" aria-label={t('importStatus')}>
       <div className="status-row">
@@ -43,10 +54,25 @@ export function StatusBar({
             </button>
           )}
         </div>
-        <span className="local-badge">
-          <span aria-hidden="true" />
-          {t('privacy')}
+        <span className="status-animation">
+          {animation !== undefined
+            ? t('currentAnimation', { name: animation })
+            : t(ready ? 'setupPose' : 'noAnimation')}
         </span>
+        <div className="status-metrics">
+          <span>
+            {t('animationSize', {
+              width: bounds ? number.format(Math.ceil(bounds.width)) : '—',
+              height: bounds ? number.format(Math.ceil(bounds.height)) : '—',
+            })}
+          </span>
+          <span>
+            {t('animationDuration', {
+              seconds: duration !== undefined ? number.format(duration) : '—',
+            })}
+          </span>
+          <span>FPS: {ready && view.fps !== undefined ? Math.round(view.fps) : '—'}</span>
+        </div>
       </div>
       {diagnostics.length > 0 && (
         <details key={revision} open={open}>

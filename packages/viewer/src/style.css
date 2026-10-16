@@ -71,6 +71,8 @@
 }
 .spine-viewer {
   height: 100dvh;
+  /* Short desktop windows scroll instead of clipping either sidebar panel. */
+  min-height: 400px;
   display: flex;
   flex-direction: column;
 }
@@ -119,8 +121,14 @@
   margin-right: 6px;
 }
 .spine-viewer .workspace {
+  --effective-sidebar-width: clamp(
+    220px,
+    var(--sidebar-width, 300px),
+    calc(100% - 320px)
+  );
+  position: relative;
   display: grid;
-  grid-template-columns: 300px minmax(0, 1fr);
+  grid-template-columns: var(--effective-sidebar-width) minmax(0, 1fr);
   flex: 1;
   min-height: 0;
 }
@@ -128,16 +136,76 @@
   grid-template-columns: minmax(0, 1fr);
 }
 .spine-viewer .sidebar {
+  min-width: 0;
   background: #171e2a;
   padding: 20px;
   border-right: 1px solid var(--line);
-  display: flex;
-  flex-direction: column;
-  gap: 23px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows:
+    clamp(85px, var(--resource-panel-height, 42%), calc(100% - 108px))
+    7px minmax(85px, 1fr);
+  gap: 8px;
   overflow-y: auto;
+}
+.spine-viewer .sidebar-resize-handle {
+  position: absolute;
+  inset-block: 0;
+  left: calc(var(--effective-sidebar-width) - 4px);
+  width: 8px;
+  z-index: 5;
+  cursor: col-resize;
+  touch-action: none;
+  outline: none;
+}
+.spine-viewer .sidebar-resize-handle::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  left: 3px;
+  width: 2px;
+  background: transparent;
+}
+.spine-viewer .sidebar-resize-handle:hover::after,
+.spine-viewer .sidebar-resize-handle:focus-visible::after,
+.spine-viewer .resizing-sidebar .sidebar-resize-handle::after {
+  background: var(--accent);
+}
+.spine-viewer .workspace.resizing-sidebar,
+.spine-viewer .workspace.resizing-sidebar * {
+  cursor: col-resize !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
 }
 .spine-viewer .sidebar > section {
   flex-shrink: 0;
+}
+.spine-viewer .sidebar-panel-resize-handle {
+  position: relative;
+  margin-inline: -20px;
+  z-index: 5;
+  cursor: row-resize;
+  touch-action: none;
+  outline: none;
+}
+.spine-viewer .sidebar-panel-resize-handle::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 3px;
+  height: 1px;
+  background: var(--line);
+}
+.spine-viewer .sidebar-panel-resize-handle:hover::after,
+.spine-viewer .sidebar-panel-resize-handle:focus-visible::after,
+.spine-viewer .resizing-sidebar-panels .sidebar-panel-resize-handle::after {
+  background: var(--accent);
+}
+.spine-viewer .sidebar.resizing-sidebar-panels,
+.spine-viewer .sidebar.resizing-sidebar-panels * {
+  cursor: row-resize !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
 }
 .spine-viewer .import-panel {
   max-width: 440px;
@@ -213,6 +281,7 @@
   max-height: none;
 }
 .spine-viewer .sidebar > .animation-section {
+  position: relative;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -225,28 +294,76 @@
 .spine-viewer .muted {
   color: var(--muted);
 }
-.spine-viewer .resource-button {
-  text-align: left;
+.spine-viewer .animation-row {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 11px 12px;
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 3px;
   min-width: 0;
 }
-.spine-viewer .resource-button strong {
-  font-size: 13px;
-  font-weight: 550;
-  overflow-wrap: anywhere;
+.spine-viewer .animation-row:hover {
+  background: #232d3e;
 }
-.spine-viewer .resource-button span {
-  color: #96a6be;
-  font-size: 11px;
+.spine-viewer .animation-row.selected {
+  background: #2a3c5b;
+  border-color: #789ee4;
+  color: #bdd3ff;
+}
+.spine-viewer .animation-row > button {
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: inherit;
 }
 .spine-viewer .animation-button {
   text-align: left;
   font-size: 12px;
-  padding: 10px 12px;
+  padding: 7px 8px;
+  flex: 1;
+  min-width: 0;
   overflow-wrap: anywhere;
+}
+.spine-viewer .animation-row > .animation-copy {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 6px;
+  margin-right: 3px;
+  color: #a9b6ca;
+}
+.spine-viewer .animation-row > .animation-copy:hover {
+  background: #405474;
+  color: #fff;
+}
+.spine-viewer .copy-tooltip {
+  position: absolute;
+  right: calc(100% + 6px);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: max-content;
+  padding: 4px 8px;
+  border: 1px solid #53627a;
+  border-radius: 4px;
+  background: #151b26;
+  color: #dce4f1;
+  font-size: 11px;
+  line-height: 1.4;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px #0006;
+  pointer-events: none;
+  visibility: hidden;
+}
+.spine-viewer .animation-copy:hover .copy-tooltip,
+.spine-viewer .animation-copy:focus-visible .copy-tooltip {
+  visibility: visible;
+}
+.spine-viewer .copy-error {
+  color: #ffb09a;
+  font-size: 11px;
+  margin-top: 6px;
 }
 .spine-viewer button.selected {
   border-color: #789ee4;
@@ -259,36 +376,44 @@
   min-width: 0;
   min-height: 0;
 }
-.spine-viewer .preview-toolbar {
-  background: #1b2230;
-  border-bottom: 1px solid var(--line);
-  padding: 16px 22px;
+/* Resource metadata belongs to the canvas, leaving more room for the preview. */
+.spine-viewer .preview-overlay-top {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  right: 16px;
+  z-index: 2;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 15px;
+  gap: 12px;
+  pointer-events: none;
 }
-.spine-viewer .asset-heading {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+.spine-viewer .preview-info,
+.spine-viewer .preview-overlay-top .local-badge,
+.spine-viewer .canvas-hint {
+  padding: 6px 9px;
+  border-radius: 5px;
+  background: #151b26d9;
+  color: #b4c2d8;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.spine-viewer .preview-info {
   min-width: 0;
-}
-.spine-viewer .asset-heading strong {
-  font-size: 14px;
-  font-weight: 550;
   overflow-wrap: anywhere;
 }
-.spine-viewer .asset-heading span {
-  font-size: 11px;
-  color: var(--muted);
-}
-.spine-viewer .view-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.spine-viewer .preview-overlay-top .local-badge {
   flex-shrink: 0;
-  font-size: 12px;
+  margin-left: auto;
+}
+.spine-viewer .canvas-hint {
+  position: absolute;
+  bottom: 14px;
+  right: 16px;
+  z-index: 2;
+  max-width: calc(100% - 32px);
+  pointer-events: none;
 }
 .spine-viewer select {
   padding: 6px 8px;
@@ -373,21 +498,11 @@
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-.spine-viewer .preview-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 11px 22px;
-  color: #8191ab;
-  font-size: 11px;
-  border-top: 1px solid #252e3e;
-}
-.spine-viewer .preview-footer > span:first-child {
-  overflow-wrap: anywhere;
-}
 .spine-viewer .status-bar {
-  padding: 12px 24px;
-  font-size: 12px;
+  padding: 10px 18px;
+  font-size: 11px;
+  user-select: text;
+  -webkit-user-select: text;
   color: #a0aec4;
   border-top: 1px solid var(--line);
   background: #151b26;
@@ -420,6 +535,7 @@
   }
   .spine-viewer .app-header {
     padding: 16px;
+    flex-wrap: wrap;
   }
   .spine-viewer .local-badge {
     font-size: 10px;
@@ -430,6 +546,10 @@
   .spine-viewer .workspace {
     grid-template-columns: 1fr;
   }
+  .spine-viewer .sidebar-resize-handle,
+  .spine-viewer .sidebar-panel-resize-handle {
+    display: none;
+  }
   .spine-viewer .sidebar {
     border-right: 0;
     border-bottom: 1px solid var(--line);
@@ -438,14 +558,23 @@
   }
   .spine-viewer .sidebar > .animation-section {
     flex: none;
+    align-self: stretch;
+  }
+  .spine-viewer .sidebar > .animation-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -8px;
+    right: auto;
+    width: 1px;
+    height: auto;
+    background: var(--line);
+    pointer-events: none;
   }
   .spine-viewer .resource-list,
   .spine-viewer .animation-list {
     max-height: 160px;
-  }
-  .spine-viewer .preview-toolbar {
-    padding: 13px 15px;
-    flex-wrap: wrap;
   }
   .spine-viewer .canvas-area {
     min-height: 360px;
@@ -453,10 +582,6 @@
   .spine-viewer .playback-bar {
     padding: 14px 15px;
     gap: 14px;
-  }
-  .spine-viewer .preview-footer {
-    padding: 11px 15px;
-    flex-wrap: wrap;
   }
   .spine-viewer .status-bar {
     padding: 12px 15px;
@@ -471,29 +596,35 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: flex-end;
-  max-width: 44%;
+  max-width: 60%;
   flex-shrink: 0;
 }
 .spine-viewer .header-actions button {
   font-size: 12px;
 }
+.spine-viewer .status-animation {
+  flex-shrink: 0;
+  color: #b8c7dc;
+}
+.spine-viewer .status-metrics {
+  display: flex;
+  flex-shrink: 0;
+  gap: 16px;
+  font-variant-numeric: tabular-nums;
+  color: #b8c7dc;
+}
 .spine-viewer .status-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 18px;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 .spine-viewer .status-message {
-  min-width: 0;
-  flex: 1;
-  overflow-wrap: anywhere;
-}
-.spine-viewer .status-row .local-badge {
-  font-size: 11px;
-  flex-shrink: 0;
+  flex: 1 0 auto;
 }
 .spine-viewer .sidebar {
   overflow: hidden;
@@ -501,8 +632,7 @@
 .spine-viewer .resource-section {
   display: flex;
   flex-direction: column;
-  max-height: 42%;
-  min-height: 85px;
+  min-height: 0;
 }
 .spine-viewer .resource-list {
   min-height: 0;
@@ -525,6 +655,7 @@
   .spine-viewer .sidebar {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto;
     align-items: start;
   }
   .spine-viewer .resource-section {
@@ -534,18 +665,17 @@
     max-height: 210px;
   }
   .spine-viewer .header-actions {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: flex-end;
     gap: 8px;
+    max-width: 100%;
+    margin-left: auto;
   }
   .spine-viewer .brand {
     gap: 8px;
   }
   .spine-viewer .brand p {
     line-height: 1.5;
-  }
-  .spine-viewer .preview-toolbar {
-    gap: 8px;
   }
   .spine-viewer .import-buttons {
     flex-wrap: wrap;
@@ -555,9 +685,6 @@
   .spine-viewer .app-header {
     align-items: flex-start;
     gap: 10px;
-  }
-  .spine-viewer .view-actions button {
-    padding: 7px 9px;
   }
   .spine-viewer .playback-actions {
     gap: 7px;

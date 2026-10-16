@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { build } from 'esbuild';
 import { runInNewContext } from 'node:vm';
+import { posix } from 'node:path';
 import type * as vscode from 'vscode';
 import type { SpineResource } from '@spine-preview/core';
 import type { IndexedGroup } from '../src/host/workspace-index.js';
@@ -40,7 +41,8 @@ interface Provider {
 
 /** 原生树 API 替身直接观察节点、命令和 Disposable 生命周期。 */
 function harness(language = 'en') {
-  const commands = new Map<string, (arg: unknown) => void>();
+  const commands = new Map<string, (arg: unknown) => void | Promise<void>>();
+  const writeText = vi.fn(async (_text: string) => {});
   const views = new Map<
     string,
     {
@@ -52,9 +54,19 @@ function harness(language = 'en') {
     }
   >();
   const api = {
-    env: { language },
+    env: { language, clipboard: { writeText } },
+    Uri: {
+      parse: uri,
+      joinPath: (root: vscode.Uri, path: string) => ({
+        path: posix.join(root.path, path),
+        fsPath: posix.join(root.fsPath, path),
+      }),
+    },
     commands: {
-      registerCommand: (name: string, callback: (arg: unknown) => void) => {
+      registerCommand: (
+        name: string,
+        callback: (arg: unknown) => void | Promise<void>,
+      ) => {
         commands.set(name, callback);
         return { dispose: () => commands.delete(name) };
       },
@@ -102,7 +114,20 @@ function harness(language = 'en') {
     selectAnimation,
     onVisible,
   );
-  return { trees, commands, views, selectResource, selectAnimation, onVisible };
+  return {
+    trees,
+    commands,
+    views,
+    selectResource,
+    selectAnimation,
+    onVisible,
+    writeText,
+  };
+}
+
+function uri(value: string): vscode.Uri {
+  const path = decodeURIComponent(new URL(value).pathname);
+  return { path, fsPath: path } as vscode.Uri;
 }
 
 function group(): IndexedGroup {
@@ -131,7 +156,7 @@ function group(): IndexedGroup {
       id: 'workspace',
       label: 'assets',
       recursive: true,
-      root: { fsPath: '/assets' } as vscode.Uri,
+      root: uri('file:///assets'),
     },
     provider: {} as IndexedGroup['provider'],
     result: { resources: [resource], diagnostics: [] },
@@ -159,6 +184,89 @@ function nestedGroup(paths: readonly string[]): IndexedGroup {
 }
 
 describe('VS Code 原生资源与动画树', () => {
+  it('复制范围、压缩目录与文件的名称和真实路径，相对路径基于各自扫描范围', async () => {
+    const editor = harness();
+    editor.trees.setGroups([nestedGroup(['aa/bb/cc/hero file.json'])]);
+    const provider = editor.views.get('spinePreview.resources')!.treeDataProvider;
+    const root = provider.getChildren()[0]!;
+    const folder = root.children[0]!;
+    const resource = folder.children[0]!;
+    for (const [node, expected] of [
+      [root, ['assets', '/assets', '.']],
+      [folder, ['cc', '/assets/aa/bb/cc', 'aa/bb/cc']],
+      [
+        resource,
+        ['hero file.json', '/assets/aa/bb/cc/hero file.json', 'aa/bb/cc/hero file.json'],
+      ],
+    ] as const) {
+      for (const [index, action] of [
+        'copyName',
+        'copyPath',
+        'copyRelativePath',
+      ].entries()) {
+        await editor.commands.get(`spinePreview.${action}`)!(node);
+        expect(editor.writeText).toHaveBeenLastCalledWith(expected[index]);
+      }
+    }
+  });
+
+  it('多根范围复制路径各自隔离，诊断、伪造与刷新前的节点不触发复制', async () => {
+    const editor = harness();
+    const first = nestedGroup(['hero.json']);
+    const second = nestedGroup(['hero.json']);
+    second.scope = {
+      ...second.scope,
+      id: 'other',
+      label: 'display label',
+      root: uri('file:///other'),
+    };
+    second.result.resources = second.result.resources.map((resource) => ({
+      ...resource,
+      id: 'file:///other/hero.json',
+      skeleton: { ...resource.skeleton, id: 'file:///other/hero.json' },
+    }));
+    first.result.diagnostics = [
+      { code: 'ATLAS_MISSING', stage: 'dependency', message: 'missing' },
+    ];
+    editor.trees.setGroups([first, second]);
+    const provider = editor.views.get('spinePreview.resources')!.treeDataProvider;
+    const roots = provider.getChildren();
+    const copy = editor.commands.get('spinePreview.copyPath')!;
+    await copy(roots[0]!.children[0]);
+    expect(editor.writeText).toHaveBeenLastCalledWith('/assets/hero.json');
+    await copy(roots[1]!.children[0]);
+    expect(editor.writeText).toHaveBeenLastCalledWith('/other/hero.json');
+    await editor.commands.get('spinePreview.copyName')!(roots[1]);
+    expect(editor.writeText).toHaveBeenLastCalledWith('other');
+    editor.writeText.mockClear();
+    await copy(roots[0]!.children[1]);
+    await copy(roots[0]!.children[1]!.children[0]);
+    await copy({ ...roots[0]!.children[0] });
+    await copy(undefined);
+    editor.trees.setGroups([first]);
+    await copy(roots[0]!.children[0]);
+    expect(editor.writeText).not.toHaveBeenCalled();
+  });
+
+  it('动画复制保留名称且不改变播放，切换资源后忽略旧条目', async () => {
+    const editor = harness();
+    editor.trees.setSelection('hero', ['idle', '行走 "loop"'], 'idle');
+    const provider = editor.views.get('spinePreview.animations')!.treeDataProvider;
+    const node = provider.getChildren()[1]!;
+    const copy = editor.commands.get('spinePreview.copyAnimationName')!;
+    const copyFromMenu = editor.commands.get('spinePreview.copyName')!;
+    await copy(node);
+    await copyFromMenu(node);
+    expect(editor.writeText).toHaveBeenLastCalledWith('行走 "loop"');
+    expect(editor.selectAnimation).not.toHaveBeenCalled();
+    editor.trees.setSelection('other', ['行走 "loop"']);
+    await copy(node);
+    await copy({ name: '行走 "loop"' });
+    await copyFromMenu(node);
+    await copyFromMenu({ name: '行走 "loop"' });
+    expect(editor.writeText).toHaveBeenCalledTimes(2);
+  });
+
   it('合并单一路径链，保持真实资源身份、完整路径和可 reveal 的父链', () => {
     const editor = harness();
     editor.trees.setGroups([nestedGroup(['aa/bb/cc/hero.json'])]);

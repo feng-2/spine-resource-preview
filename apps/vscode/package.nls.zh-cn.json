@@ -6,5 +6,9 @@
   "command.workspace.title": "返回工作区",
   "view.resources.title": "资源",
   "view.animations.title": "动画",
-  "container.spine.title": "Spine 资源预览"
+  "container.spine.title": "Spine 资源预览",
+  "command.copyName.title": "复制名称",
+  "command.copyPath.title": "复制路径",
+  "command.copyRelativePath.title": "复制相对路径",
+  "command.copyAnimationName.title": "复制动画名称"
 }
