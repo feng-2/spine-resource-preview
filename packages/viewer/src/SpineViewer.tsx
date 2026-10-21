@@ -48,7 +48,9 @@ export function SpineViewer({ source }: ViewerProps) {
     null,
   );
   const [animations, setAnimations] = useState<readonly string[]>([]);
+  const [slots, setSlots] = useState<readonly string[]>([]);
   const [animation, setAnimation] = useState<string | undefined>();
+  const [selectedSlot, setSelectedSlot] = useState<string | undefined>();
   const [ready, setReady] = useState(false);
   const [view, setView] = useState(INITIAL);
   const [loop, setLoop] = useState(true);
@@ -120,7 +122,9 @@ export function SpineViewer({ source }: ViewerProps) {
     controllerIdentity.current = null;
     setReady(false);
     setAnimations([]);
+    setSlots([]);
     setAnimation(undefined);
+    setSelectedSlot(undefined);
     setView(INITIAL);
     setLoop(true);
     setSpeed(1);
@@ -186,6 +190,7 @@ export function SpineViewer({ source }: ViewerProps) {
           ...(chosen !== undefined ? { animation: chosen } : {}),
         };
         setAnimations(next.animations);
+        setSlots(next.slots);
         setAnimation(chosen);
         setReady(true);
         setLoading(false);
@@ -280,6 +285,13 @@ export function SpineViewer({ source }: ViewerProps) {
       }),
     [control, loop, activeResource, snapshot.revision, source, animation],
   );
+  const toggleSlot = useCallback((name: string) => {
+    setSelectedSlot((current) => {
+      const next = current === name ? undefined : name;
+      controller.current?.selectSlot(next);
+      return next;
+    });
+  }, []);
   const selectResource = useCallback(
     (id: string) => {
       if (selected?.id === id && failure) setRetry((current) => current + 1);
@@ -409,7 +421,13 @@ export function SpineViewer({ source }: ViewerProps) {
         <section className="preview-panel" aria-label={t('preview')}>
           <div className="canvas-area" aria-busy={busy}>
             <div className="canvas-host" ref={host} />
-            <PreviewToolbar locale={locale} resource={selected} />
+            <PreviewToolbar
+              locale={locale}
+              resource={selected}
+              slots={slots}
+              selectedSlot={selectedSlot}
+              onSelectSlot={toggleSlot}
+            />
             <span className="canvas-hint">{t('canvasHint')}</span>
             {!ready && (
               <ImportEmpty

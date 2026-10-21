@@ -13,6 +13,7 @@ export const es: { [Key in keyof typeof en]: string } = {
   resourceAndAnimation: 'Recursos y animaciones',
   resources: 'Recursos',
   animations: 'Animaciones',
+  slots: 'Ranuras',
   copyName: 'Copiar nombre',
   copyPath: 'Copiar ruta',
   copyRelativePath: 'Copiar ruta relativa',

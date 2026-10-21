@@ -14,6 +14,7 @@ export const fr: { [Key in keyof typeof en]: string } = {
   resourceAndAnimation: 'Ressources et animations',
   resources: 'Ressources',
   animations: 'Animations',
+  slots: 'Slots',
   copyName: 'Copier le nom',
   copyPath: 'Copier le chemin',
   copyRelativePath: 'Copier le chemin relatif',

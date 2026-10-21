@@ -61,7 +61,7 @@ export class SpineTrees implements vscode.Disposable {
   private readonly subscriptions: vscode.Disposable[] = [];
   private roots: ResourceNode[] = [];
   private readonly resourceNodes = new Map<string, ResourceNode>();
-  private readonly copyNodes = new Map<string, ResourceNode>();
+  private readonly treeNodes = new Map<string, ResourceNode>();
   private animationNodes: AnimationNode[] = [];
   private selectedId: string | undefined;
   private selectedAnimation: string | undefined;
@@ -112,7 +112,7 @@ export class SpineTrees implements vscode.Disposable {
             const animation = this.animationNodes.find((entry) => entry === value);
             if (animation) return vscode.env.clipboard.writeText(animation.name);
           }
-          const node = this.currentCopyNode(value);
+          const node = this.currentTreeNode(value);
           if (!node?.uri) return;
           const content =
             action === 'copyPath'
@@ -128,6 +128,14 @@ export class SpineTrees implements vscode.Disposable {
         (value: unknown) => {
           const node = this.animationNodes.find((entry) => entry === value);
           if (node) return vscode.env.clipboard.writeText(node.name);
+        },
+      ),
+      vscode.commands.registerCommand(
+        'spinePreview.revealInExplorer',
+        (value: unknown) => {
+          const node = this.currentTreeNode(value);
+          if (node?.uri)
+            return vscode.commands.executeCommand('revealInExplorer', node.uri);
         },
       ),
       this.resourceView.onDidChangeVisibility(({ visible }) => {
@@ -150,7 +158,7 @@ export class SpineTrees implements vscode.Disposable {
   setGroups(groups: readonly IndexedGroup[]): void {
     if (this.disposed) return;
     this.resourceNodes.clear();
-    this.copyNodes.clear();
+    this.treeNodes.clear();
     this.roots = groups.map((group) => {
       const root: ResourceNode = {
         id: `scope:${group.scope.id}`,
@@ -162,7 +170,7 @@ export class SpineTrees implements vscode.Disposable {
         relativePath: '.',
         resourceCount: group.result.resources.length,
       };
-      this.copyNodes.set(root.id, root);
+      this.treeNodes.set(root.id, root);
       const folders = new Map<string, ResourceNode>();
       for (const resource of group.result.resources) {
         const parts = resource.skeleton.path.replaceAll('\\', '/').split('/');
@@ -201,7 +209,7 @@ export class SpineTrees implements vscode.Disposable {
         };
         parent.children.push(node);
         this.resourceNodes.set(resource.id, node);
-        this.copyNodes.set(node.id, node);
+        this.treeNodes.set(node.id, node);
       }
       if (group.result.diagnostics.length) {
         const diagnostics: ResourceNode = {
@@ -237,7 +245,7 @@ export class SpineTrees implements vscode.Disposable {
       };
       compactFolders(root);
       const registerFolders = (node: ResourceNode): void => {
-        if (node.kind === 'folder') this.copyNodes.set(node.id, node);
+        if (node.kind === 'folder') this.treeNodes.set(node.id, node);
         node.children.forEach(registerFolders);
       };
       registerFolders(root);
@@ -285,14 +293,14 @@ export class SpineTrees implements vscode.Disposable {
     this.disposed = true;
     this.subscriptions.splice(0).forEach((subscription) => subscription.dispose());
     this.resourceNodes.clear();
-    this.copyNodes.clear();
+    this.treeNodes.clear();
     this.roots = [];
     this.animationNodes = [];
   }
 
-  private currentCopyNode(value: unknown): ResourceNode | undefined {
+  private currentTreeNode(value: unknown): ResourceNode | undefined {
     if (!value || typeof value !== 'object' || !('id' in value)) return undefined;
-    const node = typeof value.id === 'string' ? this.copyNodes.get(value.id) : undefined;
+    const node = typeof value.id === 'string' ? this.treeNodes.get(value.id) : undefined;
     return node === value ? node : undefined;
   }
 

@@ -13,6 +13,7 @@ export const ko: { [Key in keyof typeof en]: string } = {
   resourceAndAnimation: '리소스 및 애니메이션',
   resources: '리소스',
   animations: '애니메이션',
+  slots: '슬롯',
   copyName: '이름 복사',
   copyPath: '경로 복사',
   copyRelativePath: '상대 경로 복사',

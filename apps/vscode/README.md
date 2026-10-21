@@ -37,6 +37,8 @@ Requires **VS Code 1.90 or later** and **WebGL** support. The runtimes are bundl
 
 Opening the sidebar discovers resources without opening a preview tab. The preview opens when you select a resource and is reused for subsequent selections. Animation names in binary exports become available after the resource loads.
 
+Right-click a resource or directory in the **Resources** view and choose **Reveal in Explorer** to select it in VS Code's Explorer.
+
 You can also right-click a folder or file in **Explorer** and choose **Preview Spine Resources**. Command names follow VS Code's display language; in Simplified Chinese this command is **预览 Spine 资源**.
 
 | What you select              | What the extension opens                                                                                                   |

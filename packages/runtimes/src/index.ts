@@ -3,6 +3,7 @@ export type {
   RuntimeAdapter,
   RuntimeLoadOptions,
   RuntimeSession,
+  SlotPose,
   CameraState,
   PoseBounds,
   PreviewController,

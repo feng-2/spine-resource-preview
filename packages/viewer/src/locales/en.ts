@@ -11,6 +11,7 @@ export const en = {
   resourceAndAnimation: 'Resources and animations',
   resources: 'Resources',
   animations: 'Animations',
+  slots: 'Slots',
   copyName: 'Copy Name',
   copyPath: 'Copy Path',
   copyRelativePath: 'Copy Relative Path',

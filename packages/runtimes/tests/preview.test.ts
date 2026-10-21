@@ -9,9 +9,28 @@ import { createPreviewController } from '../src/preview.js';
 /** 无 DOM 渲染依赖的画布桩，测试真实控制器的时钟与所有权。 */
 class Canvas extends EventTarget {
   style = { cssText: '', cursor: '' };
+  className = '';
   width = 0;
   height = 0;
   removed = false;
+  readonly context2d = {
+    setTransform: vi.fn(),
+    clearRect: vi.fn(),
+    save: vi.fn(),
+    restore: vi.fn(),
+    beginPath: vi.fn(),
+    arc: vi.fn(),
+    fill: vi.fn(),
+    stroke: vi.fn(),
+    strokeRect: vi.fn(),
+    setLineDash: vi.fn(),
+    strokeStyle: '',
+    fillStyle: '',
+    lineWidth: 0,
+  } as unknown as CanvasRenderingContext2D & {
+    arc: ReturnType<typeof vi.fn>;
+    strokeRect: ReturnType<typeof vi.fn>;
+  };
   setAttribute(): void {}
   remove(): void {
     this.removed = true;
@@ -23,8 +42,8 @@ class Canvas extends EventTarget {
     return false;
   }
   releasePointerCapture(): void {}
-  getContext() {
-    return null;
+  getContext(type?: string) {
+    return type === '2d' ? this.context2d : null;
   }
 }
 
@@ -81,10 +100,15 @@ beforeEach(() => {
     version: '4.2',
     animations: ['idle'],
     skins: ['default'],
+    slots: ['head'],
     play: vi.fn(),
     setSkin: vi.fn(),
     update: vi.fn(),
     getBounds: () => ({ x: 10, y: 20, width: 100, height: 200 }),
+    getSlotPose: vi.fn(() => ({
+      anchor: { x: 30, y: 50 },
+      bounds: { x: 20, y: 40, width: 20, height: 30 },
+    })),
     render: (camera) => rendered.push({ ...camera }),
     dispose: vi.fn(),
   };
@@ -143,6 +167,18 @@ describe('真实预览控制器', () => {
     preview.toggleFit();
     preview.setZoom(0.5);
     expect(states.at(-1)).toMatchObject({ zoom: 0.5, fitted: false });
+    await preview.dispose();
+  });
+
+  it('插槽按当前相机投影为虚线框和红色锚点，非法名称被拒绝', async () => {
+    const preview = await createPreviewController(host, resource, provider);
+    expect(preview.slots).toEqual(['head']);
+    preview.selectSlot('head');
+    expect(session.getSlotPose).toHaveBeenCalledWith('head');
+    expect(canvas.context2d.strokeRect).toHaveBeenCalledWith(356, 346, 28, 38);
+    expect(canvas.context2d.arc).toHaveBeenCalledWith(370, 370, 2, 0, Math.PI * 2);
+    expect(() => preview.selectSlot('missing')).toThrow('插槽不存在');
+    preview.selectSlot(undefined);
     await preview.dispose();
   });
 

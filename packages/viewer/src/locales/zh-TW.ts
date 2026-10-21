@@ -12,6 +12,7 @@ export const zhTW: { [Key in keyof typeof en]: string } = {
   resourceAndAnimation: '資源與動畫',
   resources: '資源',
   animations: '動畫',
+  slots: '插槽',
   copyName: '複製名稱',
   copyPath: '複製路徑',
   copyRelativePath: '複製相對路徑',

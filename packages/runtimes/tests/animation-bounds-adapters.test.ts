@@ -132,3 +132,39 @@ describe('现代适配器的固定动画范围', () => {
     },
   );
 });
+
+describe('现代适配器的插槽检测与当前姿态几何', () => {
+  test.each(
+    [v40, v41, v42, v43].flatMap((adapter) =>
+      [false, true].map((binary) => ({ adapter, binary })),
+    ),
+  )(
+    '$adapter.version binary=$binary 暴露 setup 插槽并计算附件范围和锚点',
+    async ({ adapter, binary }: { adapter: RuntimeAdapter; binary: boolean }) => {
+      vi.stubGlobal(
+        'Image',
+        class {
+          onload: (() => void) | null = null;
+          onerror: (() => void) | null = null;
+          width = 1024;
+          height = 1024;
+          set src(_value: string) {
+            queueMicrotask(() => this.onload?.());
+          }
+          removeAttribute() {}
+        },
+      );
+      const session = await adapter.load(prepare(adapter.version, binary));
+      try {
+        expect(session.slots).toContain('head');
+        const head = session.getSlotPose('head');
+        expect([head?.anchor.x, head?.anchor.y].every(Number.isFinite)).toBe(true);
+        expect(head?.bounds?.width).toBeGreaterThan(0);
+        expect(head?.bounds?.height).toBeGreaterThan(0);
+        expect(session.getSlotPose('missing')).toBeUndefined();
+      } finally {
+        await session.dispose();
+      }
+    },
+  );
+});

@@ -12,6 +12,14 @@ export interface PoseBounds {
   height: number;
 }
 
+/** 当前插槽附件的世界范围及其所属骨骼锚点。 */
+export interface SlotPose {
+  /** 插槽所属骨骼的当前世界坐标。 */
+  anchor: { x: number; y: number };
+  /** 当前附件的世界包围盒；空附件或点附件没有稳定范围。 */
+  bounds?: PoseBounds;
+}
+
 /** 渲染用逻辑相机，不包含设备像素比。 */
 export interface CameraState {
   /** 逻辑画布宽度。 */
@@ -34,6 +42,8 @@ export interface RuntimeSession {
   readonly animations: readonly string[];
   /** 原始皮肤名。 */
   readonly skins: readonly string[];
+  /** 骨架声明的插槽名，顺序来自 setup pose。 */
+  readonly slots: readonly string[];
   /** 恢复初始姿态并从头切换动作。 */
   play(name: string, loop: boolean): void;
   /** 切换原始皮肤。 */
@@ -44,6 +54,8 @@ export interface RuntimeSession {
   render(camera: CameraState): void;
   /** 当前姿态边界。 */
   getBounds(): PoseBounds;
+  /** 当前姿态下指定插槽的附件范围和骨骼锚点。 */
+  getSlotPose(name: string): SlotPose | undefined;
   /** 官方动画数据中的时长（秒），未知动作返回 undefined。 */
   getAnimationDuration?(name: string): number | undefined;
   /** 当前皮肤下整个动作采样合并的固定边界，不改变当前播放姿态。 */
@@ -94,6 +106,8 @@ export interface PreviewController {
   readonly animations: readonly string[];
   /** 原始皮肤名。 */
   readonly skins: readonly string[];
+  /** 骨架声明的插槽名。 */
+  readonly slots: readonly string[];
   /** 实际版本。 */
   readonly version: SpineVersion;
   /** 播放并恢复更新。 */
@@ -104,6 +118,8 @@ export interface PreviewController {
   setSpeed(speed: number): void;
   /** 用户直接缩放并退出 fit。 */
   setZoom(zoom: number): void;
+  /** 设置需要高亮的插槽；省略名称时关闭高亮。 */
+  selectSlot(name: string | undefined): void;
   /** 适应画布和100%居中之间切换。 */
   toggleFit(): void;
   /** 关闭实例并等待独占会话释放。 */

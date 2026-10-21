@@ -13,6 +13,7 @@ export const ja: { [Key in keyof typeof en]: string } = {
   resourceAndAnimation: 'リソースとアニメーション',
   resources: 'リソース',
   animations: 'アニメーション',
+  slots: 'スロット',
   copyName: '名前をコピー',
   copyPath: 'パスをコピー',
   copyRelativePath: '相対パスをコピー',

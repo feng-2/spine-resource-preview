@@ -4,6 +4,7 @@ import type {
   PoseBounds,
   RuntimeLoadOptions,
   RuntimeSession,
+  SlotPose,
 } from '../types';
 
 /** 已读取的素材；运行时对象只留在版本独立模块内。 */
@@ -22,6 +23,8 @@ export interface ModernBackend {
   animations: readonly string[];
   /** 皮肤名。 */
   skins: readonly string[];
+  /** setup pose 中的插槽名。 */
+  slots: readonly string[];
   /** 从头播放。 */
   play(name: string, loop: boolean): void;
   /** 切换皮肤。 */
@@ -32,6 +35,8 @@ export interface ModernBackend {
   render(camera: CameraState): void;
   /** 当前姿态边界。 */
   getBounds(): PoseBounds;
+  /** 当前姿态下指定插槽的附件范围和锚点。 */
+  getSlotPose(name: string): SlotPose | undefined;
   /** 官方动画数据中的秒数。 */
   getAnimationDuration(name: string): number | undefined;
   /** 独立采样整个动画，不改变播放状态。 */
@@ -211,6 +216,7 @@ export async function loadModernSession(
       version,
       animations: backend.animations,
       skins: backend.skins,
+      slots: backend.slots,
       play(name, loop) {
         active();
         backend.play(name, loop);
@@ -233,6 +239,10 @@ export async function loadModernSession(
       getBounds() {
         active();
         return safeBounds(backend.getBounds());
+      },
+      getSlotPose(name) {
+        active();
+        return backend.getSlotPose(name);
       },
       getAnimationDuration(name) {
         active();

@@ -4,6 +4,7 @@
   "command.open.title": "Preview Spine Resources",
   "command.refresh.title": "Refresh Resources",
   "command.workspace.title": "Return to Workspace",
+  "command.revealInExplorer.title": "Reveal in Explorer",
   "view.resources.title": "Resources",
   "view.animations.title": "Animations",
   "container.spine.title": "Spine Resource Preview",

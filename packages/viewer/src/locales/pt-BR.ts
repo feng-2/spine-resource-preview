@@ -14,6 +14,7 @@ export const ptBR: { [Key in keyof typeof en]: string } = {
   resourceAndAnimation: 'Recursos e animações',
   resources: 'Recursos',
   animations: 'Animações',
+  slots: 'Slots',
   copyName: 'Copiar nome',
   copyPath: 'Copiar caminho',
   copyRelativePath: 'Copiar caminho relativo',

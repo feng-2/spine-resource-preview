@@ -19,11 +19,19 @@ export async function createPreviewController(
   canvas.setAttribute('aria-label', 'Spine animation preview canvas');
   canvas.style.cssText =
     'position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab';
+  const overlay = document.createElement('canvas');
+  overlay.setAttribute('aria-hidden', 'true');
+  overlay.className = 'slot-overlay-canvas';
+  overlay.style.cssText =
+    'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1';
+  const overlayContext = overlay.getContext('2d');
   const width = Math.max(1, host.clientWidth);
   const height = Math.max(1, host.clientHeight);
   const ratio = Math.min(window.devicePixelRatio || 1, 2);
   canvas.width = Math.round(width * ratio);
   canvas.height = Math.round(height * ratio);
+  overlay.width = canvas.width;
+  overlay.height = canvas.height;
   let session: RuntimeSession | undefined;
   try {
     session = await loadRuntime({
@@ -36,8 +44,8 @@ export async function createPreviewController(
     const first = session.animations[0];
     if (first !== undefined) session.play(first, true);
     session.update(0);
-    host.append(canvas);
-    return new LocalPreview(host, canvas, session, options);
+    host.append(canvas, overlay);
+    return new LocalPreview(host, canvas, overlay, overlayContext, session, options);
   } catch (error) {
     try {
       await session?.dispose();
@@ -62,6 +70,7 @@ class LocalPreview implements PreviewController {
   private animationBounds: PoseBounds = { x: 0, y: 0, width: 0, height: 0 };
   private animationDuration: number | undefined;
   private fps = 0;
+  private selectedSlot: string | undefined;
   private sampleStarted: number | undefined;
   private sampleFrames = 0;
   private frame = 0;
@@ -81,6 +90,8 @@ class LocalPreview implements PreviewController {
   constructor(
     private readonly host: HTMLElement,
     private readonly canvas: HTMLCanvasElement,
+    private readonly overlay: HTMLCanvasElement,
+    private readonly overlayContext: CanvasRenderingContext2D | null,
     private readonly session: RuntimeSession,
     private readonly options: PreviewOptions,
   ) {
@@ -139,6 +150,9 @@ class LocalPreview implements PreviewController {
   get skins(): readonly string[] {
     return this.session.skins;
   }
+  get slots(): readonly string[] {
+    return this.session.slots;
+  }
   get version(): SpineResource['version'] {
     return this.session.version;
   }
@@ -178,6 +192,14 @@ class LocalPreview implements PreviewController {
     this.zoomAt(zoom, this.camera.width / 2, this.camera.height / 2);
   }
 
+  selectSlot(name: string | undefined): void {
+    this.assertOpen();
+    if (name !== undefined && !this.session.slots.includes(name))
+      throw new Error(`Spine 插槽不存在：${name}`);
+    this.selectedSlot = name;
+    this.drawSlotOverlay();
+  }
+
   toggleFit(): void {
     this.assertOpen();
     const bounds = this.centerPose();
@@ -199,6 +221,7 @@ class LocalPreview implements PreviewController {
     this.observer.disconnect();
     this.endDrag();
     this.canvas.remove();
+    this.overlay.remove();
     this.disposal = Promise.resolve()
       .then(async () => {
         await this.session.dispose();
@@ -267,6 +290,67 @@ class LocalPreview implements PreviewController {
       : 1;
   }
 
+  /** 使用与 WebGL 相机相同的中心、缩放和纵轴方向投影插槽范围。 */
+  private drawSlotOverlay(): void {
+    const context = this.overlayContext;
+    if (!context) return;
+    const ratio = Math.max(1, this.overlay.width / this.camera.width);
+    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.clearRect(0, 0, this.overlay.width, this.overlay.height);
+    const selected = this.selectedSlot;
+    if (selected === undefined) return;
+    const pose = this.session.getSlotPose(selected);
+    if (!pose || !Number.isFinite(pose.anchor.x) || !Number.isFinite(pose.anchor.y))
+      return;
+
+    const anchorX =
+      (pose.anchor.x - this.camera.centerX) * this.camera.zoom + this.camera.width / 2;
+    const anchorY =
+      this.camera.height / 2 - (pose.anchor.y - this.camera.centerY) * this.camera.zoom;
+    const bounds = pose.bounds;
+    let left = anchorX - 8;
+    let top = anchorY - 8;
+    let width = 16;
+    let height = 16;
+    if (
+      bounds &&
+      [bounds.x, bounds.y, bounds.width, bounds.height].every(Number.isFinite)
+    ) {
+      left = (bounds.x - this.camera.centerX) * this.camera.zoom + this.camera.width / 2;
+      top =
+        this.camera.height / 2 -
+        (bounds.y + bounds.height - this.camera.centerY) * this.camera.zoom;
+      width = bounds.width * this.camera.zoom;
+      height = bounds.height * this.camera.zoom;
+    }
+    const padding = 4;
+    left -= padding;
+    top -= padding;
+    width = Math.max(8, width + padding * 2);
+    height = Math.max(8, height + padding * 2);
+
+    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    context.save();
+    context.strokeStyle = '#8bafff';
+    context.lineWidth = 1.5;
+    context.setLineDash([6, 4]);
+    context.strokeRect(left, top, width, height);
+    context.setLineDash([]);
+
+    context.beginPath();
+    context.arc(anchorX, anchorY, 5.5, 0, Math.PI * 2);
+    context.fillStyle = 'rgba(255, 72, 94, 0.22)';
+    context.fill();
+    context.beginPath();
+    context.arc(anchorX, anchorY, 2, 0, Math.PI * 2);
+    context.fillStyle = '#ff2f4f';
+    context.fill();
+    context.strokeStyle = '#ffffff';
+    context.lineWidth = 1;
+    context.stroke();
+    context.restore();
+  }
+
   private readonly resize = (): void => {
     if (this.disposed) return;
     this.camera.width = Math.max(1, this.host.clientWidth);
@@ -274,6 +358,9 @@ class LocalPreview implements PreviewController {
     const ratio = Math.min(window.devicePixelRatio || 1, 2);
     this.canvas.width = Math.round(this.camera.width * ratio);
     this.canvas.height = Math.round(this.camera.height * ratio);
+    this.overlay.width = this.canvas.width;
+    this.overlay.height = this.canvas.height;
+    this.drawSlotOverlay();
     if (this.fitted) {
       this.camera.zoom = this.fitZoom(this.centerPose());
       this.notify();
@@ -290,6 +377,7 @@ class LocalPreview implements PreviewController {
             Math.min(Math.max((now - this.lastFrame) / 1000, 0), 0.1) * this.speed,
           );
         this.session.render(this.camera);
+        this.drawSlotOverlay();
         this.sampleMetrics(now);
       } else {
         const hadFps = this.fps !== 0;

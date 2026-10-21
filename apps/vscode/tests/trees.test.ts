@@ -43,6 +43,7 @@ interface Provider {
 function harness(language = 'en') {
   const commands = new Map<string, (arg: unknown) => void | Promise<void>>();
   const writeText = vi.fn(async (_text: string) => {});
+  const executeCommand = vi.fn(async (_command: string, ..._args: unknown[]) => {});
   const views = new Map<
     string,
     {
@@ -63,6 +64,7 @@ function harness(language = 'en') {
       }),
     },
     commands: {
+      executeCommand,
       registerCommand: (
         name: string,
         callback: (arg: unknown) => void | Promise<void>,
@@ -122,6 +124,7 @@ function harness(language = 'en') {
     selectAnimation,
     onVisible,
     writeText,
+    executeCommand,
   };
 }
 
@@ -246,6 +249,50 @@ describe('VS Code 原生资源与动画树', () => {
     editor.trees.setGroups([first]);
     await copy(roots[0]!.children[0]);
     expect(editor.writeText).not.toHaveBeenCalled();
+  });
+
+  it('有效资源和目录可在资源管理器中显示，诊断与伪造节点被忽略', async () => {
+    const editor = harness();
+    const sample = nestedGroup(['aa/bb/hero.json']);
+    sample.result.diagnostics = [
+      { code: 'ATLAS_MISSING', stage: 'dependency', message: 'missing' },
+    ];
+    editor.trees.setGroups([sample]);
+    const provider = editor.views.get('spinePreview.resources')!.treeDataProvider;
+    const root = provider.getChildren()[0]!;
+    const folder = root.children[0]!;
+    const resource = folder.children[0]!;
+    const diagnostics = root.children[1]!;
+    const diagnostic = diagnostics.children[0]!;
+    const reveal = editor.commands.get('spinePreview.revealInExplorer')!;
+
+    await reveal(resource);
+    expect(editor.executeCommand).toHaveBeenCalledWith(
+      'revealInExplorer',
+      uri('file:///assets/aa/bb/hero.json'),
+    );
+    await reveal(root);
+    await reveal(folder);
+    expect(editor.executeCommand).toHaveBeenNthCalledWith(
+      2,
+      'revealInExplorer',
+      uri('file:///assets'),
+    );
+    expect(editor.executeCommand).toHaveBeenNthCalledWith(
+      3,
+      'revealInExplorer',
+      uri('file:///assets/aa/bb'),
+    );
+
+    await reveal(diagnostics);
+    await reveal(diagnostic);
+    await reveal({ ...resource });
+    await reveal(undefined);
+    expect(editor.executeCommand).toHaveBeenCalledTimes(3);
+
+    editor.trees.setGroups([nestedGroup(['aa/bb/hero.json'])]);
+    await reveal(resource);
+    expect(editor.executeCommand).toHaveBeenCalledTimes(3);
   });
 
   it('动画复制保留名称且不改变播放，切换资源后忽略旧条目', async () => {

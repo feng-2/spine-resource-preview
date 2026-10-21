@@ -4,6 +4,7 @@
   "command.open.title": "Spine リソースをプレビュー",
   "command.refresh.title": "リソースを更新",
   "command.workspace.title": "ワークスペースに戻る",
+  "command.revealInExplorer.title": "エクスプローラーで表示",
   "view.resources.title": "リソース",
   "view.animations.title": "アニメーション",
   "container.spine.title": "Spine リソースプレビュー",

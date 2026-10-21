@@ -25,10 +25,64 @@ export interface LegacySkeletonData {
   version: string;
   /** 原始皮肤数据的名称。 */
   skins: { /** 皮肤名。 */ name: string }[];
+  /** setup pose 中的插槽数据。 */
+  slots: { /** 插槽名。 */ name: string }[];
+}
+
+/** 旧 runtime 中插槽所属的骨骼世界变换。 */
+export interface LegacyBone {
+  /** 世界横坐标。 */
+  worldX: number;
+  /** 世界纵坐标。 */
+  worldY: number;
+}
+
+/** 所有旧版附件的共同身份。 */
+export interface LegacyAttachment {
+  /** 附件名。 */
+  name: string;
+}
+
+/** 旧版区域附件使用骨骼进行世界顶点变换。 */
+export interface LegacyRegionAttachment extends LegacyAttachment {
+  /** 将四个区域顶点转换到世界坐标。 */
+  computeWorldVertices(
+    bone: LegacyBone,
+    worldVertices: number[],
+    offset: number,
+    stride: number,
+  ): void;
+}
+
+/** 旧版网格、包围盒、路径及点附件共享的顶点数据。 */
+export interface LegacyVertexAttachment extends LegacyAttachment {
+  /** 可输出的世界顶点值数量。 */
+  worldVerticesLength: number;
+  /** 使用插槽当前姿态和变形转换顶点。 */
+  computeWorldVertices(
+    slot: LegacySlot,
+    start: number,
+    count: number,
+    worldVertices: number[],
+    offset: number,
+    stride: number,
+  ): void;
+}
+
+/** 独立骨骼实例中的当前插槽状态。 */
+export interface LegacySlot {
+  /** 插槽 setup pose 数据。 */
+  data: { /** 插槽名。 */ name: string };
+  /** 所属骨骼的当前世界变换。 */
+  bone: LegacyBone;
+  /** 当前附件；空插槽为 null。 */
+  attachment: LegacyAttachment | null;
 }
 
 /** 旧版官方骨骼实例，纵轴保持向上。 */
 export interface LegacySkeleton {
+  /** 当前骨骼中的全部插槽。 */
+  slots: LegacySlot[];
   /** 从初始数据恢复骨骼、插槽和约束。 */
   setToSetupPose(): void;
   /** 恢复皮肤切换后的插槽姿态。 */
@@ -107,6 +161,10 @@ export interface LegacyRuntime {
   };
   /** 官方独立骨骼实例构造器。 */
   Skeleton: new (data: LegacySkeletonData) => LegacySkeleton;
+  /** 官方区域附件类型，用于区分顶点计算签名。 */
+  RegionAttachment: new (...args: unknown[]) => LegacyRegionAttachment;
+  /** 官方顶点附件类型，用于读取网格和包围盒几何。 */
+  VertexAttachment: new (...args: unknown[]) => LegacyVertexAttachment;
   /** 官方动画状态配置构造器。 */
   AnimationStateData: new (data: LegacySkeletonData) => unknown;
   /** 官方动画状态构造器。 */

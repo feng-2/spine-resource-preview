@@ -1,6 +1,7 @@
 import * as spine from 'spine-webgl-40';
-import type { PoseBounds, RuntimeAdapter, RuntimeLoadOptions } from '../types';
+import type { PoseBounds, RuntimeAdapter, RuntimeLoadOptions, SlotPose } from '../types';
 import { sampleAnimationBounds } from '../animation-bounds.js';
+import { boundsFromVertices } from '../slot-overlay.js';
 import {
   loadModernSession,
   checkExportVersion,
@@ -36,6 +37,36 @@ class PageTexture extends spine.GLTexture {
   }
 }
 
+/** 计算当前插槽附件的世界范围和骨骼锚点，不改变姿态。 */
+function slotPose(
+  skeleton: spine.Skeleton,
+  name: string,
+  vertices: number[],
+): SlotPose | undefined {
+  const slot = skeleton.slots.find((candidate) => candidate.data.name === name);
+  if (!slot) return undefined;
+  const anchor = { x: slot.bone.worldX, y: slot.bone.worldY };
+  const attachment = slot.attachment;
+  if (!attachment) return { anchor };
+  if (attachment instanceof spine.RegionAttachment) {
+    vertices.length = 8;
+    attachment.computeWorldVertices(slot.bone, vertices, 0, 2);
+    const bounds = boundsFromVertices(vertices, 8);
+    return bounds ? { anchor, bounds } : { anchor };
+  }
+  if (
+    attachment instanceof spine.VertexAttachment &&
+    attachment.worldVerticesLength > 0
+  ) {
+    const count = attachment.worldVerticesLength;
+    vertices.length = count;
+    attachment.computeWorldVertices(slot, 0, count, vertices, 0, 2);
+    const bounds = boundsFromVertices(vertices, count);
+    return bounds ? { anchor, bounds } : { anchor };
+  }
+  return { anchor };
+}
+
 /** 只建立 4.0 官方对象；类型检查保留本版本的 API 差异。 */
 function buildBackend(
   canvas: HTMLCanvasElement,
@@ -66,12 +97,14 @@ function buildBackend(
   });
   const animationBounds = new Map<string, PoseBounds>();
   scope.own(() => animationBounds.clear());
+  const slotVertices: number[] = [];
   const renderer = new spine.SceneRenderer(canvas, context, true);
   scope.own(() => renderer.dispose());
   skeleton.updateWorldTransform();
   return {
     animations: data.animations.map((animation) => animation.name),
     skins: data.skins.map((skin) => skin.name),
+    slots: data.slots.map((slot) => slot.name),
     getAnimationDuration(name) {
       return data.findAnimation(name)?.duration;
     },
@@ -123,6 +156,9 @@ function buildBackend(
     },
     getBounds() {
       return skeleton.getBoundsRect();
+    },
+    getSlotPose(name) {
+      return slotPose(skeleton, name, slotVertices);
     },
     render(camera) {
       renderer.camera.position.x = camera.centerX;

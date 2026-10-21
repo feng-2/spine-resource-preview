@@ -4,6 +4,7 @@
   "command.open.title": "預覽 Spine 資源",
   "command.refresh.title": "重新整理資源",
   "command.workspace.title": "返回工作區",
+  "command.revealInExplorer.title": "在檔案總管中顯示",
   "view.resources.title": "資源",
   "view.animations.title": "動畫",
   "container.spine.title": "Spine 資源預覽",

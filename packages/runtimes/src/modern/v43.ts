@@ -1,6 +1,7 @@
 import * as spine from 'spine-webgl-43';
-import type { PoseBounds, RuntimeAdapter, RuntimeLoadOptions } from '../types';
+import type { PoseBounds, RuntimeAdapter, RuntimeLoadOptions, SlotPose } from '../types';
 import { sampleAnimationBounds } from '../animation-bounds.js';
+import { boundsFromVertices } from '../slot-overlay.js';
 import {
   loadModernSession,
   checkExportVersion,
@@ -8,6 +9,46 @@ import {
   type PreparedAssets,
   CleanupScope,
 } from './common';
+
+/** 计算当前插槽姿态中的附件范围和骨骼锚点，不改变骨骼状态。 */
+function slotPose(
+  skeleton: spine.Skeleton,
+  name: string,
+  vertices: number[],
+): SlotPose | undefined {
+  const slot = skeleton.slots.find((candidate) => candidate.data.name === name);
+  if (!slot) return undefined;
+  // 4.3 渲染器使用约束后的 applied pose，锚点必须与绘制姿态一致。
+  const anchor = {
+    x: slot.bone.appliedPose.worldX,
+    y: slot.bone.appliedPose.worldY,
+  };
+  const attachment = slot.pose.attachment;
+  if (!attachment) return { anchor };
+  if (attachment instanceof spine.RegionAttachment) {
+    vertices.length = 8;
+    attachment.computeWorldVertices(
+      slot,
+      attachment.getOffsets(slot.pose),
+      vertices,
+      0,
+      2,
+    );
+    const bounds = boundsFromVertices(vertices, 8);
+    return bounds ? { anchor, bounds } : { anchor };
+  }
+  if (
+    attachment instanceof spine.VertexAttachment &&
+    attachment.worldVerticesLength > 0
+  ) {
+    const count = attachment.worldVerticesLength;
+    vertices.length = count;
+    attachment.computeWorldVertices(skeleton, slot, 0, count, vertices, 0, 2);
+    const bounds = boundsFromVertices(vertices, count);
+    return bounds ? { anchor, bounds } : { anchor };
+  }
+  return { anchor };
+}
 
 /** 只建立 4.3 官方对象；类型检查保留本版本的 API 差异。 */
 function buildBackend(
@@ -40,6 +81,7 @@ function buildBackend(
   });
   const animationBounds = new Map<string, PoseBounds>();
   scope.own(() => animationBounds.clear());
+  const slotVertices: number[] = [];
   const renderer = new spine.SceneRenderer(canvas, context, true);
   scope.own(() => renderer.dispose());
   renderer.skeletonRenderer.pmaAdditiveBatching = false;
@@ -47,6 +89,7 @@ function buildBackend(
   return {
     animations: data.animations.map((animation) => animation.name),
     skins: data.skins.map((skin) => skin.name),
+    slots: data.slots.map((slot) => slot.name),
     getAnimationDuration(name) {
       return data.findAnimation(name)?.duration;
     },
@@ -102,6 +145,9 @@ function buildBackend(
     },
     getBounds() {
       return skeleton.getBoundsRect();
+    },
+    getSlotPose(name) {
+      return slotPose(skeleton, name, slotVertices);
     },
     render(camera) {
       renderer.camera.position.x = camera.centerX;

@@ -1,5 +1,6 @@
-import type { CameraState, RuntimeSession, PoseBounds } from '../types.js';
+import type { CameraState, RuntimeSession, PoseBounds, SlotPose } from '../types.js';
 import { sampleAnimationBounds } from '../animation-bounds.js';
+import { boundsFromVertices } from '../slot-overlay.js';
 import type {
   LegacyRuntime,
   LegacySkeleton,
@@ -45,8 +46,11 @@ export class LegacySession implements RuntimeSession {
   readonly animations: readonly string[];
   /** 原始皮肤名，顺序来自骨骼数据。 */
   readonly skins: readonly string[];
+  /** 原始插槽名，顺序来自 setup pose。 */
+  readonly slots: readonly string[];
   private objects: LegacySessionObjects | undefined;
   private readonly vertices: number[] = [];
+  private readonly slotVertices: number[] = [];
   private readonly matrix = new Float32Array(16);
   private readonly durations: ReadonlyMap<string, number>;
   private readonly animationBounds = new Map<string, PoseBounds>();
@@ -64,6 +68,7 @@ export class LegacySession implements RuntimeSession {
     this.version = version;
     this.animations = Object.freeze(data.animations.map((animation) => animation.name));
     this.skins = Object.freeze(data.skins.map((skin) => skin.name));
+    this.slots = Object.freeze(data.slots.map((slot) => slot.name));
     this.durations = new Map(
       data.animations.map(({ name, duration }) => [name, duration]),
     );
@@ -115,6 +120,32 @@ export class LegacySession implements RuntimeSession {
       width: Math.max(0, size.x),
       height: Math.max(0, size.y),
     };
+  }
+
+  getSlotPose(name: string): SlotPose | undefined {
+    const { skeleton } = this.active();
+    const slot = skeleton.slots.find((candidate) => candidate.data.name === name);
+    if (!slot) return undefined;
+    const anchor = { x: slot.bone.worldX, y: slot.bone.worldY };
+    const attachment = slot.attachment;
+    if (!attachment) return { anchor };
+    if (attachment instanceof this.runtime.RegionAttachment) {
+      this.slotVertices.length = 8;
+      attachment.computeWorldVertices(slot.bone, this.slotVertices, 0, 2);
+      const bounds = boundsFromVertices(this.slotVertices, 8);
+      return bounds ? { anchor, bounds } : { anchor };
+    }
+    if (
+      attachment instanceof this.runtime.VertexAttachment &&
+      attachment.worldVerticesLength > 0
+    ) {
+      const count = attachment.worldVerticesLength;
+      this.slotVertices.length = count;
+      attachment.computeWorldVertices(slot, 0, count, this.slotVertices, 0, 2);
+      const bounds = boundsFromVertices(this.slotVertices, count);
+      return bounds ? { anchor, bounds } : { anchor };
+    }
+    return { anchor };
   }
 
   getAnimationDuration(name: string): number | undefined {

@@ -12,6 +12,7 @@ export const zhCN: { [Key in keyof typeof en]: string } = {
   resourceAndAnimation: '资源与动画',
   resources: '资源',
   animations: '动画',
+  slots: '插槽',
   copyName: '复制名称',
   copyPath: '复制路径',
   copyRelativePath: '复制相对路径',

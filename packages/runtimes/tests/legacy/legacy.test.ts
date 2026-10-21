@@ -152,6 +152,11 @@ describe('官方旧 runtime 的来源与真实格式', () => {
       const result = session(runtime, version, binary, pro);
       expect(result.session.animations).toContain('idle');
       expect(result.session.skins).toContain('default');
+      expect(result.session.slots).toContain('head');
+      const head = result.session.getSlotPose('head');
+      expect(head?.anchor.x).toBeTypeOf('number');
+      expect(head?.bounds?.width).toBeGreaterThan(0);
+      expect(result.session.getSlotPose('missing')).toBeUndefined();
       expect(result.session.getAnimationDuration('idle')).toBeGreaterThan(0);
       expect(result.session.getAnimationDuration('death')).toBeGreaterThan(0);
       expect(result.session.getAnimationDuration('missing')).toBeUndefined();

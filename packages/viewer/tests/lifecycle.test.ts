@@ -43,10 +43,12 @@ function controller(dispose: () => Promise<void> = async () => {}): PreviewContr
     version: '4.2',
     animations: ['idle'],
     skins: [],
+    slots: ['head'],
     play: vi.fn(),
     setPaused: vi.fn(),
     setSpeed: vi.fn(),
     setZoom: vi.fn(),
+    selectSlot: vi.fn(),
     toggleFit: vi.fn(),
     dispose: vi.fn(dispose),
   };
