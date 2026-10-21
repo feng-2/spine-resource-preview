@@ -9,6 +9,7 @@ export const zhCN: { [Key in keyof typeof en]: string } = {
   privacy: '本地处理，无需上传',
   resizeSidebar: '拖动调整侧栏宽度 · 双击恢复默认宽度',
   resizeSidebarPanels: '拖动调整资源与动画分区高度 · 双击恢复默认比例',
+  resizeSlots: '拖动调整插槽列表高度 · 双击恢复默认高度',
   resourceAndAnimation: '资源与动画',
   resources: '资源',
   animations: '动画',

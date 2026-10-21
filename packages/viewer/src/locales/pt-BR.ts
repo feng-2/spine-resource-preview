@@ -11,6 +11,7 @@ export const ptBR: { [Key in keyof typeof en]: string } = {
     'Arraste para redimensionar a barra lateral · Clique duas vezes para redefinir',
   resizeSidebarPanels:
     'Arraste para ajustar a altura dos painéis de recursos e animações · Clique duas vezes para redefinir',
+  resizeSlots: 'Arraste para ajustar a lista de slots · Clique duas vezes para redefinir',
   resourceAndAnimation: 'Recursos e animações',
   resources: 'Recursos',
   animations: 'Animações',

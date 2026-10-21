@@ -5,6 +5,7 @@
   "command.refresh.title": "Atualizar recursos",
   "command.workspace.title": "Voltar ao espaço de trabalho",
   "command.revealInExplorer.title": "Mostrar no Explorer",
+  "command.revealInSystemFileManager.title": "Mostrar no gerenciador de arquivos do sistema",
   "view.resources.title": "Recursos",
   "view.animations.title": "Animações",
   "container.spine.title": "Prévia de recursos Spine",

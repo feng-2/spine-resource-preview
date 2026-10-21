@@ -9,6 +9,7 @@ export const zhTW: { [Key in keyof typeof en]: string } = {
   privacy: '本機處理，無需上傳',
   resizeSidebar: '拖曳調整側欄寬度 · 按兩下恢復預設寬度',
   resizeSidebarPanels: '拖曳調整資源與動畫分區高度 · 按兩下恢復預設比例',
+  resizeSlots: '拖曳調整插槽列表高度 · 按兩下恢復預設高度',
   resourceAndAnimation: '資源與動畫',
   resources: '資源',
   animations: '動畫',

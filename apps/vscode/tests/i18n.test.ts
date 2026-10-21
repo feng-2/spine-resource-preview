@@ -34,6 +34,7 @@ describe('VS Code 原生本地化与扩展清单', () => {
       'command.open.title',
       'command.refresh.title',
       'command.revealInExplorer.title',
+      'command.revealInSystemFileManager.title',
       'command.workspace.title',
       'container.spine.title',
       'extension.description',
@@ -83,14 +84,17 @@ describe('VS Code 原生本地化与扩展清单', () => {
         (command: { command: string }) => command.command === copyAnimation.command,
       ).icon,
     ).toBe('$(copy)');
-    const reveal = menus.find(
-      (entry) => entry.command === 'spinePreview.revealInExplorer',
-    )!;
-    expect(reveal).toEqual({
-      command: 'spinePreview.revealInExplorer',
-      when: 'view == spinePreview.resources && viewItem =~ /^spinePreview\\.(scope|folder|resource)$/',
-      group: 'navigation@1',
-    });
+    for (const [command, group] of [
+      ['spinePreview.revealInExplorer', 'navigation@1'],
+      ['spinePreview.revealInSystemFileManager', 'navigation@2'],
+    ] as const) {
+      const reveal = menus.find((entry) => entry.command === command)!;
+      expect(reveal).toEqual({
+        command,
+        when: 'view == spinePreview.resources && viewItem =~ /^spinePreview\\.(scope|folder|resource)$/',
+        group,
+      });
+    }
   });
 
   it('原生活动栏及两个视图声明存在的可迁移图标', () => {

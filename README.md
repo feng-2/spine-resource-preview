@@ -60,7 +60,7 @@ Page filenames come from the atlas; they do not have to match the skeleton filen
 
 ![VS Code extension with native Resources and Animations views beside the Spineboy editor preview](assets/screenshots/vscode-preview-en.jpg)
 
-Browse resources and actions in the native sidebar; keep playback, zoom, and pan in the editor canvas. Right-click a resource or directory in the sidebar and choose **Reveal in Explorer** to select it in VS Code's Explorer. Example artwork © Esoteric Software; see the [original asset license](fixtures/official/4.2/LICENSE).
+Browse resources and actions in the native sidebar; keep playback, zoom, and pan in the editor canvas. Use **Reveal in Explorer** or **Reveal in System File Manager** from a resource's context menu to open it in VS Code, Finder, or File Explorer. Example artwork © Esoteric Software; see the [original asset license](fixtures/official/4.2/LICENSE).
 
 Install [Spine Resource Preview from Marketplace](https://marketplace.visualstudio.com/items?itemName=cceevv.spine-resource-preview), or use the local VSIX build below.
 

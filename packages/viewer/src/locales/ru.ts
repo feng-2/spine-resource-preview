@@ -10,6 +10,8 @@ export const ru: { [Key in keyof typeof en]: string } = {
   resizeSidebar: 'Перетащите для изменения ширины панели · Двойной щелчок для сброса',
   resizeSidebarPanels:
     'Перетащите для изменения высоты ресурсов и анимаций · Двойной щелчок для сброса',
+  resizeSlots:
+    'Перетащите для изменения высоты списка слотов · Двойной щелчок для сброса',
   resourceAndAnimation: 'Ресурсы и анимации',
   resources: 'Ресурсы',
   animations: 'Анимации',

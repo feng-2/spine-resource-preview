@@ -10,6 +10,7 @@ export const es: { [Key in keyof typeof en]: string } = {
   resizeSidebar: 'Arrastra para ajustar la barra lateral · Doble clic para restablecer',
   resizeSidebarPanels:
     'Arrastra para ajustar la altura de recursos y animaciones · Doble clic para restablecer',
+  resizeSlots: 'Arrastra para ajustar la lista de ranuras · Doble clic para restablecer',
   resourceAndAnimation: 'Recursos y animaciones',
   resources: 'Recursos',
   animations: 'Animaciones',

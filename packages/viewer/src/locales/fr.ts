@@ -11,6 +11,7 @@ export const fr: { [Key in keyof typeof en]: string } = {
     'Glisser pour redimensionner la barre latérale · Double-clic pour réinitialiser',
   resizeSidebarPanels:
     'Glisser pour ajuster la hauteur des ressources et des animations · Double-clic pour réinitialiser',
+  resizeSlots: 'Glisser pour ajuster la liste des slots · Double-clic pour réinitialiser',
   resourceAndAnimation: 'Ressources et animations',
   resources: 'Ressources',
   animations: 'Animations',

@@ -5,6 +5,7 @@
   "command.refresh.title": "리소스 새로 고침",
   "command.workspace.title": "작업 영역으로 돌아가기",
   "command.revealInExplorer.title": "탐색기에서 표시",
+  "command.revealInSystemFileManager.title": "시스템 파일 관리자에서 표시",
   "view.resources.title": "리소스",
   "view.animations.title": "애니메이션",
   "container.spine.title": "Spine 리소스 미리 보기",

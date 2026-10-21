@@ -8,6 +8,7 @@ export const en = {
   resizeSidebar: 'Drag to resize sidebar · Double-click to reset',
   resizeSidebarPanels:
     'Drag to resize resource and animation panels · Double-click to reset',
+  resizeSlots: 'Drag to resize the slot list · Double-click to reset',
   resourceAndAnimation: 'Resources and animations',
   resources: 'Resources',
   animations: 'Animations',

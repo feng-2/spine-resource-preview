@@ -5,6 +5,7 @@
   "command.refresh.title": "Обновить ресурсы",
   "command.workspace.title": "Вернуться в рабочую область",
   "command.revealInExplorer.title": "Показать в проводнике",
+  "command.revealInSystemFileManager.title": "Показать в системном файловом менеджере",
   "view.resources.title": "Ресурсы",
   "view.animations.title": "Анимации",
   "container.spine.title": "Просмотр ресурсов Spine",

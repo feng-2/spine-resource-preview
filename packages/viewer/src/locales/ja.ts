@@ -10,6 +10,7 @@ export const ja: { [Key in keyof typeof en]: string } = {
   resizeSidebar: 'ドラッグでサイドバーの幅を変更 · ダブルクリックでリセット',
   resizeSidebarPanels:
     'ドラッグでリソースとアニメーションの高さを変更 · ダブルクリックでリセット',
+  resizeSlots: 'ドラッグでスロットリストの高さを変更 · ダブルクリックでリセット',
   resourceAndAnimation: 'リソースとアニメーション',
   resources: 'リソース',
   animations: 'アニメーション',

@@ -10,6 +10,7 @@ export const ko: { [Key in keyof typeof en]: string } = {
   resizeSidebar: '드래그하여 사이드바 너비 조절 · 두 번 클릭하여 초기화',
   resizeSidebarPanels:
     '드래그하여 리소스 및 애니메이션 영역 높이 조절 · 두 번 클릭하여 초기화',
+  resizeSlots: '드래그하여 슬롯 목록 높이 조절 · 두 번 클릭하여 초기화',
   resourceAndAnimation: '리소스 및 애니메이션',
   resources: '리소스',
   animations: '애니메이션',

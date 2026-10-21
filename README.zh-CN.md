@@ -58,7 +58,7 @@ hero/
 
 ![VS Code 插件：左侧原生资源目录树和动画列表，右侧编辑器中播放 Spineboy](assets/screenshots/vscode-preview-en.jpg)
 
-原生侧栏负责浏览资源和动画，编辑器画布保留播放、缩放和平移控件。在侧栏资源列表右击资源文件或目录并选择“在资源管理器中显示”，即可在 VS Code 的资源管理器中选中对应项目。示例美术 © Esoteric Software，见[素材原始许可](fixtures/official/4.2/LICENSE)。
+原生侧栏负责浏览资源和动画，编辑器画布保留播放、缩放和平移控件。右击侧栏中的资源文件或目录，可选择“在资源管理器中显示”来定位到 VS Code 资源管理器，或选择“在系统文件管理器中显示”来打开 Finder 或 Windows 文件资源管理器。示例美术 © Esoteric Software，见[素材原始许可](fixtures/official/4.2/LICENSE)。
 
 可从 [Marketplace 安装 Spine Resource Preview](https://marketplace.visualstudio.com/items?itemName=cceevv.spine-resource-preview)，或使用下面的本地 VSIX 构建方式。
 

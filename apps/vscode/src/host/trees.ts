@@ -29,6 +29,10 @@ interface AnimationNode {
 
 const resourceCommand = 'spinePreview.selectResource';
 const animationCommand = 'spinePreview.selectAnimation';
+const revealCommands = [
+  ['spinePreview.revealInExplorer', 'revealInExplorer'],
+  ['spinePreview.revealInSystemFileManager', 'revealFileInOS'],
+] as const;
 const text = (key: HostTextKey, values?: Readonly<Record<string, string | number>>) =>
   getLocalizedMessage(vscode.env.language, key, values);
 
@@ -130,13 +134,11 @@ export class SpineTrees implements vscode.Disposable {
           if (node) return vscode.env.clipboard.writeText(node.name);
         },
       ),
-      vscode.commands.registerCommand(
-        'spinePreview.revealInExplorer',
-        (value: unknown) => {
+      ...revealCommands.map(([command, builtin]) =>
+        vscode.commands.registerCommand(command, (value: unknown) => {
           const node = this.currentTreeNode(value);
-          if (node?.uri)
-            return vscode.commands.executeCommand('revealInExplorer', node.uri);
-        },
+          if (node?.uri) return vscode.commands.executeCommand(builtin, node.uri);
+        }),
       ),
       this.resourceView.onDidChangeVisibility(({ visible }) => {
         if (visible) onVisible();

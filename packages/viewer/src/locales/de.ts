@@ -10,6 +10,7 @@ export const de: { [Key in keyof typeof en]: string } = {
   resizeSidebar: 'Seitenleiste durch Ziehen skalieren · Doppelklick zum Zurücksetzen',
   resizeSidebarPanels:
     'Ressourcen- und Animationsbereiche durch Ziehen skalieren · Doppelklick zum Zurücksetzen',
+  resizeSlots: 'Slot-Liste durch Ziehen skalieren · Doppelklick zum Zurücksetzen',
   resourceAndAnimation: 'Ressourcen und Animationen',
   resources: 'Ressourcen',
   animations: 'Animationen',

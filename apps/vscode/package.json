@@ -2,7 +2,7 @@
   "name": "@spine-preview/vscode",
   "displayName": "%extension.displayName%",
   "description": "%extension.description%",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "publisher": "cceevv",
   "private": true,
   "type": "module",
@@ -35,6 +35,11 @@
       {
         "command": "spinePreview.revealInExplorer",
         "title": "%command.revealInExplorer.title%",
+        "category": "Spine"
+      },
+      {
+        "command": "spinePreview.revealInSystemFileManager",
+        "title": "%command.revealInSystemFileManager.title%",
         "category": "Spine"
       },
       {
@@ -85,6 +90,11 @@
           "group": "navigation@1"
         },
         {
+          "command": "spinePreview.revealInSystemFileManager",
+          "when": "view == spinePreview.resources && viewItem =~ /^spinePreview\\.(scope|folder|resource)$/",
+          "group": "navigation@2"
+        },
+        {
           "command": "spinePreview.copyName",
           "when": "view == spinePreview.resources && viewItem =~ /^spinePreview\\.(scope|folder|resource)$/",
           "group": "clipboard@1"
@@ -113,6 +123,10 @@
       "commandPalette": [
         {
           "command": "spinePreview.revealInExplorer",
+          "when": "false"
+        },
+        {
+          "command": "spinePreview.revealInSystemFileManager",
           "when": "false"
         },
         {
