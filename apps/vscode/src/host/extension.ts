@@ -148,6 +148,8 @@ class PreviewPanel implements vscode.Disposable {
   }
 
   async play(resourceId: string, animation: string): Promise<void> {
+    if (this.closed) return;
+    this.panel.reveal();
     const message = { type: 'play-animation' as const, resourceId, animation };
     if (!this.ready) this.pendingAnimation = message;
     else await this.send(message);

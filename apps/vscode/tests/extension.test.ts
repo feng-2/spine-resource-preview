@@ -489,6 +489,10 @@ describe('实际扩展宿主入口集成', () => {
         animation: 'binary-only',
       }),
     );
+    const panel = host.api.window.createWebviewPanel.mock.results[0]!.value;
+    expect(panel.reveal).toHaveBeenCalledTimes(2);
+    expect(host.api.window.createWebviewPanel).toHaveBeenCalledTimes(1);
+    expect(snapshots(host)).toHaveLength(2);
     expect(
       await host.trees.get('spinePreview.animations')!.provider.getChildren(),
     ).toHaveLength(3);
